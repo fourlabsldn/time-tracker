@@ -21,4 +21,14 @@ organiser.registerAll('./gulp-tasks', {
     src: './',
     tasks: ['flow-typecheck', 'flow-transpile-to-es5'],
   },
+  'browser-sync': {
+    src: '.', // it doesn't matter, it's just so the task object is not ignored.
+    reloadOn: ['flow-transpile-to-es5', 'sass'], // reload page when these tasks happen
+    startPath: 'examples/widget/index.html',
+    baseDir: './',
+  },
+  'sass': {
+    src: path.join(src, 'styles/**/*.scss'),
+    dest,
+  },
 });
