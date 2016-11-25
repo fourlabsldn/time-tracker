@@ -9,7 +9,7 @@ const relativePath = (...args) => path.join(__dirname, ...args);
 
 const organiser = require('gulp-organiser');
 organiser.registerAll('./gulp-tasks', {
-  'flow-transpile-to-es5': {
+  'transpile-react': {
     watch: relativePath(src, '/js/**/*.js'),
     src: relativePath(src, '/js/main.js'),
     dest,
@@ -23,20 +23,13 @@ organiser.registerAll('./gulp-tasks', {
       },
     },
   },
-  'flow-typecheck': {
-    watch: relativePath(src, '/js/**/*.js'),
-    src: relativePath(src, '/js/**/*.js'),
-    config: {
-      abort: false,
-    },
-  },
   'build': {
     src: './',
-    tasks: ['flow-typecheck', 'flow-transpile-to-es5', 'sass'],
+    tasks: ['sass'],
   },
   'browser-sync': {
     src: '.', // it doesn't matter, it's just so the task object is not ignored.
-    reloadOn: ['flow-transpile-to-es5', 'sass'], // reload page when these tasks happen
+    reloadOn: ['transpile-react', 'sass'], // reload page when these tasks happen
     startPath: 'examples/widget/index.html',
     baseDir: './',
   },

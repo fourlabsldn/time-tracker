@@ -1,5 +1,12 @@
-/* eslint-disable max-len */
-// npm install --save-dev lodash gulp-rename rollup-plugin-node-resolve rollup-plugin-commonjs gulp-sourcemaps vinyl-source-stream rollup-plugin-babel rollup-stream gulp-flatmap vinyl-buffer babel-preset-es2015-rollup babel-preset-es2017 babel-plugin-lodash babel-plugin-react
+// npm install --save-dev gulp path gulp-uglify vinyl-buffer gulp-flatmap rollup-stream rollup-plugin-babel vinyl-source-stream gulp-sourcemaps rollup-plugin-replace rollup-plugin-commonjs rollup-plugin-node-resolve gulp-organiser lodash  babel-preset-es2017 babel-preset-react
+
+/**
+  Hidden dependencies:
+  	babel-preset-es2015-rollup
+  	babel-preset-react
+  	babel-plugin-transform-async-to-generator
+  	babel-plugin-external-helpers-2
+ */
 
 // ============================================================================
 // Transpile ES7 react code into ES5. Includes support for async await.
@@ -12,6 +19,7 @@ const rollup = require('rollup-stream');
 const babel = require('rollup-plugin-babel');
 const source = require('vinyl-source-stream');
 const sourcemaps = require('gulp-sourcemaps');
+const replace = require('rollup-plugin-replace');
 const commonjs = require('rollup-plugin-commonjs');
 const nodeResolve = require('rollup-plugin-node-resolve');
 const organiser = require('gulp-organiser');
@@ -23,8 +31,8 @@ const DEFAULT_CONFIG = {
   // Treat these imports as external dependencies and
   // load them from the given paths
   external: [],
-  // Let's use UMD format as default so we can import it from anywhere
-  format: 'umd',
+  // Let's use AMD format to serve our files to the front-end
+  format: 'amd',
   plugins: [
     // Import modules with jsnext:main
     nodeResolve({	jsnext: true, main: true }),
@@ -32,14 +40,12 @@ const DEFAULT_CONFIG = {
     commonjs(),
     // Transpile our code to ES5
     babel({
-      runtimeHelpers: true,
       exclude: 'node_modules/**',
       babelrc: false,
-      plugins: [
-        'lodash',
-      ],
-      presets: ['es2015-rollup', 'es2017', 'react'],
+      presets: ['es2017', 'react'],
     }),
+    // TODO: Change this from 'development' to 'production' during production
+    replace({ 'process.env.NODE_ENV': JSON.stringify('development') }),
   ],
 };
 
@@ -57,6 +63,7 @@ const doTranspilation = curry((task, stream, file) => {
 	.pipe(sourcemaps.init({ loadMaps: true }))
 	// Further modify the file here if needed
   .pipe(rename(outputName))
+  // .pipe(uglify())
 	// write the sourcemap alongside the output file.
 	.pipe(sourcemaps.write('.'));
 });

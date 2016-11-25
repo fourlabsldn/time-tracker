@@ -19,7 +19,6 @@
   "devDependencies": {
     "autoprefixer": "^6.5.3",
     "babel-plugin-lodash": "^3.2.10",
-    "babel-plugin-transform-flow-strip-types": "^6.18.0",
     "babel-preset-es2015-rollup": "^1.2.0",
     "babel-preset-es2017": "^6.16.0",
     "babel-preset-react": "^6.16.0",
@@ -39,6 +38,7 @@
     "rollup-plugin-babel": "^2.6.1",
     "rollup-plugin-commonjs": "^5.0.5",
     "rollup-plugin-node-resolve": "^2.0.0",
+    "rollup-plugin-replace": "^1.1.1",
     "rollup-stream": "^1.14.0",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0"
