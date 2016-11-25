@@ -27,6 +27,7 @@
     "flow-bin": "^0.36.0",
     "gulp": "^3.9.1",
     "gulp-flatmap": "^1.0.0",
+    "gulp-if": "^2.0.2",
     "gulp-organiser": "^1.0.6",
     "gulp-postcss": "^6.2.0",
     "gulp-rename": "^1.2.2",

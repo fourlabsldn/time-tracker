@@ -19,7 +19,7 @@ organiser.registerAll('./gulp-tasks', {
   },
   'build': {
     src: './',
-    tasks: ['flow-typecheck', 'flow-transpile-to-es5'],
+    tasks: ['flow-typecheck', 'flow-transpile-to-es5', 'sass'],
   },
   'browser-sync': {
     src: '.', // it doesn't matter, it's just so the task object is not ignored.
@@ -30,5 +30,6 @@ organiser.registerAll('./gulp-tasks', {
   'sass': {
     src: path.join(src, 'styles/**/*.scss'),
     dest,
+    rename: 'time-tracker.css'
   },
 });

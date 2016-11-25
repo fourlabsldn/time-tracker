@@ -1,4 +1,4 @@
 // @flow
 
-const str: number = 'hello world!';
+const str: number = 23;
 console.log(str);
