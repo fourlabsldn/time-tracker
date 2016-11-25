@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-// npm install --save-dev lodash gulp-rename rollup-plugin-node-resolve rollup-plugin-commonjs gulp-sourcemaps vinyl-source-stream rollup-plugin-babel rollup-stream gulp-flatmap vinyl-buffer babel-preset-es2015-rollup babel-preset-es2017 babel-plugin-lodash babel-plugin-transform-flow-strip-types
+// npm install --save-dev lodash gulp-rename rollup-plugin-node-resolve rollup-plugin-commonjs gulp-sourcemaps vinyl-source-stream rollup-plugin-babel rollup-stream gulp-flatmap vinyl-buffer babel-preset-es2015-rollup babel-preset-es2017 babel-plugin-lodash babel-plugin-react
 
 // ============================================================================
 // Transpile ES7 react code into ES5. Includes support for async await.
@@ -37,7 +37,6 @@ const DEFAULT_CONFIG = {
       babelrc: false,
       plugins: [
         'lodash',
-        'transform-flow-strip-types',
       ],
       presets: ['es2015-rollup', 'es2017', 'react'],
     }),

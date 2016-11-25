@@ -19,6 +19,6 @@ organiser.registerAll('./gulp-tasks', {
   },
   'build': {
     src: './',
-    tasks: ['flow-transpile-to-es5'],
+    tasks: ['flow-typecheck', 'flow-transpile-to-es5'],
   },
 });
