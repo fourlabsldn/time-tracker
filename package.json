@@ -21,6 +21,8 @@
     "babel-plugin-transform-flow-strip-types": "^6.18.0",
     "babel-preset-es2015-rollup": "^1.2.0",
     "babel-preset-es2017": "^6.16.0",
+    "babel-preset-react": "^6.16.0",
+    "flow-bin": "^0.36.0",
     "gulp": "^3.9.1",
     "gulp-flatmap": "^1.0.0",
     "gulp-organiser": "^1.0.6",

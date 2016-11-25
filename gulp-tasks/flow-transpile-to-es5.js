@@ -39,7 +39,7 @@ const DEFAULT_CONFIG = {
         'lodash',
         'transform-flow-strip-types',
       ],
-      presets: ['es2015-rollup', 'es2017'],
+      presets: ['es2015-rollup', 'es2017', 'react'],
     }),
   ],
 };
