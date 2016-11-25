@@ -1,4 +1,9 @@
 // @flow
+import React from 'react';
+import ReactDOM from 'react-dom';
 
-const str: number = 23;
-console.log(str);
+export default function () {
+  const wrapper: HTMLElement = document.createElement('div');
+
+  return ReactDOM.render(<div> Hello world!</div>, wrapper);
+}

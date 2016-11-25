@@ -10,12 +10,25 @@ const relativePath = (...args) => path.join(__dirname, ...args);
 const organiser = require('gulp-organiser');
 organiser.registerAll('./gulp-tasks', {
   'flow-transpile-to-es5': {
+    watch: relativePath(src, '/js/**/*.js'),
     src: relativePath(src, '/js/main.js'),
     dest,
     rename: 'time-tracker.js',
+    config: {
+      moduleName: 'timeTracker',
+      external: ['react', 'react-dom'],
+      paths: {
+        'react': 'https://cdnjs.cloudflare.com/ajax/libs/react/15.4.0/react',
+        'react-dom': 'https://cdnjs.cloudflare.com/ajax/libs/react/15.4.0/react-dom',
+      },
+    },
   },
   'flow-typecheck': {
+    watch: relativePath(src, '/js/**/*.js'),
     src: relativePath(src, '/js/**/*.js'),
+    config: {
+      abort: false,
+    },
   },
   'build': {
     src: './',
@@ -30,6 +43,6 @@ organiser.registerAll('./gulp-tasks', {
   'sass': {
     src: path.join(src, 'styles/**/*.scss'),
     dest,
-    rename: 'time-tracker.css'
+    rename: 'time-tracker.css',
   },
 });

@@ -13,8 +13,13 @@
     }
   </style>
 
+  <!-- ReactJS dependency -->
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/react/15.4.0/react.js'> </script>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/react/15.4.0/react-dom.js'> </script>
+
+  <!-- App files -->
   <link rel="stylesheet" href="../../dist/time-tracker.css">
-  <script src="../../dist/time-tracker.css"></script>
+  <script src="../../dist/time-tracker.js"></script>
 
 </head>
 <body>
@@ -38,7 +43,16 @@
   <div class="container">
     <h1>Bootstrap starter template</h1>
     <p class="lead">Use this document as a way to quickly start any new project.<br> All you get is this text and a mostly barebones HTML document.</p>
+    <div class="tracker-container"></div>
   </div>
+
+  <script>
+    // require(['time-tracker', timeTracker => {
+      const tracker = timeTracker();
+
+      document.querySelector('.tracker-container').appendChild(tracker);
+    // }])
+  </script>
 
 </body>
 </html>
