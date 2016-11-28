@@ -1,14 +1,15 @@
-import assert from 'fl-assert';
+/* eslint-disable new-cap */
 import RemoteData from './RemoteData';
 import Maybe from 'data.maybe';
+import { string, object, date, remoteData, maybe, array } from './type-checkers';
 // ===================================================================
 //  State Types
 // ===================================================================
 
-const Deliverabble = {
+const Deliverable = {
   name: string,
   url: string,
-}
+};
 const deliverable = object(Deliverable);
 
 const Project = {
@@ -16,27 +17,28 @@ const Project = {
   url: string,
   deliverables: array(deliverable),
   selectedDeliverable: deliverable,
-}
-const project = object(Deliverable);
+};
+const project = object(Project);
 
 const TimeInterval = {
   start: date,
   end: date,
-}
+};
 const timeInterval = object(TimeInterval);
 
 const Recording = {
-  project : project,
+  project,
   startTime: maybe(date),
   intervals: array(timeInterval),
-}
-const recording = object(recording);
+};
+const recording = object(Recording);
 
 const State = {
   recording: maybe(recording),
   serverURL: string,
-}
-const state = object(state);
+  availableProjects: remoteData,
+};
+const state = object(State);
 
 // ===================================================================
 //  Initial
@@ -44,19 +46,8 @@ const state = object(state);
 
 export const initialState = {
   recording: Maybe.Nothing(),
-  serverURL: string,
-}
+  serverURL: 'localhost:8080',
+  availableProjects: RemoteData.NotAsked(),
+};
 
-export const typeCheck = state;
-
-
-/**
- * Checks that all types in the state are correct.
- * @method stateChecker
- * @param  {[type]} state [description]
- * @return {[type]} [description]
- */
-export stateChecker = state => {
-  assert(typeof state.name)
-
-}
+export const stateTypeCheck = state;

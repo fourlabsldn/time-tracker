@@ -30,6 +30,12 @@ export const bool = v => (
     : Validation.Failure(`${v} is not a boolean`)
 );
 
+export const nullType = v => (
+  typeof v === 'object' && v === null
+    ? Validation.Success()
+    : Validation.Failure(`${v} is not null`)
+);
+
 export const array = curry((subType, v) => (
   Array.isArray(v) && v.map(subType).reduce(and)
     ? Validation.Success()
@@ -48,11 +54,23 @@ export const maybe = curry((subType, v) => (
     : Validation.Failure(`${v} is not of type Maybe`)
 ));
 
-export const remoteData = curry((subTypeSuccess, subTypeFailure, v) => (
+export const remoteData = v => (
   typeof v === 'object' && typeof v.isNotAsked === 'function'
     ? Validation.Success()
     : Validation.Failure(`${v} is not of type RemoteData.`)
-));
+);
+
+export const request = v => (
+  typeof v === 'object' && v instanceof Request
+    ? Validation.Success()
+    : Validation.Failure(`${v} is not of type Request.`)
+);
+
+export const response = v => (
+  typeof v === 'object' && v instanceof Response
+    ? Validation.Success()
+    : Validation.Failure(`${v} is not of type Response.`)
+);
 
 export const errMsg = curry((prop, errorMessage) =>
   `Invalid property value for ${prop}. ${errorMessage}`
