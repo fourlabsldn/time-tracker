@@ -42,7 +42,7 @@ const DEFAULT_CONFIG = {
     babel({
       exclude: 'node_modules/**',
       babelrc: false,
-      presets: ['es2017', 'react'],
+      presets: ['es2017', 'react', 'ramda'],
     }),
     // TODO: Change this from 'development' to 'production' during production
     replace({ 'process.env.NODE_ENV': JSON.stringify('development') }),
