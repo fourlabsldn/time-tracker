@@ -46,7 +46,7 @@ const state = object(State);
 
 export const initialState = {
   recording: Maybe.Nothing(),
-  serverURL: 'localhost:8080',
+  serverURL: './data.json',
   availableProjects: RemoteData.NotAsked(),
 };
 
