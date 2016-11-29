@@ -4,21 +4,27 @@ import { pipe } from 'ramda';
 import {
   StartStopTimer,
   FetchProjects,
+  FetchProjectsStatusChange,
   FetchRecording,
+  FetchRecordingStatusChange,
   LoadRecordingFromLocalStorage,
   SaveRecordingToLocalStorage,
-} from '../action-types';
+} from '../actions';
 
 import startStopTimer from './startStopTimer';
 import fetchProjects from './fetchProjects';
+import fetchProjectsStatusChange from './fetchProjectsStatusChange';
 import fetchRecording from './fetchRecording';
+import fetchRecordingStatusChange from './fetchRecordingStatusChange';
 import loadRecordingFromLocalStorage from './loadRecordingFromLocalStorage';
 import saveRecordingToLocalStorage from './saveRecordingToLocalStorage';
 
 const reducer = (state, action) => ( // eslint-disable-line complexity
     action instanceof StartStopTimer ? startStopTimer(state, action)
     : action instanceof FetchProjects ? fetchProjects(state, action)
+    : action instanceof FetchProjectsStatusChange ? fetchProjectsStatusChange(state, action)
     : action instanceof FetchRecording ? fetchRecording(state, action)
+    : action instanceof FetchRecordingStatusChange ? fetchRecordingStatusChange(state, action)
     : action instanceof LoadRecordingFromLocalStorage ? loadRecordingFromLocalStorage(state, action)
     : action instanceof SaveRecordingToLocalStorage ? saveRecordingToLocalStorage(state, action)
     : null // something went wrong.

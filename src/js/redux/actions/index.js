@@ -18,11 +18,13 @@ export function StartStopTimer(time, start) {
   this.start = start;
 }
 
+export function FetchProjects() {}
+
 /**
- * @constructor FetchProjects
+ * @constructor FetchProjectsStatusChange
  * @param  {RemoteData} fetchStatus
  */
-export function FetchProjects(fetchStatus) {
+export function FetchProjectsStatusChange(fetchStatus) {
   pipe(
     typeCheckers.remoteData,
     Validation.throwFailure,
@@ -31,11 +33,14 @@ export function FetchProjects(fetchStatus) {
   this.fetchStatus = fetchStatus;
 }
 
+
+export function FetchRecording() {}
+
 /**
- * @constructor FetchRecording
+ * @constructor FetchRecordingStatusChange
  * @param  {RemoteData} fetchStatus
  */
-export function FetchRecording(fetchStatus) {
+export function FetchRecordingStatusChange(fetchStatus) {
   pipe(
     typeCheckers.remoteData,
     Validation.throwFailure,
@@ -72,7 +77,9 @@ export function SaveRecordingToLocalStorage(saveStatus) {
 
 export const startStopTimer = (...args) => new StartStopTimer(...args);
 export const fetchProjects = (...args) => new FetchProjects(...args);
-export const fetchRecording = (...args) => new FetchRecording(...args);
+export const fetchProjectsStatusChange = (...args) => FetchProjectsStatusChange(...args);
+export const fetchRecording = (...args) => FetchRecording(...args);
+export const fetchRecordingStatusChange = (...args) => new FetchRecordingStatusChange(...args);
 export const loadRecordingFromLocalStorage = (...args) =>
   new LoadRecordingFromLocalStorage(...args);
 export const saveRecordingToLocalStorage = (...args) => new SaveRecordingToLocalStorage(...args);
