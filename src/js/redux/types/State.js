@@ -1,6 +1,4 @@
 /* eslint-disable new-cap */
-import RemoteData from './RemoteData';
-import Maybe from './Maybe';
 import { string, object, date, remoteData, maybe, array } from './type-checkers';
 // ===================================================================
 //  State Types
@@ -33,21 +31,9 @@ const Recording = {
 };
 const recording = object(Recording);
 
-const State = {
+export const State = {
   recording: maybe(recording),
   serverURL: string,
   availableProjects: remoteData,
 };
-const state = object(State);
-
-// ===================================================================
-//  Initial
-// ===================================================================
-
-export const initialState = {
-  recording: Maybe.Nothing(),
-  serverURL: './data.json',
-  availableProjects: RemoteData.NotAsked(),
-};
-
-export const stateTypeCheck = state;
+export const stateTypeCheck = object(State);

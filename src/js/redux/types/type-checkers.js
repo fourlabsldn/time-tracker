@@ -3,7 +3,7 @@ import Validation from './Validation';
 import Maybe from './Maybe';
 import { curry, and, pipe } from 'ramda';
 
-
+// All type checks return a Validation object.
 // ===================================================================
 //  General Type checkers
 // ===================================================================
@@ -39,7 +39,7 @@ export const nullType = v => (
 );
 
 export const array = curry((subType, v) => (
-  Array.isArray(v) && v.map(subType).reduce(and)
+  Array.isArray(v) && v.map(subType).map(Validation.isSuccess).reduce(and)
     ? Validation.Success()
     : Validation.Failure(`${v} is not an array`)
 ));
@@ -51,7 +51,7 @@ export const date = v => (
 );
 
 export const maybe = curry((subType, v) => (
-  typeof v === 'object' && bool(v.isNothing)
+  typeof v === 'object' && Validation.isSuccess(bool(v.isNothing))
     ? pipe(
         Maybe.map(subType),
         Maybe.withDefault(Validation.Success()),
@@ -60,7 +60,7 @@ export const maybe = curry((subType, v) => (
 ));
 
 export const remoteData = v => (
-  typeof v === 'object' && typeof v.isNotAsked === 'function'
+  typeof v === 'object' && Validation.isSuccess(bool(v.isNotAsked))
     ? Validation.Success()
     : Validation.Failure(`${v} is not of type RemoteData.`)
 );
