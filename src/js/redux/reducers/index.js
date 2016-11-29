@@ -16,7 +16,7 @@ import loadRecordingFromLocalStorage from './loadRecordingFromLocalStorage';
 import saveRecordingToLocalStorage from './saveRecordingToLocalStorage';
 
 const reducer = (state, action) => ( // eslint-disable-line complexity
-  action instanceof StartStopTimer ? startStopTimer(state, action)
+    action instanceof StartStopTimer ? startStopTimer(state, action)
     : action instanceof FetchProjects ? fetchProjects(state, action)
     : action instanceof FetchRecording ? fetchRecording(state, action)
     : action instanceof LoadRecordingFromLocalStorage ? loadRecordingFromLocalStorage(state, action)
