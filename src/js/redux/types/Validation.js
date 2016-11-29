@@ -14,15 +14,16 @@ const types = {
 
 function Validation(value, type) {
   // Check that a valid type is being used
+  const isSuccess = type.name === types.Success;
   return {
-    isSuccess: () => type.name === types.Success,
-    isFailure: () => type.name === types.Failure,
-    getOrElse: elseVal => (type === types.Success ? value : elseVal),
-    map: f => (type === types.Success
+    isSuccess,
+    isFailure: !isSuccess,
+    withDefault: defaultVal => (isSuccess ? value : defaultVal),
+    map: f => (isSuccess
       ? new Validation(f(value), type)
       : new Validation(value, type)
     ),
-    mapFailure: f => (type === types.Failure
+    mapFailure: f => (!isSuccess
       ? new Validation(f(value), type)
       : new Validation(value, type)
     ),
@@ -33,9 +34,9 @@ function Validation(value, type) {
 Validation.Success = v => new Validation(v, types.Success);
 Validation.Failure = v => new Validation(v, types.Failure);
 
-Validation.isSuccess = v => v.isSuccess();
-Validation.isFailure = v => v.isFailure();
-Validation.getOrElse = curry((elseVal, v) => v.getOrElse(elseVal));
+Validation.isSuccess = v => v.isSuccess;
+Validation.isFailure = v => v.isFailure;
+Validation.withDefault = curry((defaultVal, v) => v.withDefault(defaultVal));
 Validation.map = curry((f, v) => v.map(f));
 Validation.mapFailure = curry((f, v) => v.mapFailure(f));
 

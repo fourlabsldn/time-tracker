@@ -50,7 +50,7 @@ export const date = v => (
 
 export const maybe = curry((subType, v) => (
   typeof v === 'object' && bool(v.isNothing)
-    ? v.map(subType).getOrElse(Validation.Success())
+    ? v.map(subType).withDefault(Validation.Success())
     : Validation.Failure(`${v} is not of type Maybe`)
 ));
 
