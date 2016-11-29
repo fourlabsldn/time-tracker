@@ -1,12 +1,12 @@
 // @flow
-import { connect } from 'react-redux'
+import { connect } from 'react-redux';
 import React from 'react';
 import moment from 'moment';
-import { reduce, prop } from 'ramda';
-import { Maybe } from './types';
+import { reduce, prop, pipe, add } from 'ramda';
+import { Maybe, RemoteData } from './types';
 
 // diff in ms
-function calcInterval(start, end) {
+function calcInterval(end, start) {
   moment(end).diff(moment(start));
 }
 
@@ -18,15 +18,20 @@ function calcInterval(start, end) {
  */
 function calculateRunningTime({ startTime, intervals }) {
   const intervalsSum = reduce(
-    (total, { start, end }) => total + calcInterval(start, end),
+    (total, { start, end }) => total + calcInterval(end, start),
     0,
     intervals
   );
 
-  return Maybe.map(add(intervalsSum)).withDefault(intervalsSum);
+  const totalTime = pipe(calcInterval(new Date()), add(intervalsSum));
+
+  return pipe(
+    Maybe.map(totalTime),
+    Maybe.withDefault(intervalsSum)
+  )(startTime);
 }
 
-const pad2 = num => ("00" + num).slice(-2);
+const pad2 = num => (`00${num}`).slice(-2);
 
 function millisecondsToTimeString(ms) {
   const seconds = ms % 1000;
@@ -41,43 +46,54 @@ const recordingTime = pipe(
   Maybe.withDefault('00:00:00')
 );
 
-const projectsBox = (maybeProjects, maybeSelectedProject) => (
+const projectsBox = (maybeProjects, _) => (
   <ul>
-    { pipe(
-        Maybe.map(projects => projects.map(p => <li> p.name </li>)),
+    {pipe(
+        Maybe.map(projects => projects.map(p => <li> {p.name} </li>)),
         Maybe.withDefault(<li></li>)
       )(maybeProjects)
     }
   </ul>
-)
+);
 
 const Widget = ({ maybeRecording, maybeProjects }) => (
-  <div class="TimeTracker">
-    <div class="TimeTracker-timer">
-      <div class="TimeTracker-timer-recording">
+  <div className="TimeTracker">
+    <div className="TimeTracker-timer">
+      <div className="TimeTracker-timer-recording">
       </div>
 
-      <div class="TimeTracker-timer-time">
+      <div className="TimeTracker-timer-time">
         {recordingTime(maybeRecording)}
       </div>
     </div>
 
-    <div class="TimeTracker-projects">
+    <div className="TimeTracker-projects">
       {projectsBox(maybeProjects, Maybe.map(prop('project'), maybeRecording))}
     </div>
 
-    <div class="TimeTracker-deliverables">
+    <div className="TimeTracker-deliverables">
     </div>
 
-    <button class="TimeTracker-stop">
+    <button className="TimeTracker-stop">
       Stop
     </button>
   </div>
 );
 
 
+const mapStateToProps = state => ({
+  maybeRecording: state.recording,
+  maybeProjects: RemoteData.toMaybe(state.availableProjects),
+});
+
+const mapDispatchToProps = _ => ({});
+
+Widget.propTypes = {
+  maybeRecording: React.PropTypes.object,
+  maybeProjects: React.PropTypes.object,
+};
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(TodoList)
+)(Widget);
