@@ -8,26 +8,13 @@
     | Success Response
 
  */
-import { request, response } from './type-checkers';
 import { curry } from 'ramda';
 
 const types = {
-  NotAsked: {
-    name: Math.random(),
-    checker: null,
-  },
-  Loading: {
-    name: Math.random(),
-    checker: request,
-  },
-  Failure: {
-    name: Math.random(),
-    checker: response,
-  },
-  Success: {
-    name: Math.random(),
-    checker: response,
-  },
+  NotAsked: Math.random(),
+  Loading: Math.random(),
+  Failure: Math.random(),
+  Success: Math.random(),
 };
 
 const mapIf = curry((condition, value, f) => (condition ? f(value) : value));
@@ -36,17 +23,14 @@ const mapIf = curry((condition, value, f) => (condition ? f(value) : value));
 // INSTANCE FUNCTIONS
 // =========================================
 function RemoteData(value, type) {
-  // Check that a valid type is being used
-  type.checker(value).failureMap(err => { throw new Error(`RemoteData: ${err}`); });
-
-  const isSuccess = type.name === types.Success.name;
-  const isFailure = type.name === types.Failure.name;
-  const isLoading = type.name === types.Loading.name;
+  const isSuccess = type === types.Success;
+  const isFailure = type === types.Failure;
+  const isLoading = type === types.Loading;
   return {
     isSuccess,
     isFailure,
     isLoading,
-    isNotAsked: type.name === types.NotAsked.name,
+    isNotAsked: type === types.NotAsked,
     withDefault: elseVal => (isSuccess ? value : elseVal),
     map: f => new RemoteData(mapIf(isSuccess, value, f), type),
     mapSuccess: f => new RemoteData(mapIf(isSuccess, value, f), type),
