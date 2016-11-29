@@ -1,3 +1,7 @@
+/* eslint-disable new-cap */
+import { checkers as typeCheckers, Validation } from '../types';
+import { pipe } from 'ramda';
+import assert from 'fl-assert';
 
 /**
  * @constructor StartStopTimer
@@ -5,6 +9,7 @@
  * @param  {Boolean} start
  */
 function StartStopTimer(time, start) {
+
   this.time = time;
   this.start = start;
 }

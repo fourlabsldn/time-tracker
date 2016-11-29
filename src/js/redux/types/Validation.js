@@ -7,11 +7,13 @@ import { curry } from 'ramda';
  */
 
 const types = {
-  Success: 'Success',
-  Failure: 'Failure',
+  Success: Math.random(),
+  Failure: Math.random(),
 };
 
+const mapIf = curry((condition, value, f) => (condition ? f(value) : value));
 
+// This function should never be called by anyone other than this file.
 function Validation(value, type) {
   // Check that a valid type is being used
   const isSuccess = type.name === types.Success;
@@ -19,14 +21,9 @@ function Validation(value, type) {
     isSuccess,
     isFailure: !isSuccess,
     withDefault: defaultVal => (isSuccess ? value : defaultVal),
-    map: f => (isSuccess
-      ? new Validation(f(value), type)
-      : new Validation(value, type)
-    ),
-    mapFailure: f => (!isSuccess
-      ? new Validation(f(value), type)
-      : new Validation(value, type)
-    ),
+    map: f => new Validation(mapIf(isSuccess, value, f), type),
+    mapSuccess: f => new Validation(mapIf(isSuccess, value, f), type),
+    mapFailure: f => new Validation(mapIf(!isSuccess, value, f), type),
   };
 }
 
@@ -38,6 +35,7 @@ Validation.isSuccess = v => v.isSuccess;
 Validation.isFailure = v => v.isFailure;
 Validation.withDefault = curry((defaultVal, v) => v.withDefault(defaultVal));
 Validation.map = curry((f, v) => v.map(f));
+Validation.mapSuccess = curry((f, v) => v.mapSuccess(f));
 Validation.mapFailure = curry((f, v) => v.mapFailure(f));
 
 export default Validation;

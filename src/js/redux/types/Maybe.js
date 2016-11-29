@@ -7,8 +7,8 @@ import { curry } from 'ramda';
  */
 
 const types = {
-  Just: 'Just',
-  Nothing: 'Nothing',
+  Just: Math.random(),
+  Nothing: Math.random(),
 };
 
 
