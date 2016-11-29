@@ -1,6 +1,17 @@
-import { combineReducers, createStore } from 'redux';
-import { initialState, stateTypeCheck } from './types'
+/* eslint-disable new-cap */
+import { createStore } from 'redux';
+import reducer from './reducer';
+import { Maybe, RemoteData } from '../types';
 
+// ===================================================================
+//  Initial
+// ===================================================================
 
-const reducer = combineReducers({ visibilityFilter, todos })
-const store = createStore(reducer)
+export const initialState = {
+  recording: Maybe.Nothing(),
+  serverURL: './data.json',
+  availableProjects: RemoteData.NotAsked(),
+};
+
+const store = createStore(reducer, initialState);
+export default store;

@@ -1,4 +1,5 @@
 import { curry } from 'ramda';
+import assert from 'fl-assert';
 
 /**
   type Validation
@@ -24,6 +25,10 @@ function Validation(value, type) {
     map: f => new Validation(mapIf(isSuccess, value, f), type),
     mapSuccess: f => new Validation(mapIf(isSuccess, value, f), type),
     mapFailure: f => new Validation(mapIf(!isSuccess, value, f), type),
+    throwFailure: _ => (!isSuccess
+      ? assert(false, value)
+      : new Validation(value, type)
+    ),
   };
 }
 
@@ -37,5 +42,6 @@ Validation.withDefault = curry((defaultVal, v) => v.withDefault(defaultVal));
 Validation.map = curry((f, v) => v.map(f));
 Validation.mapSuccess = curry((f, v) => v.mapSuccess(f));
 Validation.mapFailure = curry((f, v) => v.mapFailure(f));
+Validation.throwFailure = v => v.throwFailure();
 
 export default Validation;
