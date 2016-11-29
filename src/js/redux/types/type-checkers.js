@@ -1,6 +1,8 @@
 /* eslint-disable new-cap */
 import Validation from './Validation';
-import { curry, and } from 'ramda';
+import Maybe from './Maybe';
+import { curry, and, pipe } from 'ramda';
+
 
 // ===================================================================
 //  General Type checkers
@@ -50,7 +52,10 @@ export const date = v => (
 
 export const maybe = curry((subType, v) => (
   typeof v === 'object' && bool(v.isNothing)
-    ? v.map(subType).withDefault(Validation.Success())
+    ? pipe(
+        Maybe.map(subType),
+        Maybe.withDefault(Validation.Success()),
+      )
     : Validation.Failure(`${v} is not of type Maybe`)
 ));
 

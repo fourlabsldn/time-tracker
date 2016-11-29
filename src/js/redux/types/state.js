@@ -1,6 +1,6 @@
 /* eslint-disable new-cap */
 import RemoteData from './RemoteData';
-import Maybe from 'data.maybe';
+import Maybe from './Maybe';
 import { string, object, date, remoteData, maybe, array } from './type-checkers';
 // ===================================================================
 //  State Types
