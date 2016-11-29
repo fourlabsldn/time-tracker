@@ -1,4 +1,3 @@
-/* eslint-disable new-cap*/
 /**
 
   This type takes care of data that is fetched from the server.
@@ -10,6 +9,7 @@
 
  */
 import { request, response } from './type-checkers';
+import { curry } from 'ramda';
 
 const types = {
   NotAsked: {
@@ -30,7 +30,9 @@ const types = {
   },
 };
 
-
+// =========================================
+// INSTANCE FUNCTIONS
+// =========================================
 function RemoteData(value, type) {
   // Check that a valid type is being used
   type.checker(value).failureMap(err => { throw new Error(`RemoteData: ${err}`); });
@@ -41,15 +43,26 @@ function RemoteData(value, type) {
     isSuccess: () => type.name === types.Success.name,
     getOrElse: elseVal => (type === types.Success ? value : elseVal),
     map: f => (type === types.Success
-      ? RemoteData(f(value), type)
-      : RemoteData(f(value), type)
+      ? new RemoteData(f(value), type)
+      : new RemoteData(value, type)
     ),
   };
 }
 
-export default {
-  NotAsked: _ => RemoteData(null, types.NotAsked),
-  Loading: v => RemoteData(v, types.Loading),
-  Failure: v => RemoteData(v, types.Failure),
-  Success: v => RemoteData(v, types.Success),
-};
+
+// =========================================
+// STATIC FUNCTIONS
+// =========================================
+RemoteData.NotAsked = _ => new RemoteData(null, types.NotAsked);
+RemoteData.Loading = v => new RemoteData(v, types.Loading);
+RemoteData.Failure = v => new RemoteData(v, types.Failure);
+RemoteData.Success = v => new RemoteData(v, types.Success);
+
+RemoteData.isNotAsked = v => v.isNotAsked();
+RemoteData.isLoading = v => v.isLoading();
+RemoteData.isFailure = v => v.isFailure();
+RemoteData.isSuccess = v => v.isSuccess();
+RemoteData.getOrElse = v => v.getOrElse();
+RemoteData.map = curry((f, v) => v.map(f));
+
+export default RemoteData;

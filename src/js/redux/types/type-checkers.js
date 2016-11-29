@@ -1,5 +1,5 @@
 /* eslint-disable new-cap */
-import Validation from 'data.validation';
+import Validation from './Validation';
 import { curry, and } from 'ramda';
 
 // ===================================================================
