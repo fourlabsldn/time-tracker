@@ -5,6 +5,7 @@ import moment from 'moment';
 import { reduce, prop, pipe, add } from 'ramda';
 import { Maybe, RemoteData } from './types';
 import store from './redux/store';
+import connectWithStore from './redux/connectWithStore';
 
 // diff in ms
 function calcInterval(end, start) {
@@ -94,7 +95,6 @@ const Widget = ({ maybeRecording, maybeProjects }) => (
 
 
 const mapStateToProps = state => ({
-  store,
   maybeRecording: state.recording,
   maybeProjects: RemoteData.toMaybe(state.availableProjects),
 });
@@ -106,7 +106,7 @@ Widget.propTypes = {
   maybeProjects: React.PropTypes.object,
 };
 
-export default connect(
+export default connectWithStore(
   mapStateToProps,
   mapDispatchToProps
-)(Widget);
+)(Widget, store);

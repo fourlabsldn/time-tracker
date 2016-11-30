@@ -19,7 +19,7 @@ function Validation(value, type) {
   // Check that a valid type is being used
   const isSuccess = type === types.Success;
   if (!isSuccess) {
-    console.log('Failing with reason:', value, type);
+    console.log('Failing with reason:', value);
   }
   return {
     isSuccess,

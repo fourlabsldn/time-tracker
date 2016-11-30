@@ -20,8 +20,8 @@ function Maybe(value, type) {
     isNothing: !isJust,
     withDefault: defaultVal => (isJust ? value : defaultVal),
     map: f => (isJust
-      ? new Maybe.Just(f(value))
-      : new Maybe.Nothing()
+      ? Maybe.Just(f(value))
+      : Maybe.Nothing()
     ),
   };
 }
