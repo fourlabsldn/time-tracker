@@ -58,11 +58,10 @@ const projectsBox = (maybeProjects, _) => (
   </ul>
 );
 
-const deliverablesBox = (selectedDeliverable, otherDeliverables) => (
-  <ul>
-    {[selectedDeliverable, ...otherDeliverables].map(d => <li> {d.name} </li>)}
-  </ul>
-);
+const deliverablesList = (recording) => pipe(
+    prop('project'),
+    p => map(d => <li> {d.name} </li>, [p.selectedDeliverable, ...p.deliverables])
+  )(recording);
 
 const Widget = ({ maybeRecording, maybeProjects }) => (
   <div className="TimeTracker">
@@ -81,8 +80,8 @@ const Widget = ({ maybeRecording, maybeProjects }) => (
 
     <div className="TimeTracker-deliverables">
     {pipe(
-        prop('project'),
-        p => deliverablesBox(p.selectedDeliverable, p.deliverables)
+        Maybe.map(deliverablesList),
+        Maybe.withDefault("")
       )(maybeRecording)
     }
     </div>
