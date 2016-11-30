@@ -16,7 +16,7 @@ organiser.registerAll('./gulp-tasks', {
     rename: 'time-tracker.js',
     config: {
       moduleName: 'timeTracker',
-      external: ['react', 'react-dom'],
+      // external: ['react', 'react-dom'],
       paths: {
         'react': 'https://cdnjs.cloudflare.com/ajax/libs/react/15.4.0/react',
         'react-dom': 'https://cdnjs.cloudflare.com/ajax/libs/react/15.4.0/react-dom',

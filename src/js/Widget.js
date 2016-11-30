@@ -5,6 +5,8 @@ import { reduce, prop, pipe, add, map } from 'ramda';
 import { Maybe, RemoteData } from './types';
 import store from './redux/store';
 import connectWithStore from './redux/connectWithStore';
+import Select from 'react-select';
+
 
 // diff in ms
 function calcInterval(end, start) {
@@ -47,15 +49,10 @@ const recordingTime = pipe(
   Maybe.withDefault('00:00:00')
 );
 
-const projectsBox = (maybeProjects, _) => (
-  <ul>
-    {pipe(
-        Maybe.map(projects => projects.map(p => <li key={p.name}> {p.name} </li>)),
-        Maybe.withDefault(<li></li>)
-      )(maybeProjects)
-    }
-  </ul>
-);
+const projectsBox = (maybeProjects, _) => pipe(
+        Maybe.map(map(p => ({ value: p.name, label: p.name }))),
+        Maybe.withDefault([])
+      )(maybeProjects);
 
 const deliverablesList = (recording) => pipe(
     prop('project'),
@@ -75,7 +72,11 @@ const Widget = ({ maybeRecording, maybeProjects }) => {
       </div>
 
       <div className="TimeTracker-projects">
-        {projectsBox(maybeProjects, Maybe.map(prop('project'), maybeRecording))}
+        <Select
+          name="form-field-name"
+          options={projectsBox(maybeProjects)}
+          onChange={v => console.log(v)}
+        />
       </div>
 
       <div className="TimeTracker-deliverables">
@@ -92,6 +93,8 @@ const Widget = ({ maybeRecording, maybeProjects }) => {
     </div>
   );
 };
+// {projectsBox(maybeProjects, Maybe.map(prop('project'), maybeRecording))}
+
 
 
 const mapStateToProps = state => ({
