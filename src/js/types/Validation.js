@@ -17,7 +17,10 @@ const mapIf = curry((condition, value, f) => (condition ? f(value) : value));
 // This function should never be called by anyone other than this file.
 function Validation(value, type) {
   // Check that a valid type is being used
-  const isSuccess = type.name === types.Success;
+  const isSuccess = type === types.Success;
+  if (!isSuccess) {
+    console.log('Failing with reason:', value, type);
+  }
   return {
     isSuccess,
     isFailure: !isSuccess,

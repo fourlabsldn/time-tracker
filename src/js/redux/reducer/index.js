@@ -27,14 +27,14 @@ const reducer = (state, action) => ( // eslint-disable-line complexity
     : action instanceof FetchRecordingStatusChange ? fetchRecordingStatusChange(state, action)
     : action instanceof LoadRecordingFromLocalStorage ? loadRecordingFromLocalStorage(state, action)
     : action instanceof SaveRecordingToLocalStorage ? saveRecordingToLocalStorage(state, action)
-    : null // something went wrong.
+    : state // something went wrong.
 );
 
-export default (...args) => pipe(
-  reducer(...args),
+export default (state, action) => pipe(
+  _ => { console.log(_, action); return _; },
   typeCheckers.stateTypeCheck,
   Validation.throwFailure,
   // will never use the default value because if it
   // were a failure it would have thrown in the step above.
   Validation.withDefault(null)
-);
+)(reducer(state, action));
