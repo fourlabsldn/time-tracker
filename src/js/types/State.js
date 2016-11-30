@@ -17,7 +17,7 @@ const Project = {
   deliverables: array(deliverable),
   selectedDeliverable: deliverable,
 };
-const project = object(Project);
+export const project = object(Project);
 
 const TimeInterval = {
   start: date,
@@ -30,7 +30,7 @@ const Recording = {
   startTime: maybe(date),
   intervals: array(timeInterval),
 };
-const recording = object(Recording);
+export const recording = object(Recording);
 
 export const State = {
   recording: maybe(recording),

@@ -81,7 +81,7 @@ const Widget = ({ maybeRecording, maybeProjects }) => (
     <div className="TimeTracker-deliverables">
     {pipe(
         Maybe.map(deliverablesList),
-        Maybe.withDefault("")
+        Maybe.withDefault('')
       )(maybeRecording)
     }
     </div>

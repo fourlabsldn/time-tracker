@@ -1,4 +1,59 @@
 {
-    recording: {},
-    projects: []
+    "recording": {},
+    "projects": [
+      {
+        "name": "Big project",
+        "url": "localhost:8080/projects/big-project",
+        "deliverables": [
+          {
+            "name": "Create logo",
+            "url": "localhost:8080/deliverables/create-logo"
+          },
+          {
+            "name": "Buy online ads",
+            "url": "localhost:8080/deliverables/buy-ads"
+          },
+          {
+            "name": "Cold call possible clients",
+            "url": "localhost:8080/deliverables/cold-call"
+          }
+        ]
+      },
+      {
+        "name": "Rushed project",
+        "url": "localhost:8080/projects/rushed-project",
+        "deliverables": [
+          {
+            "name": "Rush with logo",
+            "url": "localhost:8080/deliverables/rush-create-logo"
+          },
+          {
+            "name": "Rush with online ads",
+            "url": "localhost:8080/deliverables/rush-buy-ads"
+          },
+          {
+            "name": "Rush with possible clients",
+            "url": "localhost:8080/deliverables/rush-cold-call"
+          }
+        ]
+      },
+      {
+        "name": "Useless project",
+        "url": "localhost:8080/projects/rushed-project",
+        "deliverables": [
+          {
+            "name": "Useless logo",
+            "url": "localhost:8080/deliverables/useless-create-logo"
+          },
+          {
+            "name": "Useless online ads",
+            "url": "localhost:8080/deliverables/useless-buy-ads"
+          },
+          {
+            "name": "Useless possible clients",
+            "url": "localhost:8080/deliverables/useless-cold-call"
+          }
+        ]
+      }
+    ]
 }
