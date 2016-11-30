@@ -2,12 +2,7 @@
 import React from 'react';
 import moment from 'moment';
 import { reduce, prop, pipe, add, map, curry, concat } from 'ramda';
-import { Maybe, RemoteData } from './types';
-import store from './redux/store';
-import connectWithStore from './redux/connectWithStore';
 import Select from 'react-select';
-import { selectProject, selectDeliverable, startStopTimer } from './redux/actions';
-
 
 // diff in ms
 const calcInterval = curry((end, start) => moment(end).diff(moment(start)));
@@ -71,13 +66,11 @@ const toSelectedDeliverable = pipe(
   Maybe.withDefault(null)
 );
 
-const Widget = ({
-    maybeRecording,
-    maybeProjects,
-    dispatchSelectProject,
-    dispatchSelectDeliverable,
-    dispatchStartStopTimer,
-  }) => {
+class Widget extends React.Component {
+  constructor() {
+    super();
+    this.state =
+  }
   const maybeSelectedProject = Maybe.map(prop('project'), maybeRecording);
   const availableProjects = toProjectsArray(maybeProjects, maybeSelectedProject);
   const timerRunning = pipe(

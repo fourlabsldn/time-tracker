@@ -50,6 +50,12 @@ export const date = v => (
     : Validation.Failure(`${v} is not a Date`)
 );
 
+export const nullable = curry((subType, v) => (
+   v === null
+   ? Validation.Success(v)
+   : Validation.map(_ => Validation.Success(v), subType(v))
+));
+
 export const maybe = curry((subType, v) => (
   typeof v === 'object' && Validation.isSuccess(bool(v.isNothing))
     ? pipe(
@@ -103,6 +109,7 @@ export default {
   string,
   bool,
   nullType,
+  nullable,
   array,
   date,
   maybe,
