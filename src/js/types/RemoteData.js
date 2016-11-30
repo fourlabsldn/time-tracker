@@ -37,7 +37,7 @@ function RemoteData(value, type) {
     mapSuccess: f => new RemoteData(mapIf(isSuccess, value, f), type),
     mapLoading: f => new RemoteData(mapIf(isLoading, value, f), type),
     mapFailure: f => new RemoteData(mapIf(isFailure, value, f), type),
-    toMaybe: _ => (isSuccess ? new Maybe.Success(value) : new Maybe.Nothing()),
+    toMaybe: _ => (isSuccess ? Maybe.Success(value) : Maybe.Nothing()), // esline-disable-line max-len, new-cap
   };
 }
 

@@ -31,8 +31,8 @@ const reducer = (state, action) => ( // eslint-disable-line complexity
 );
 
 export default (state, action) => pipe(
-  _ => { console.log(_, action); return _; },
   typeCheckers.stateTypeCheck,
+  _ => { console.log(_, action); return _; },
   Validation.throwFailure,
   // will never use the default value because if it
   // were a failure it would have thrown in the step above.

@@ -54,7 +54,8 @@ export const maybe = curry((subType, v) => (
   typeof v === 'object' && Validation.isSuccess(bool(v.isNothing))
     ? pipe(
         Maybe.map(subType),
-        Maybe.withDefault(Validation.Success()),
+        Maybe.map(Validation.map(_ => Validation.Success(v))),
+        Maybe.withDefault(Validation.Success(v)),
       )(v)
     : Validation.Failure(`${v} is not of type Maybe`)
 ));
@@ -86,7 +87,11 @@ export const object = curry((typeSignature, v) =>
   .reduce(
     (outcome, key) => (
       outcome.isSuccess
-        ? Validation.mapFailure(errMsg(key), typeSignature[key](v[key]))
+        ? pipe(
+            typeSignature[key],
+            Validation.mapFailure(errMsg(key)),
+            Validation.mapSuccess(_ => v)
+          )(v[key])
         : outcome
     ),
     Validation.Success(v)
