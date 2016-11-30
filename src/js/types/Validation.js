@@ -21,19 +21,18 @@ function Validation(value, type) {
   if (!isSuccess) {
     console.log('Failing with reason:', value);
   }
-  return {
-    isSuccess,
-    isFailure: !isSuccess,
-    withDefault: defaultVal => (isSuccess ? value : defaultVal),
-    map: f => new Validation(mapIf(isSuccess, value, f), type),
-    mapSuccess: f => new Validation(mapIf(isSuccess, value, f), type),
-    mapFailure: f => new Validation(mapIf(!isSuccess, value, f), type),
-    throwFailure: _ => (!isSuccess
-      ? assert(false, value)
-      : new Validation(value, type)
-    ),
-    _value: value, // JUST FOR DEBUGGING PURPOSES. DO NOT USE
-  };
+
+  this.isSuccess = isSuccess;
+  this.isFailure = !isSuccess;
+  this.withDefault = defaultVal => (isSuccess ? value : defaultVal);
+  this.map = f => new Validation(mapIf(isSuccess, value, f), type);
+  this.mapSuccess = f => new Validation(mapIf(isSuccess, value, f), type);
+  this.mapFailure = f => new Validation(mapIf(!isSuccess, value, f), type);
+  this.throwFailure = _ => (!isSuccess
+    ? assert(false, value)
+    : new Validation(value, type)
+  );
+  this._value = value; // JUST FOR DEBUGGING PURPOSES. DO NOT USE
 }
 
 // Static functions

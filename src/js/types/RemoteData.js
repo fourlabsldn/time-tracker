@@ -30,19 +30,18 @@ function RemoteData(value, type) {
   if (isFailure) {
     console.log('Failing with reason:', value);
   }
-  return {
-    isSuccess,
-    isFailure,
-    isLoading,
-    isNotAsked: type === types.NotAsked,
-    withDefault: elseVal => (isSuccess ? value : elseVal),
-    map: f => new RemoteData(mapIf(isSuccess, value, f), type),
-    mapSuccess: f => new RemoteData(mapIf(isSuccess, value, f), type),
-    mapLoading: f => new RemoteData(mapIf(isLoading, value, f), type),
-    mapFailure: f => new RemoteData(mapIf(isFailure, value, f), type),
-    toMaybe: _ => (isSuccess ? Maybe.Just(value) : Maybe.Nothing()), // eslint-disable-line max-len, new-cap
-    _value: value, // JUST FOR DEBUGGING PURPOSES. DO NOT USE
-  };
+
+  this.isSuccess = isSuccess;
+  this.isFailure = isFailure;
+  this.isLoading = isLoading;
+  this.isNotAsked = type === types.NotAsked;
+  this.withDefault = elseVal => (isSuccess ? value : elseVal);
+  this.map = f => new RemoteData(mapIf(isSuccess, value, f), type);
+  this.mapSuccess = f => new RemoteData(mapIf(isSuccess, value, f), type);
+  this.mapLoading = f => new RemoteData(mapIf(isLoading, value, f), type);
+  this.mapFailure = f => new RemoteData(mapIf(isFailure, value, f), type);
+  this.toMaybe = _ => (isSuccess ? Maybe.Just(value) : Maybe.Nothing()); // eslint-disable-line max-len, new-cap
+  this._value = value; // JUST FOR DEBUGGING PURPOSES. DO NOT USE
 }
 
 

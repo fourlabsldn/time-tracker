@@ -1,3 +1,4 @@
+/* eslint-disable new-cap */
 import { curry } from 'ramda';
 
 /**
@@ -15,15 +16,13 @@ const types = {
 function Maybe(value, type) {
   // Check that a valid type is being used
   const isJust = type === types.Just;
-  return {
-    isJust,
-    isNothing: !isJust,
-    withDefault: defaultVal => (isJust ? value : defaultVal),
-    map: f => (isJust
-      ? Maybe.Just(f(value))
-      : Maybe.Nothing()
-    ),
-  };
+  this.isJust = isJust;
+  this.isNothing = !isJust;
+  this.withDefault = defaultVal => (isJust ? value : defaultVal);
+  this.map = f => (isJust
+    ? Maybe.Just(f(value))
+    : Maybe.Nothing()
+  );
 }
 
 // Static functions

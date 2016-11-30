@@ -50,7 +50,7 @@ const recordingTime = pipe(
 const projectsBox = (maybeProjects, _) => (
   <ul>
     {pipe(
-        Maybe.map(projects => projects.map(p => <li> {p.name} </li>)),
+        Maybe.map(projects => projects.map(p => <li key={p.name}> {p.name} </li>)),
         Maybe.withDefault(<li></li>)
       )(maybeProjects)
     }
@@ -59,13 +59,10 @@ const projectsBox = (maybeProjects, _) => (
 
 const deliverablesList = (recording) => pipe(
     prop('project'),
-    p => map(d => <li> {d.name} </li>, [p.selectedDeliverable, ...p.deliverables])
+    p => map(d => <li key={d.name}> {d.name} </li>, [p.selectedDeliverable, ...p.deliverables])
   )(recording);
 
 const Widget = ({ maybeRecording, maybeProjects }) => {
-
-  console.log('Is Just?', Maybe.isJust(maybeProjects));
-
   return (
     <div className="TimeTracker">
       <div className="TimeTracker-timer">
