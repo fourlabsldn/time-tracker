@@ -21,14 +21,18 @@ const startRecording = (time, recording) =>
   Object.assign(
     {},
     recording,
-    { startTime: Maybe.Just(Maybe.withDefault(time)) }
+    { startTime: Maybe.Just(Maybe.withDefault(time, recording.startTime)) }
   );
 
-const startStopRecordingTime = curry(({ time, start }, recording) => (
-  start
-    ? startRecording(time, recording)
-    : stopRecording(time, recording)
-));
+const startStopRecordingTime = curry(({ time, start }, recording) => {
+  const v = (
+    start
+      ? startRecording(time, recording)
+      : stopRecording(time, recording)
+  );
+  console.log(v);
+  return v;
+});
 
 export default (state, action) =>
   Object.assign(

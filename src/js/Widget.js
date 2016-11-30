@@ -6,7 +6,7 @@ import { Maybe, RemoteData } from './types';
 import store from './redux/store';
 import connectWithStore from './redux/connectWithStore';
 import Select from 'react-select';
-import { selectProject, selectDeliverable } from './redux/actions';
+import { selectProject, selectDeliverable, startStopTimer } from './redux/actions';
 
 
 // diff in ms
@@ -76,10 +76,16 @@ const Widget = ({
     maybeProjects,
     dispatchSelectProject,
     dispatchSelectDeliverable,
+    dispatchStartStopTimer,
   }) => {
-
   const maybeSelectedProject = Maybe.map(prop('project'), maybeRecording);
   const availableProjects = toProjectsArray(maybeProjects, maybeSelectedProject);
+  const timerRunning = pipe(
+    Maybe.map(prop('startTime')),
+    Maybe.withDefault(Maybe.Nothing()),
+    Maybe.map(_ => true),
+    Maybe.withDefault(false)
+  )(maybeRecording);
 
   return (
     <div className="TimeTracker">
@@ -110,8 +116,11 @@ const Widget = ({
         />
       </div>
 
-      <button className="TimeTracker-stop">
-        Stop
+      <button
+        className="TimeTracker-stop"
+        onClick={_ => dispatchStartStopTimer(new Date(), !timerRunning)}
+      >
+        {timerRunning ? 'Stop': 'Start'}
       </button>
     </div>
   );
@@ -129,7 +138,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   dispatchSelectProject: pipe(selectProject, dispatch),
-  dispatchSelectDeliverable: pipe(selectDeliverable, dispatch)
+  dispatchSelectDeliverable: pipe(selectDeliverable, dispatch),
+  dispatchStartStopTimer: (...args) => dispatch(startStopTimer(...args)),
 });
 
 Widget.propTypes = {
@@ -137,6 +147,7 @@ Widget.propTypes = {
   maybeProjects: React.PropTypes.object,
   dispatchSelectProject: React.PropTypes.func,
   dispatchSelectDeliverable: React.PropTypes.func,
+  dispatchStartStopTimer: React.PropTypes.func,
 };
 
 export default connectWithStore(
