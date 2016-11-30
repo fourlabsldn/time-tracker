@@ -70,7 +70,7 @@ export function loadRecordingFromLocalStorage(fetchStatus) {
 
   return {
     type: 'LoadRecordingFromLocalStorage',
-    fetchStatus
+    fetchStatus,
   };
 }
 
@@ -87,5 +87,29 @@ export function saveRecordingToLocalStorage(saveStatus) {
   return {
     type: 'SaveRecordingToLocalStorage',
     saveStatus,
+  };
+}
+
+export function selectProject({ name }) {
+  pipe(
+    typeCheckers.string,
+    Validation.throwFailure,
+  )(name);
+
+  return {
+    type: 'SelectProject',
+    name,
+  };
+}
+
+export function selectDeliverable({ name }) {
+  pipe(
+    typeCheckers.string,
+    Validation.throwFailure,
+  )(name);
+
+  return {
+    type: 'SelectDeliverable',
+    name,
   };
 }

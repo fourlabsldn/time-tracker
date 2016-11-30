@@ -9,6 +9,8 @@ import fetchRecording from './fetchRecording';
 import fetchRecordingStatusChange from './fetchRecordingStatusChange';
 import loadRecordingFromLocalStorage from './loadRecordingFromLocalStorage';
 import saveRecordingToLocalStorage from './saveRecordingToLocalStorage';
+import selectProject from './selectProject';
+import selectDeliverable from './selectDeliverable';
 
 const reducer = (state, action) => ( // eslint-disable-line complexity
     action.type === 'StartStopTimer' ? startStopTimer(state, action)
@@ -18,6 +20,8 @@ const reducer = (state, action) => ( // eslint-disable-line complexity
     : action.type === 'FetchRecordingStatusChange' ? fetchRecordingStatusChange(state, action)
     : action.type === 'LoadRecordingFromLocalStorage' ? loadRecordingFromLocalStorage(state, action)
     : action.type === 'SaveRecordingToLocalStorage' ? saveRecordingToLocalStorage(state, action)
+    : action.type === 'SelectProject' ? selectProject(state, action)
+    : action.type === 'SelectDeliverable' ? selectDeliverable(state, action)
     : state // something went wrong.
 );
 

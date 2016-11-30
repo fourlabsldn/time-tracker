@@ -39,7 +39,7 @@ export const nullType = v => (
 );
 
 export const array = curry((subType, v) => (
-  Array.isArray(v) && v.map(subType).map(Validation.isSuccess).reduce(and)
+  Array.isArray(v) && v.map(subType).map(Validation.isSuccess).reduce(and, true)
     ? Validation.Success(v)
     : Validation.Failure(`${v} is not an array`)
 ));

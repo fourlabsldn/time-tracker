@@ -1,17 +1,16 @@
 // @flow
 import React from 'react';
 import moment from 'moment';
-import { reduce, prop, pipe, add, map } from 'ramda';
+import { reduce, prop, pipe, add, map, curry, concat } from 'ramda';
 import { Maybe, RemoteData } from './types';
 import store from './redux/store';
 import connectWithStore from './redux/connectWithStore';
 import Select from 'react-select';
+import { selectProject, selectDeliverable } from './redux/actions';
 
 
 // diff in ms
-function calcInterval(end, start) {
-  moment(end).diff(moment(start));
-}
+const calcInterval = curry((end, start) => moment(end).diff(moment(start)));
 
 /**
  * @method calculateRunningTime
@@ -49,17 +48,39 @@ const recordingTime = pipe(
   Maybe.withDefault('00:00:00')
 );
 
-const projectsBox = (maybeProjects, _) => pipe(
-        Maybe.map(map(p => ({ value: p.name, label: p.name }))),
-        Maybe.withDefault([])
-      )(maybeProjects);
+const toOption = ({ name }) => ({ name, label: name });
 
-const deliverablesList = (recording) => pipe(
-    prop('project'),
-    p => map(d => <li key={d.name}> {d.name} </li>, [p.selectedDeliverable, ...p.deliverables])
-  )(recording);
+const toProjectsArray = (maybeProjects, maybeSelectedProject) =>
+  pipe(
+    Maybe.map(Array),
+    Maybe.withDefault([]),
+    concat(Maybe.withDefault([], maybeProjects))
+  )(maybeSelectedProject);
 
-const Widget = ({ maybeRecording, maybeProjects }) => {
+const toDeliverablesArray = pipe(
+    Maybe.map(prop('project')),
+    Maybe.map(({ selectedDeliverable, deliverables }) => [selectedDeliverable, ...deliverables]),
+    Maybe.withDefault([]),
+    map(toOption)
+  );
+
+const toSelectedDeliverable = pipe(
+  Maybe.map(prop('project')),
+  Maybe.map(prop('selectedDeliverable')),
+  Maybe.map(toOption),
+  Maybe.withDefault(null)
+);
+
+const Widget = ({
+    maybeRecording,
+    maybeProjects,
+    dispatchSelectProject,
+    dispatchSelectDeliverable,
+  }) => {
+
+  const maybeSelectedProject = Maybe.map(prop('project'), maybeRecording);
+  const availableProjects = toProjectsArray(maybeProjects, maybeSelectedProject);
+
   return (
     <div className="TimeTracker">
       <div className="TimeTracker-timer">
@@ -74,17 +95,19 @@ const Widget = ({ maybeRecording, maybeProjects }) => {
       <div className="TimeTracker-projects">
         <Select
           name="form-field-name"
-          options={projectsBox(maybeProjects)}
-          onChange={v => console.log(v)}
+          value={Maybe.map(toOption, maybeSelectedProject).withDefault(null)}
+          options={map(toOption, availableProjects)}
+          onChange={dispatchSelectProject}
         />
       </div>
 
       <div className="TimeTracker-deliverables">
-      {pipe(
-          Maybe.map(deliverablesList),
-          Maybe.withDefault('')
-        )(maybeRecording)
-      }
+        <Select
+          name="form-field-name"
+          value={toSelectedDeliverable(maybeRecording)}
+          options={toDeliverablesArray(maybeRecording)}
+          onChange={dispatchSelectDeliverable}
+        />
       </div>
 
       <button className="TimeTracker-stop">
@@ -104,11 +127,16 @@ const mapStateToProps = state => ({
   }()),
 });
 
-const mapDispatchToProps = _ => ({});
+const mapDispatchToProps = dispatch => ({
+  dispatchSelectProject: pipe(selectProject, dispatch),
+  dispatchSelectDeliverable: pipe(selectDeliverable, dispatch)
+});
 
 Widget.propTypes = {
   maybeRecording: React.PropTypes.object,
   maybeProjects: React.PropTypes.object,
+  dispatchSelectProject: React.PropTypes.func,
+  dispatchSelectDeliverable: React.PropTypes.func,
 };
 
 export default connectWithStore(
