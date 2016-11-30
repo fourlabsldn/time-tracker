@@ -27,6 +27,9 @@ function RemoteData(value, type) {
   const isSuccess = type === types.Success;
   const isFailure = type === types.Failure;
   const isLoading = type === types.Loading;
+  if (isFailure) {
+    console.log('Failing with reason:', value);
+  }
   return {
     isSuccess,
     isFailure,
@@ -37,7 +40,8 @@ function RemoteData(value, type) {
     mapSuccess: f => new RemoteData(mapIf(isSuccess, value, f), type),
     mapLoading: f => new RemoteData(mapIf(isLoading, value, f), type),
     mapFailure: f => new RemoteData(mapIf(isFailure, value, f), type),
-    toMaybe: _ => (isSuccess ? Maybe.Success(value) : Maybe.Nothing()), // esline-disable-line max-len, new-cap
+    toMaybe: _ => (isSuccess ? Maybe.Just(value) : Maybe.Nothing()), // eslint-disable-line max-len, new-cap
+    _value: value, // JUST FOR DEBUGGING PURPOSES. DO NOT USE
   };
 }
 

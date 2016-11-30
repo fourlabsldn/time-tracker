@@ -32,6 +32,7 @@ function Validation(value, type) {
       ? assert(false, value)
       : new Validation(value, type)
     ),
+    _value: value, // JUST FOR DEBUGGING PURPOSES. DO NOT USE
   };
 }
 

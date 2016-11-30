@@ -17,7 +17,7 @@ export const maybe = {
   deserialise: curry(
     (subSerialiser = defaultSubSerialiser, { type, value }) => (
       type === 'Success'
-        ? Maybe.Success(subSerialiser.deserialise(value))
+        ? Maybe.Just(subSerialiser.deserialise(value))
         : Maybe.Nothing()
   )),
 };

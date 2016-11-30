@@ -1,15 +1,6 @@
 /* eslint-disable no-nested-ternary */
 import { Validation, typeCheckers } from '../../types';
 import { pipe } from 'ramda';
-import {
-  StartStopTimer,
-  FetchProjects,
-  FetchProjectsStatusChange,
-  FetchRecording,
-  FetchRecordingStatusChange,
-  LoadRecordingFromLocalStorage,
-  SaveRecordingToLocalStorage,
-} from '../actions';
 
 import startStopTimer from './startStopTimer';
 import fetchProjects from './fetchProjects';
@@ -20,13 +11,13 @@ import loadRecordingFromLocalStorage from './loadRecordingFromLocalStorage';
 import saveRecordingToLocalStorage from './saveRecordingToLocalStorage';
 
 const reducer = (state, action) => ( // eslint-disable-line complexity
-    action instanceof StartStopTimer ? startStopTimer(state, action)
-    : action instanceof FetchProjects ? fetchProjects(state, action)
-    : action instanceof FetchProjectsStatusChange ? fetchProjectsStatusChange(state, action)
-    : action instanceof FetchRecording ? fetchRecording(state, action)
-    : action instanceof FetchRecordingStatusChange ? fetchRecordingStatusChange(state, action)
-    : action instanceof LoadRecordingFromLocalStorage ? loadRecordingFromLocalStorage(state, action)
-    : action instanceof SaveRecordingToLocalStorage ? saveRecordingToLocalStorage(state, action)
+    action.type === 'StartStopTimer' ? startStopTimer(state, action)
+    : action.type === 'FetchProjects' ? fetchProjects(state, action)
+    : action.type === 'FetchProjectsStatusChange' ? fetchProjectsStatusChange(state, action)
+    : action.type === 'FetchRecording' ? fetchRecording(state, action)
+    : action.type === 'FetchRecordingStatusChange' ? fetchRecordingStatusChange(state, action)
+    : action.type === 'LoadRecordingFromLocalStorage' ? loadRecordingFromLocalStorage(state, action)
+    : action.type === 'SaveRecordingToLocalStorage' ? saveRecordingToLocalStorage(state, action)
     : state // something went wrong.
 );
 

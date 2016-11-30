@@ -7,79 +7,85 @@ import { pipe } from 'ramda';
  * @param  {Date} date
  * @param  {Boolean} start
  */
-export function StartStopTimer(time, start) {
+export function startStopTimer(time, start) {
   pipe(
     Validation.map(_ => typeCheckers.date(time)),
     Validation.map(_ => typeCheckers.bool(start)),
     Validation.throwFailure // throw with failure value if failed.
   )(Validation.Success());
 
-  this.time = time;
-  this.start = start;
+  return {
+    type: 'StartStopTimer',
+    time,
+    start,
+  };
 }
 
-export function FetchProjects() {}
+export const fetchProjects = _ => ({ type: 'FetchProjects' });
 
 /**
- * @constructor FetchProjectsStatusChange
+ * @constructor fetchProjectsStatusChange
  * @param  {RemoteData} fetchStatus
  */
-export function FetchProjectsStatusChange(fetchStatus) {
+export function fetchProjectsStatusChange(fetchStatus) {
   pipe(
     typeCheckers.remoteData,
     Validation.throwFailure,
   )(fetchStatus);
 
-  this.fetchStatus = fetchStatus;
+  return {
+    type: 'FetchProjectsStatusChange',
+    fetchStatus,
+  };
 }
 
 
-export function FetchRecording() {}
+export const fetchRecording = _ => ({ type: 'FetchRecording' });
 
 /**
- * @constructor FetchRecordingStatusChange
+ * @constructor fetchRecordingStatusChange
  * @param  {RemoteData} fetchStatus
  */
-export function FetchRecordingStatusChange(fetchStatus) {
+export function fetchRecordingStatusChange(fetchStatus) {
   pipe(
     typeCheckers.remoteData,
     Validation.throwFailure,
   )(fetchStatus);
 
-  this.fetchStatus = fetchStatus;
+  return {
+    type: 'FetchRecordingStatusChange',
+    fetchStatus,
+  };
 }
 
 /**
- * @constructor LoadRecordingFromLocalStorage
+ * @constructor loadRecordingFromLocalStorage
  * @param  {RemoteData} fetchStatus
  */
-export function LoadRecordingFromLocalStorage(fetchStatus) {
+export function loadRecordingFromLocalStorage(fetchStatus) {
   pipe(
     typeCheckers.remoteData,
     Validation.throwFailure,
   )(fetchStatus);
 
-  this.fetchStatus = fetchStatus;
+  return {
+    type: 'LoadRecordingFromLocalStorage',
+    fetchStatus
+  };
 }
 
 /**
- * @constructor SaveRecordingToLocalStorage
+ * @constructor saveRecordingToLocalStorage
  * @param  {RemoteData} saveStatus
  */
-export function SaveRecordingToLocalStorage(saveStatus) {
+export function saveRecordingToLocalStorage(saveStatus) {
   pipe(
     typeCheckers.remoteData,
     Validation.throwFailure,
   )(saveStatus);
 
-  this.saveStatus = saveStatus;
+  return {
+    type: 'SaveRecordingToLocalStorage',
+    saveStatus,
+  };
 }
-
-export const startStopTimer = (...args) => new StartStopTimer(...args);
-export const fetchProjects = (...args) => new FetchProjects(...args);
-export const fetchProjectsStatusChange = (...args) => FetchProjectsStatusChange(...args);
-export const fetchRecording = (...args) => FetchRecording(...args);
-export const fetchRecordingStatusChange = (...args) => new FetchRecordingStatusChange(...args);
-export const loadRecordingFromLocalStorage = (...args) =>
-  new LoadRecordingFromLocalStorage(...args);
-export const saveRecordingToLocalStorage = (...args) => new SaveRecordingToLocalStorage(...args);

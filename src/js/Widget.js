@@ -1,8 +1,7 @@
 // @flow
-import { connect } from 'react-redux';
 import React from 'react';
 import moment from 'moment';
-import { reduce, prop, pipe, add } from 'ramda';
+import { reduce, prop, pipe, add, map } from 'ramda';
 import { Maybe, RemoteData } from './types';
 import store from './redux/store';
 import connectWithStore from './redux/connectWithStore';
@@ -63,39 +62,46 @@ const deliverablesList = (recording) => pipe(
     p => map(d => <li> {d.name} </li>, [p.selectedDeliverable, ...p.deliverables])
   )(recording);
 
-const Widget = ({ maybeRecording, maybeProjects }) => (
-  <div className="TimeTracker">
-    <div className="TimeTracker-timer">
-      <div className="TimeTracker-timer-recording">
+const Widget = ({ maybeRecording, maybeProjects }) => {
+
+  console.log('Is Just?', Maybe.isJust(maybeProjects));
+
+  return (
+    <div className="TimeTracker">
+      <div className="TimeTracker-timer">
+        <div className="TimeTracker-timer-recording">
+        </div>
+
+        <div className="TimeTracker-timer-time">
+          {recordingTime(maybeRecording)}
+        </div>
       </div>
 
-      <div className="TimeTracker-timer-time">
-        {recordingTime(maybeRecording)}
+      <div className="TimeTracker-projects">
+        {projectsBox(maybeProjects, Maybe.map(prop('project'), maybeRecording))}
       </div>
-    </div>
 
-    <div className="TimeTracker-projects">
-      {projectsBox(maybeProjects, Maybe.map(prop('project'), maybeRecording))}
-    </div>
+      <div className="TimeTracker-deliverables">
+      {pipe(
+          Maybe.map(deliverablesList),
+          Maybe.withDefault('')
+        )(maybeRecording)
+      }
+      </div>
 
-    <div className="TimeTracker-deliverables">
-    {pipe(
-        Maybe.map(deliverablesList),
-        Maybe.withDefault('')
-      )(maybeRecording)
-    }
+      <button className="TimeTracker-stop">
+        Stop
+      </button>
     </div>
-
-    <button className="TimeTracker-stop">
-      Stop
-    </button>
-  </div>
-);
+  );
+};
 
 
 const mapStateToProps = state => ({
   maybeRecording: state.recording,
-  maybeProjects: RemoteData.toMaybe(state.availableProjects),
+  maybeProjects: (function () {
+    return RemoteData.toMaybe(state.availableProjects);
+  }()),
 });
 
 const mapDispatchToProps = _ => ({});

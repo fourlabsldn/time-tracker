@@ -1,2 +1,2 @@
 export default (state, action) =>
-  Object.assign({}, state, { recording: action.status });
+  Object.assign({}, state, { recording: action.fetchStatus });

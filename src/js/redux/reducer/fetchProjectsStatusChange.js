@@ -1,2 +1,2 @@
 export default (state, action) =>
-  Object.assign({}, state, { projects: action.status });
+  Object.assign({}, state, { availableProjects: action.fetchStatus });
