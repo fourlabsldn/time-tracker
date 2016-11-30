@@ -31,8 +31,8 @@ const DEFAULT_CONFIG = {
   // Treat these imports as external dependencies and
   // load them from the given paths
   external: [],
-  // Let's use AMD format to serve our files to the front-end
-  format: 'amd',
+  // Let's use UMD format to serve our files to the front-end
+  format: 'umd',
   plugins: [
     // Import modules with jsnext:main
     nodeResolve({	jsnext: true, main: true }),
@@ -42,7 +42,8 @@ const DEFAULT_CONFIG = {
     babel({
       exclude: 'node_modules/**',
       babelrc: false,
-      presets: ['es2017', 'react', 'ramda'],
+      presets: ['es2017', 'react'],
+      plugins: ['ramda'],
     }),
     // TODO: Change this from 'development' to 'production' during production
     replace({ 'process.env.NODE_ENV': JSON.stringify('development') }),

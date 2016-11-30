@@ -91,3 +91,18 @@ export const object = curry((typeSignature, v) =>
     ),
     Validation.Success(v)
   ));
+
+export default {
+  int,
+  float,
+  string,
+  bool,
+  nullType,
+  array,
+  date,
+  maybe,
+  remoteData,
+  request,
+  response,
+  object,
+};

@@ -4,6 +4,7 @@ import React from 'react';
 import moment from 'moment';
 import { reduce, prop, pipe, add } from 'ramda';
 import { Maybe, RemoteData } from './types';
+import store from './redux/store';
 
 // diff in ms
 function calcInterval(end, start) {
@@ -56,6 +57,12 @@ const projectsBox = (maybeProjects, _) => (
   </ul>
 );
 
+const deliverablesBox = (selectedDeliverable, otherDeliverables) => (
+  <ul>
+    {[selectedDeliverable, ...otherDeliverables].map(d => <li> {d.name} </li>)}
+  </ul>
+);
+
 const Widget = ({ maybeRecording, maybeProjects }) => (
   <div className="TimeTracker">
     <div className="TimeTracker-timer">
@@ -72,6 +79,11 @@ const Widget = ({ maybeRecording, maybeProjects }) => (
     </div>
 
     <div className="TimeTracker-deliverables">
+    {pipe(
+        prop('project'),
+        p => deliverablesBox(p.selectedDeliverable, p.deliverables)
+      )(maybeRecording)
+    }
     </div>
 
     <button className="TimeTracker-stop">
@@ -82,6 +94,7 @@ const Widget = ({ maybeRecording, maybeProjects }) => (
 
 
 const mapStateToProps = state => ({
+  store,
   maybeRecording: state.recording,
   maybeProjects: RemoteData.toMaybe(state.availableProjects),
 });

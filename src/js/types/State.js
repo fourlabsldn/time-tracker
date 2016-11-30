@@ -1,5 +1,6 @@
 /* eslint-disable new-cap */
-import { string, object, date, remoteData, maybe, array } from './type-checkers';
+import typeCheckers from './type-checkers';
+const { string, object, date, remoteData, maybe, array } = typeCheckers;
 // ===================================================================
 //  State Types
 // ===================================================================

@@ -1,5 +1,5 @@
 /* eslint-disable new-cap */
-import { checkers as typeCheckers, Validation } from '../../types';
+import { typeCheckers, Validation } from '../../types';
 import { pipe } from 'ramda';
 
 /**

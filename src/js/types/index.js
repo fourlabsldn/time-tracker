@@ -1,13 +1,10 @@
-import Maybe from './Maybe';
-import RemoteData from './RemoteData';
-import Validation from './Validation';
-import { State, stateTypeCheck } from './State';
-import typeCheckers from './type-checkers';
+import _Maybe from './Maybe';
+import _RemoteData from './RemoteData';
+import _Validation from './Validation';
+import _typeCheckers from './type-checkers';
+import { stateTypeCheck } from './State';
 
-export default {
-  Maybe,
-  RemoteData,
-  Validation,
-  State,
-  checkers: Object.assign({}, typeCheckers, { stateTypeCheck }),
-};
+export const Maybe = _Maybe;
+export const RemoteData = _RemoteData;
+export const Validation = _Validation;
+export const typeCheckers = Object.assign({}, _typeCheckers, { stateTypeCheck });
