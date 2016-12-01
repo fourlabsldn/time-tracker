@@ -45,14 +45,6 @@ const availableDeliverables = ({ recording }) => {
     .concat([selected]);
 };
 
-/**
- * @param {Object} state
- * @return bool
- */
-const isRecording = state => {
-  return state.recording && state.recording.startTime;
-};
-
 const toOption = el => (
   el
   ? pipe(prop('name'), name => ({ label: name, value: name }))(el)
@@ -90,8 +82,10 @@ export default class Widget extends React.Component {
 
   render() {
     const model = this.state.model;
+    const isRecording = !!model.recording && !!model.recording.startTime;
+
     const timeTrackerClick = _ => this.setState({
-      model: startStopRecording(model, new Date(), !isRecording(model)),
+      model: startStopRecording(model, new Date(), !isRecording),
     });
 
     const changeProject = (option) => this.setState({
@@ -108,7 +102,7 @@ export default class Widget extends React.Component {
     return (
       <div className={`TimeTracker ${this.state.minimised ? 'TimeTracker--minimised' : ''}`}>
         <div
-          className={`TimeTracker-timer ${isRecording(model) ? 'TimeTracker-timer--recording' : ''}`}
+          className={`TimeTracker-timer ${isRecording ? 'TimeTracker-timer--recording' : ''}`}
           onClick={toggleMinimise}
         >
           <Timer
@@ -123,6 +117,7 @@ export default class Widget extends React.Component {
               value={toOption(selectedProject(model))}
               options={availableProjects(model).map(toOption)}
               onChange={changeProject}
+              disabled={isRecording}
             />
           </div>
 
@@ -132,6 +127,7 @@ export default class Widget extends React.Component {
               value={toOption(selectedDeliverable(model))}
               options={availableDeliverables(model).map(toOption)}
               onChange={changeDeliverable}
+              disabled={isRecording}
             />
           </div>
 
@@ -140,7 +136,7 @@ export default class Widget extends React.Component {
             onClick={timeTrackerClick}
             disabled={!selectedDeliverable(model)}
           >
-            {isRecording(model) ? 'Stop' : 'Start'}
+            {isRecording ? 'Stop' : 'Start'}
           </button>
         </div>
       </div>

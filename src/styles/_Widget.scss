@@ -3,7 +3,7 @@
   max-width: 200px;
   max-height: 200px;
   font-family: $font-family;
-  transform-origin: top left;
+  transform-origin: top right;
   transition: overflow 0s linear 1s, transform .2s ease-out;
 
   &--minimised {
@@ -44,6 +44,7 @@
   color: $c-white;
   transition: .2s ease-out;
   transform-origin: top left;
+  cursor: pointer;
   z-index: 1;
 
   &::before {
