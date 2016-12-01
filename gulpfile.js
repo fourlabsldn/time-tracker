@@ -34,7 +34,8 @@ organiser.registerAll('./gulp-tasks', {
     baseDir: './',
   },
   'sass': {
-    src: path.join(src, 'styles/**/*.scss'),
+    watch: path.join(src, 'styles/**/*.scss'),
+    src: path.join(src, 'styles/main.scss'),
     dest,
     rename: 'time-tracker.css',
   },

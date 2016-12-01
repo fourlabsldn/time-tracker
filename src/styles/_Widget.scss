@@ -1,0 +1,44 @@
+.TimeTracker {
+  width: 200px;
+  height: 200px;
+  font-family: $font-family;
+  background-color: $c-grey;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+}
+
+@keyframes blink {
+  0% { opacity: .5 }
+  50% { opacity: 1 }
+  100% { opacity: .5 }
+}
+
+.TimeTracker-timer {
+  font-size: 1.5em;
+  text-align: center;
+  padding: 1em;
+  background-color: $c-blue;
+  color: $c-white;
+}
+
+.TimeTracker-timer-time{
+  &::before,
+  &--recording::before {
+    content: " ";
+    display: inline-block;
+    width: 0.4em;
+    height: .4em;
+    background-color: $c-white;
+    border-radius: 50%;
+    margin-right: .3em;
+    position: relative;
+    top: -.054em;
+    background-color: $c-light-blue;
+  }
+
+  &--recording::before {
+    background-color: $c-red;
+    animation: blink 1s infinite ease;
+  }
+}
