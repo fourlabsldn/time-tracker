@@ -3,7 +3,12 @@ import React from 'react';
 import moment from 'moment';
 import Select from 'react-select';
 import { State } from './types';
-import { startStopRecording, selectDeliverable, selectProject } from './Widget.update';
+import {
+  startStopRecording,
+  selectDeliverable,
+  selectProject,
+  setProjects,
+} from './Widget.update';
 import { reduce, pipe, add, curry, prop } from 'ramda';
 
 
@@ -105,9 +110,24 @@ export default class Widget extends React.Component {
     super();
     this.state = new State({
       recording: null,
-      serverURL: 'localhost',
+      serverURL: './data.json',
       availableProjects: null,
     });
+
+    this.loadProjects();
+  }
+
+  loadProjects() {
+    fetch(this.state.serverURL)
+    .then(r => r.json())
+    .then(prop('projects'))
+    // Set projects is inside a function so that we use this.state at the
+    // time of the response, rather than at the time of the request.
+    .then(proj =>
+      this.setState(
+        setProjects(this.state, proj)
+      )
+    );
   }
 
 

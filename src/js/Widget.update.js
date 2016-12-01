@@ -1,6 +1,6 @@
 import assert from 'fl-assert';
 import { Project, Recording, TimeInterval, State } from './types';
-import { not, equals, propEq, curry } from 'ramda';
+import { not, equals, propEq, curry, prop } from 'ramda';
 
 export const startStopRecording = curry((state, time, shouldStart) => {
   const projectChosen = !!state.recording;
@@ -104,4 +104,43 @@ export const selectDeliverable = curry((state, deliverableName) => {
     serverURL: state.serverURL,
     availableProjects: state.availableProjects,
   });
+});
+
+
+/**
+ * Sets an array of projects as the new available projects in the widget.
+ * @method setProjects
+ * @param {Object} state
+ * @param {Array<Object>} projects
+ */
+export const setProjects = curry((state, projects) => {
+  assert(Array.isArray(projects), `Invalid array of projects: ${JSON.stringify(projects)}`);
+
+  // TODO: We must use IDS instead of names, as names can change.
+  const currentlyRecordingProject = state.recording
+    ? state.recording.project
+    : null;
+
+  assert(
+    !(currentlyRecordingProject
+      && !projects
+        .map(prop('name'))
+        .includes(currentlyRecordingProject.name)
+    ),
+    'Currently recording project is not present in new projects array.'
+  );
+
+  const { recording, serverURL } = state;
+
+  return currentlyRecordingProject
+    ? new State({
+      recording,
+      serverURL,
+      availableProjects: projects.filter(p => p.name !== currentlyRecordingProject.name),
+    })
+    : new State({
+      recording: null,
+      serverURL,
+      availableProjects: projects,
+    });
 });

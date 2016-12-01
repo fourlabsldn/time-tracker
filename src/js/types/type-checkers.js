@@ -1,7 +1,11 @@
 /* eslint-disable new-cap */
 import Validation from './Validation';
 import Maybe from './Maybe';
-import { curry, and, pipe } from 'ramda';
+import { curry, pipe } from 'ramda';
+
+export const errMsg = curry((prop, errorMessage) =>
+  `Invalid property value for ${prop}. ${errorMessage}`
+);
 
 // All type checks return a Validation object.
 // ===================================================================
@@ -38,11 +42,24 @@ export const nullType = v => (
     : Validation.Failure(`${v} is not null`)
 );
 
-export const array = curry((subType, v) => (
-  Array.isArray(v) && v.map(subType).map(Validation.isSuccess).reduce(and, true)
-    ? Validation.Success(v)
-    : Validation.Failure(`${v} is not an array`)
-));
+export const array = curry((subType, v) => {
+  if (v instanceof Validation) {
+    return Validation.andThen(array, v);
+  }
+
+  if (!Array.isArray(v)) {
+    return Validation.Failure(`${v} is not an array`);
+  }
+
+  const subtypesValidaton = v
+    .map(subType)
+    .reduce(Validation.chain, Validation.Success(v));
+
+  if (Validation.isSuccess(subtypesValidaton)) {
+    return Validation.Success(v);
+  }
+  return Validation.mapFailure(errMsg('array'));
+});
 
 export const date = v => (
   v !== undefined && v instanceof Date
@@ -84,24 +101,35 @@ export const response = v => (
     : Validation.Failure(`${v} is not of type Response.`)
 );
 
-export const errMsg = curry((prop, errorMessage) =>
-  `Invalid property value for ${prop}. ${errorMessage}`
-);
+const haveSameKeys = (o1, o2) => {
+  const k1 = Object.keys(o1);
+  const k2 = Object.keys(o2);
+  return k1.reduce((out, key) => out && k2.includes(key), true);
+};
 
-export const object = curry((typeSignature, v) =>
-  Object.keys(typeSignature)
+export const object = curry((typeSignature, v) => {
+  if (!haveSameKeys(typeSignature, v)) {
+    return Validation.Failure(
+      `Object does not have same keys as its type signature:
+      Keys present: ${Object.keys(v)}
+      Keys expected: ${Object.keys(typeSignature)}`
+    );
+  }
+
+  return Object.keys(typeSignature)
   .reduce(
-    (outcome, key) => (
-      outcome.isSuccess
-        ? pipe(
+    (outcome, key) =>
+      Validation.chain(
+        outcome,
+        pipe(
             typeSignature[key],
             Validation.mapFailure(errMsg(key)),
             Validation.mapSuccess(_ => v)
           )(v[key])
-        : outcome
-    ),
-    Validation.Success(v)
-  ));
+      ),
+      Validation.Success(v)
+  );
+});
 
 export default {
   int,

@@ -30,9 +30,33 @@ function Validation(value, type) {
   this.mapFailure = f => new Validation(mapIf(!isSuccess, value, f), type);
   this.throwFailure = _ => (!isSuccess
     ? assert(false, value)
-    : new Validation(value, type)
+    : this
   );
-  this._value = value; // JUST FOR DEBUGGING PURPOSES. DO NOT USE
+  this.andThen = f => {
+    if (!isSuccess) {
+      return this;
+    }
+
+    const val = f(value);
+    assert(
+      val instanceof Validation,
+      'Value returned by Validation.andThen is not of type Validation'
+    );
+    return val;
+  };
+  // Validation -> Validation
+  this.chain = v => {
+    if (!isSuccess) { return this; }
+
+    assert(
+      v instanceof Validation,
+      'Value passed to Validation.chain is not of type Validation'
+    );
+
+    return v;
+  };
+  // JUST FOR DEBUGGING PURPOSES. DO NOT USE
+  this._value = value; // eslint-disable-line no-underscore-dangle
 }
 
 // Static functions
@@ -46,5 +70,6 @@ Validation.map = curry((f, v) => v.map(f));
 Validation.mapSuccess = curry((f, v) => v.mapSuccess(f));
 Validation.mapFailure = curry((f, v) => v.mapFailure(f));
 Validation.throwFailure = v => v.throwFailure();
-
+Validation.andThen = curry((f, v) => v.andThen(f));
+Validation.chain = curry((v1, v2) => v1.chain(v2));
 export default Validation;
