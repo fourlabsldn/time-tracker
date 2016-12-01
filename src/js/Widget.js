@@ -101,9 +101,16 @@ export default class Widget extends React.Component {
       model: selectDeliverable(model, option ? option.value : null),
     });
 
+    const toggleMinimise = () => this.setState({
+      minimised: !this.state.minimised,
+    });
+
     return (
-      <div className="TimeTracker">
-        <div className={`TimeTracker-timer ${isRecording(model) ? 'TimeTracker-timer--recording' : ''}`}>
+      <div className={`TimeTracker ${this.state.minimised ? 'TimeTracker--minimised' : ''}`}>
+        <div
+          className={`TimeTracker-timer ${isRecording(model) ? 'TimeTracker-timer--recording' : ''}`}
+          onClick={toggleMinimise}
+        >
           <Timer
             startTime={model.recording ? model.recording.startTime : null}
             intervals={model.recording ? model.recording.intervals : []}

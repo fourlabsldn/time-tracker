@@ -1,11 +1,32 @@
 .TimeTracker {
-  width: 200px;
-  height: 200px;
+  display: inline-block;
+  max-width: 200px;
+  max-height: 200px;
   font-family: $font-family;
-  background-color: $c-grey;
+  transform-origin: top left;
+  transition: overflow 0s linear 1s, transform .2s ease-out;
+
+  &--minimised {
+    transform: scale(.7);
+    overflow: hidden;
+    transition-delay: 0s;
+
+    .TimeTracker-fields {
+      transform: translateY(-100%);
+      opacity: 0;
+    }
+
+    .TimeTracker-timer {
+      padding: .2em 1em;
+    }
+  }
+}
+
+.TimeTracker-fields {
   display: flex;
   flex-flow: column nowrap;
   justify-content: center;
+  transition: .2s ease-out;
 }
 
 @keyframes blink {
@@ -15,11 +36,15 @@
 }
 
 .TimeTracker-timer {
+  position: relative;
   font-size: 1.5em;
   text-align: center;
-  padding: 1em;
+  padding: 1em 2em;
   background-color: $c-blue;
   color: $c-white;
+  transition: .2s ease-out;
+  transform-origin: top left;
+  z-index: 1;
 
   &::before {
     content: " ";
@@ -37,7 +62,6 @@
 
   &--recording::before {
     background-color: $c-red;
-    animation: blink 1s infinite ease;
   }
 }
 

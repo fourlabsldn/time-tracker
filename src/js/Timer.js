@@ -33,7 +33,7 @@ function millisecondsToTimeString(ms) {
   const seconds = Math.round(ms / 1000) % 60;
   const minutes = Math.round(ms / (1000 * 60)) % 60;
   const hours = Math.round(ms / (1000 * 60 * 60)) % 24;
-  return `${pad2(minutes)}:${pad2(seconds)}:${pad2(decaseconds)}`;
+  return `${pad2(minutes)}:${pad2(seconds)}`;
 }
 
 
