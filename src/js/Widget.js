@@ -132,6 +132,7 @@ export default class Widget extends React.Component {
         <button
           className="TimeTracker-stop"
           onClick={timeTrackerClick}
+          disabled={!selectedDeliverable(state)}
         >
           {isRecording(this.state) ? 'Stop' : 'Start'}
         </button>

@@ -53,7 +53,6 @@ export default class Timer extends React.Component {
     if (startTime) {
       setTimeout(_ => this.forceUpdate(), 10);
     }
-    console.log(this.props);
 
     return (
       <div className="TimeTracker-timer-time">
