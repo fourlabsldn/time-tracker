@@ -62,77 +62,80 @@ const toOption = el => (
 export default class Widget extends React.Component {
   constructor() {
     super();
-    this.state = new State({
-      recording: null,
-      serverURL: './data.json',
-      availableProjects: null,
-    });
+    this.state = {
+      minimised: false,
+      model: new State({
+        recording: null,
+        serverURL: './data.json',
+        availableProjects: null,
+      }),
+    };
 
     this.loadProjects();
   }
 
   loadProjects() {
-    fetch(this.state.serverURL)
+    fetch(this.state.model.serverURL)
     .then(r => r.json())
     .then(prop('projects'))
-    // Set projects is inside a function so that we use this.state at the
+    // Set projects is inside a function so that we use this.state.model at the
     // time of the response, rather than at the time of the request.
     .then(proj =>
-      this.setState(
-        setProjects(this.state, proj)
-      )
+      this.setState({
+        model: setProjects(this.state.model, proj),
+      })
     );
   }
 
 
   render() {
-    const state = this.state;
-    const timeTrackerClick = _ => this.setState(
-      startStopRecording(this.state, new Date(), !isRecording(this.state))
-    );
+    const model = this.state.model;
+    const timeTrackerClick = _ => this.setState({
+      model: startStopRecording(model, new Date(), !isRecording(model)),
+    });
 
-    const changeProject = (option) => this.setState(
-      selectProject(state, option ? option.value : null)
-    );
-
-    const changeDeliverable = (option) => this.setState(
-      selectDeliverable(state, option ? option.value : null)
-    );
+    const changeProject = (option) => this.setState({
+      model: selectProject(model, option ? option.value : null),
+    });
+    const changeDeliverable = (option) => this.setState({
+      model: selectDeliverable(model, option ? option.value : null),
+    });
 
     return (
       <div className="TimeTracker">
-        <div className={`TimeTracker-timer ${isRecording(this.state) ? 'TimeTracker-timer--recording' : ''}`}>
+        <div className={`TimeTracker-timer ${isRecording(model) ? 'TimeTracker-timer--recording' : ''}`}>
           <Timer
-            startTime={state.recording ? state.recording.startTime : null}
-            intervals={state.recording ? state.recording.intervals : []}
+            startTime={model.recording ? model.recording.startTime : null}
+            intervals={model.recording ? model.recording.intervals : []}
           />
         </div>
+        <div className="TimeTracker-fields">
+          <div className="TimeTracker-projects">
+            <Select
+              name="form-field-name"
+              value={toOption(selectedProject(model))}
+              options={availableProjects(model).map(toOption)}
+              onChange={changeProject}
+            />
+          </div>
 
-        <div className="TimeTracker-projects">
-          <Select
-            name="form-field-name"
-            value={toOption(selectedProject(state))}
-            options={availableProjects(state).map(toOption)}
-            onChange={changeProject}
-          />
+          <div className="TimeTracker-deliverables">
+            <Select
+              name="form-field-name"
+              value={toOption(selectedDeliverable(model))}
+              options={availableDeliverables(model).map(toOption)}
+              onChange={changeDeliverable}
+            />
+          </div>
+
+          <button
+            className="TimeTracker-stop"
+            onClick={timeTrackerClick}
+            disabled={!selectedDeliverable(model)}
+          >
+            {isRecording(model) ? 'Stop' : 'Start'}
+          </button>
         </div>
-
-        <div className="TimeTracker-deliverables">
-          <Select
-            name="form-field-name"
-            value={toOption(selectedDeliverable(state))}
-            options={availableDeliverables(state).map(toOption)}
-            onChange={changeDeliverable}
-          />
-        </div>
-
-        <button
-          className="TimeTracker-stop"
-          onClick={timeTrackerClick}
-          disabled={!selectedDeliverable(state)}
-        >
-          {isRecording(this.state) ? 'Stop' : 'Start'}
-        </button>
       </div>
     );
   }
