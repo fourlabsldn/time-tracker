@@ -47,6 +47,14 @@ export const selectProject = curry((state, projectName) => {
     ? availableProjects.concat(recording.project)
     : availableProjects;
 
+  if (projectName === null) {
+    return new State({
+      recording: null,
+      serverURL,
+      availableProjects: allProjects,
+    });
+  }
+
   const chosenProject = allProjects.find(propEq('name', projectName));
 
   assert(chosenProject, `No project found with name ${projectName}`);
@@ -82,14 +90,24 @@ export const selectDeliverable = curry((state, deliverableName) => {
 
   const chosenDeliverable = allProjectDeliverables.find(propEq('name', deliverableName));
 
-  assert(chosenDeliverable, `No deliverables found with name ${deliverableName}`);
+  assert(
+    chosenDeliverable || deliverableName === null,
+    `No deliverables found with name ${deliverableName}`
+  );
 
-  const newProject = new Project({
-    name: project.name,
-    url: project.url,
-    deliverables: allProjectDeliverables.filter(v => !equals(chosenDeliverable)(v)),
-    selectedDeliverable: chosenDeliverable,
-  });
+  const newProject = deliverableName === null
+    ? new Project({
+      name: project.name,
+      url: project.url,
+      deliverables: allProjectDeliverables,
+      selectedDeliverable: null,
+    })
+    : new Project({
+      name: project.name,
+      url: project.url,
+      deliverables: allProjectDeliverables.filter(v => !equals(chosenDeliverable)(v)),
+      selectedDeliverable: chosenDeliverable,
+    });
 
   // TODO: This is just wrong. When you change deliverables you shouldn't
   // start everything from the beginning. It shouldpick up where you left off.

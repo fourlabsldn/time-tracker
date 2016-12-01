@@ -91,12 +91,12 @@ export default class Widget extends React.Component {
       startStopRecording(this.state, new Date(), !isRecording(this.state))
     );
 
-    const changeProject = ({ value }) => this.setState(
-      selectProject(state, value)
+    const changeProject = (option) => this.setState(
+      selectProject(state, option ? option.value : null)
     );
 
-    const changeDeliverable = ({ value }) => this.setState(
-      selectDeliverable(state, value)
+    const changeDeliverable = (option) => this.setState(
+      selectDeliverable(state, option ? option.value : null)
     );
 
     return (
