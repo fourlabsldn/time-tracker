@@ -96,7 +96,7 @@ export const selectDeliverable = curry((state, deliverableName) => {
   const newRecording = new Recording({
     project: newProject,
     startTime: null,
-    intervals: null,
+    intervals: [],
   });
 
   return new State({

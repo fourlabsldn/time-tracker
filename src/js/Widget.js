@@ -1,66 +1,20 @@
 /* eslint-disable no-nested-ternary */
 import React from 'react';
-import moment from 'moment';
 import Select from 'react-select';
 import { State } from './types';
+import Timer from './Timer';
 import {
   startStopRecording,
   selectDeliverable,
   selectProject,
   setProjects,
 } from './Widget.update';
-import { reduce, pipe, add, curry, prop } from 'ramda';
+import { pipe, prop } from 'ramda';
 
-
-// diff in ms
-const calcInterval = curry((end, start) => moment(end).diff(moment(start)));
-
-/**
- * @method calculateRunningTime
- * @param  {Maybe<Date>} startTime
- * @param  {Array<Object>} intervals - Time intervals of type { start: Object, end: Object}
- * @return {Integer}
- */
-function calculateRunningTime(startTime, intervals) {
-  const intervalsSum = reduce(
-    (total, { start, end }) => total + calcInterval(end, start),
-    0,
-    intervals
-  );
-
-  const totalTime = pipe(calcInterval(new Date()), add(intervalsSum));
-
-  return startTime
-    ? totalTime(startTime)
-    : intervalsSum;
-}
-
-const pad2 = num => (`00${num}`).slice(-2);
-
-function millisecondsToTimeString(ms) {
-  const seconds = ms % 1000;
-  const minutes = ms % (1000 * 60);
-  const hours = ms % (1000 * 60 * 60);
-  return `${pad2(hours)}:${pad2(minutes)}:${pad2(seconds)}`;
-}
-
-
-const recordingTime = state => {
-  if (!state.recording || !state.recording.startTime) {
-    return '00:00:00';
-  }
-
-  const runningTime = calculateRunningTime(
-    state.recording.startTime,
-    state.recording.intervals
-  );
-
-  return millisecondsToTimeString(runningTime);
-};
 
 const selectedProject = ({ recording }) => (
   recording
-    ? recording.project.name
+    ? recording.project
     : null
 );
 
@@ -73,7 +27,7 @@ const availableProjects = (state) => (
 
 const selectedDeliverable = ({ recording }) => (
   recording && recording.project.selectedDeliverable
-    ? recording.project.selectedDeliverable.name
+    ? recording.project.selectedDeliverable
     : null
 );
 
@@ -134,7 +88,7 @@ export default class Widget extends React.Component {
   render() {
     const state = this.state;
     const timeTrackerClick = _ => this.setState(
-      startStopRecording(new Date(), !isRecording(this.state), this.state)
+      startStopRecording(this.state, new Date(), !isRecording(this.state))
     );
 
     const changeProject = ({ value }) => this.setState(
@@ -151,9 +105,10 @@ export default class Widget extends React.Component {
           <div className="TimeTracker-timer-recording">
           </div>
 
-          <div className="TimeTracker-timer-time">
-            {recordingTime(this.state)}
-          </div>
+          <Timer
+            startTime={state.recording ? state.recording.startTime : null}
+            intervals={state.recording ? state.recording.intervals : []}
+          />
         </div>
 
         <div className="TimeTracker-projects">
