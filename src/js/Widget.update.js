@@ -2,7 +2,7 @@ import assert from 'fl-assert';
 import { Project, Recording, TimeInterval, State } from './types';
 import { not, equals, propEq, curry } from 'ramda';
 
-const startStopRecording = curry((state, time, shouldStart) {
+export const startStopRecording = curry((state, time, shouldStart) => {
   const projectChosen = !!state.recording;
   const recordingAlreadyStarted = projectChosen && !!state.recording.startTime;
   const shouldStop = !shouldStart;
@@ -35,7 +35,7 @@ const startStopRecording = curry((state, time, shouldStart) {
   });
 });
 
-const selectProject = curry((state, projectName) {
+export const selectProject = curry((state, projectName) => {
   const { recording, serverURL, availableProjects } = state;
 
   const isCurrentlyRecording = recording && recording.startTime;
@@ -64,7 +64,7 @@ const selectProject = curry((state, projectName) {
   });
 });
 
-const selectDeliverable = curry((state, deliverableName) {
+export const selectDeliverable = curry((state, deliverableName) => {
   const { recording } = state;
 
   const projectChosen = !!recording;
@@ -105,7 +105,3 @@ const selectDeliverable = curry((state, deliverableName) {
     availableProjects: state.availableProjects,
   });
 });
-
-export startStopRecording;
-export selectProject;
-export selectDeliverable;

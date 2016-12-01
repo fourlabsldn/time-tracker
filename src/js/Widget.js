@@ -1,19 +1,22 @@
-// @flow
+/* eslint-disable no-nested-ternary */
 import React from 'react';
 import moment from 'moment';
-import { reduce, prop, pipe, add, map, curry, concat } from 'ramda';
 import Select from 'react-select';
+import { State } from './types';
+import { startStopRecording, selectDeliverable, selectProject } from './Widget.update';
+import { reduce, pipe, add, curry, prop } from 'ramda';
+
 
 // diff in ms
 const calcInterval = curry((end, start) => moment(end).diff(moment(start)));
 
 /**
  * @method calculateRunningTime
- * @param  {Object.Maybe<Date>} startTime
- * @param  {Object.Array<Object>} intervals - Time intervals of type { start: Object, end: Object}
+ * @param  {Maybe<Date>} startTime
+ * @param  {Array<Object>} intervals - Time intervals of type { start: Object, end: Object}
  * @return {Integer}
  */
-function calculateRunningTime({ startTime, intervals }) {
+function calculateRunningTime(startTime, intervals) {
   const intervalsSum = reduce(
     (total, { start, end }) => total + calcInterval(end, start),
     0,
@@ -22,10 +25,9 @@ function calculateRunningTime({ startTime, intervals }) {
 
   const totalTime = pipe(calcInterval(new Date()), add(intervalsSum));
 
-  return pipe(
-    Maybe.map(totalTime),
-    Maybe.withDefault(intervalsSum)
-  )(startTime);
+  return startTime
+    ? totalTime(startTime)
+    : intervalsSum;
 }
 
 const pad2 = num => (`00${num}`).slice(-2);
@@ -38,112 +40,127 @@ function millisecondsToTimeString(ms) {
 }
 
 
-const recordingTime = pipe(
-  Maybe.map(pipe(calculateRunningTime, millisecondsToTimeString)),
-  Maybe.withDefault('00:00:00')
-);
+const recordingTime = state => {
+  if (!state.recording || !state.recording.startTime) {
+    return '00:00:00';
+  }
 
-const toOption = ({ name }) => ({ name, label: name });
-
-const toProjectsArray = (maybeProjects, maybeSelectedProject) =>
-  pipe(
-    Maybe.map(Array),
-    Maybe.withDefault([]),
-    concat(Maybe.withDefault([], maybeProjects))
-  )(maybeSelectedProject);
-
-const toDeliverablesArray = pipe(
-    Maybe.map(prop('project')),
-    Maybe.map(({ selectedDeliverable, deliverables }) => [selectedDeliverable, ...deliverables]),
-    Maybe.withDefault([]),
-    map(toOption)
+  const runningTime = calculateRunningTime(
+    state.recording.startTime,
+    state.recording.intervals
   );
 
-const toSelectedDeliverable = pipe(
-  Maybe.map(prop('project')),
-  Maybe.map(prop('selectedDeliverable')),
-  Maybe.map(toOption),
-  Maybe.withDefault(null)
+  return millisecondsToTimeString(runningTime);
+};
+
+const selectedProject = ({ recording }) => (
+  recording
+    ? recording.project.name
+    : null
 );
 
-class Widget extends React.Component {
+const availableProjects = (state) => (
+  state.recording
+    ? (state.availableProjects || [])
+      .concat([state.recording.project])
+    : (state.availableProjects || [])
+);
+
+const selectedDeliverable = ({ recording }) => (
+  recording && recording.project.selectedDeliverable
+    ? recording.project.selectedDeliverable.name
+    : null
+);
+
+const availableDeliverables = ({ recording }) => {
+  if (!recording) {
+    return [];
+  }
+  const selected = recording.project.selectedDeliverable;
+
+  if (!selected) {
+    return recording.project.deliverables;
+  }
+
+  return recording.project.deliverables
+    .concat([selected]);
+};
+
+/**
+ * @param {Object} state
+ * @return bool
+ */
+const isRecording = state => {
+  return state.recording && state.recording.startTime;
+};
+
+const toOption = el => (
+  el
+  ? pipe(prop('name'), name => ({ label: name, value: name }))(name)
+  : null
+);
+
+export default class Widget extends React.Component {
   constructor() {
     super();
-    this.state =
+    this.state = new State({
+      recording: null,
+      serverURL: 'localhost',
+      availableProjects: null,
+    });
   }
-  const maybeSelectedProject = Maybe.map(prop('project'), maybeRecording);
-  const availableProjects = toProjectsArray(maybeProjects, maybeSelectedProject);
-  const timerRunning = pipe(
-    Maybe.map(prop('startTime')),
-    Maybe.withDefault(Maybe.Nothing()),
-    Maybe.map(_ => true),
-    Maybe.withDefault(false)
-  )(maybeRecording);
 
-  return (
-    <div className="TimeTracker">
-      <div className="TimeTracker-timer">
-        <div className="TimeTracker-timer-recording">
+
+  render() {
+    const state = this.state;
+    const timeTrackerClick = _ => this.setState(
+      startStopRecording(new Date(), !isRecording(this.state), this.state)
+    );
+
+    const changeProject = name => this.setState(
+      selectProject(state, name)
+    );
+
+    const changeDeliverable = name => this.setState(
+      selectDeliverable(state, name)
+    );
+
+    return (
+      <div className="TimeTracker">
+        <div className="TimeTracker-timer">
+          <div className="TimeTracker-timer-recording">
+          </div>
+
+          <div className="TimeTracker-timer-time">
+            {recordingTime(this.state)}
+          </div>
         </div>
 
-        <div className="TimeTracker-timer-time">
-          {recordingTime(maybeRecording)}
+        <div className="TimeTracker-projects">
+          <Select
+            name="form-field-name"
+            value={toOption(selectedProject(state))}
+            options={availableProjects(state).map(toOption)}
+            onChange={changeProject}
+          />
         </div>
+
+        <div className="TimeTracker-deliverables">
+          <Select
+            name="form-field-name"
+            value={toOption(selectedDeliverable(state))}
+            options={availableDeliverables(state).map(toOption)}
+            onChange={changeDeliverable}
+          />
+        </div>
+
+        <button
+          className="TimeTracker-stop"
+          onClick={timeTrackerClick}
+        >
+          {isRecording(this.state) ? 'Stop' : 'Start'}
+        </button>
       </div>
-
-      <div className="TimeTracker-projects">
-        <Select
-          name="form-field-name"
-          value={Maybe.map(toOption, maybeSelectedProject).withDefault(null)}
-          options={map(toOption, availableProjects)}
-          onChange={dispatchSelectProject}
-        />
-      </div>
-
-      <div className="TimeTracker-deliverables">
-        <Select
-          name="form-field-name"
-          value={toSelectedDeliverable(maybeRecording)}
-          options={toDeliverablesArray(maybeRecording)}
-          onChange={dispatchSelectDeliverable}
-        />
-      </div>
-
-      <button
-        className="TimeTracker-stop"
-        onClick={_ => dispatchStartStopTimer(new Date(), !timerRunning)}
-      >
-        {timerRunning ? 'Stop': 'Start'}
-      </button>
-    </div>
-  );
-};
-// {projectsBox(maybeProjects, Maybe.map(prop('project'), maybeRecording))}
-
-
-
-const mapStateToProps = state => ({
-  maybeRecording: state.recording,
-  maybeProjects: (function () {
-    return RemoteData.toMaybe(state.availableProjects);
-  }()),
-});
-
-const mapDispatchToProps = dispatch => ({
-  dispatchSelectProject: pipe(selectProject, dispatch),
-  dispatchSelectDeliverable: pipe(selectDeliverable, dispatch),
-  dispatchStartStopTimer: (...args) => dispatch(startStopTimer(...args)),
-});
-
-Widget.propTypes = {
-  maybeRecording: React.PropTypes.object,
-  maybeProjects: React.PropTypes.object,
-  dispatchSelectProject: React.PropTypes.func,
-  dispatchSelectDeliverable: React.PropTypes.func,
-  dispatchStartStopTimer: React.PropTypes.func,
-};
-
-export default connectWithStore(
-  mapStateToProps,
-  mapDispatchToProps
-)(Widget, store);
+    );
+  }
+}

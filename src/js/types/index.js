@@ -1,3 +1,4 @@
+import assert from 'fl-assert';
 import { string, object, date, array, nullable } from './type-checkers';
 
 // ===================================================================
@@ -20,11 +21,16 @@ const project = object({
   selectedDeliverable: nullable(deliverable),
 });
 // deliverables and selectedDeliverables together form a ziplist.
-export function Project(name, url, deliverables = []) {
+export function Project({ name, url, deliverables = [], selectedDeliverable = null }) {
   this.name = name;
   this.url = url;
-  this.deliverables = deliverables.slice(1);
-  this.selectedDeliverable = deliverables[0] || null;
+  this.deliverables = deliverables;
+  this.selectedDeliverable = selectedDeliverable;
+
+  assert(
+    !(deliverables.includes(selectedDeliverable)),
+    'Selected deliverable cannot be repeated in deliverables list'
+  );
   project(this).throwFailure();
 }
 
@@ -41,8 +47,8 @@ export const recording = object({
   startTime: nullable(date),
   intervals: array(timeInterval),
 });
-export function Recording(proj, startTime = null, intervals = []) {
-  this.project = proj;
+export function Recording({ project, startTime = null, intervals = [] }) {
+  this.project = project;
   this.startTime = startTime;
   this.intervals = intervals;
   recording(this).throwFailure();
@@ -54,9 +60,15 @@ const state = object({
   availableProjects: nullable(array(project)),
 });
 
-export function State(rec= null, serverURL, availableProjects = null) {
-  this.recording = rec;
+export function State({ recording = null, serverURL, availableProjects = null }) {
+  this.recording = recording;
   this.serverURL = serverURL;
   this.availableProjects = availableProjects;
+
+  assert(
+    !(recording && availableProjects && availableProjects.includes(recording.project)),
+    'Recording project must not be included in availableProjects array'
+  );
+
   state(this).throwFailure();
 }
