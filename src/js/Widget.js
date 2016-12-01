@@ -101,10 +101,7 @@ export default class Widget extends React.Component {
 
     return (
       <div className="TimeTracker">
-        <div className="TimeTracker-timer">
-          <div className="TimeTracker-timer-recording">
-          </div>
-
+        <div className={`TimeTracker-timer ${isRecording(this.state) ? 'TimeTracker-timer--recording' : ''}`}>
           <Timer
             startTime={state.recording ? state.recording.startTime : null}
             intervals={state.recording ? state.recording.intervals : []}

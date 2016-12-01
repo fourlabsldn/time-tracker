@@ -33,7 +33,7 @@ function millisecondsToTimeString(ms) {
   const seconds = Math.round(ms / 1000) % 60;
   const minutes = Math.round(ms / (1000 * 60)) % 60;
   const hours = Math.round(ms / (1000 * 60 * 60)) % 24;
-  return `${pad2(hours)}:${pad2(minutes)}:${pad2(seconds)}:${pad2(decaseconds)}`;
+  return `${pad2(minutes)}:${pad2(seconds)}:${pad2(decaseconds)}`;
 }
 
 
@@ -54,9 +54,14 @@ export default class Timer extends React.Component {
       setTimeout(_ => this.forceUpdate(), 10);
     }
 
+    const timeString = recordingTime(startTime, intervals);
+
     return (
-      <div className="TimeTracker-timer-time">
-        {recordingTime(startTime, intervals)}
+      <div
+        className="TimeTracker-timer-time"
+        style={{ minWidth: `${timeString.length * 0.6}em` }}
+      >
+        {timeString}
       </div>
     );
   }

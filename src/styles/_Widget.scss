@@ -20,11 +20,8 @@
   padding: 1em;
   background-color: $c-blue;
   color: $c-white;
-}
 
-.TimeTracker-timer-time{
-  &::before,
-  &--recording::before {
+  &::before {
     content: " ";
     display: inline-block;
     width: 0.4em;
@@ -41,4 +38,9 @@
     background-color: $c-red;
     animation: blink 1s infinite ease;
   }
+}
+
+.TimeTracker-timer-time {
+  display: inline-block;
+  text-align: left;
 }
