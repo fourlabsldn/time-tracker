@@ -60,7 +60,7 @@ export const selectProject = curry((state, projectName) => {
   return new State({
     recording: newRecording,
     serverURL,
-    availableProjects,
+    availableProjects: allProjects.filter(({ name }) => name !== chosenProject.name),
   });
 });
 
@@ -87,7 +87,7 @@ export const selectDeliverable = curry((state, deliverableName) => {
   const newProject = new Project({
     name: project.name,
     url: project.url,
-    deliverables: allProjectDeliverables.filter(not(equals(chosenDeliverable))),
+    deliverables: allProjectDeliverables.filter(v => !equals(chosenDeliverable)(v)),
     selectedDeliverable: chosenDeliverable,
   });
 
@@ -113,8 +113,8 @@ export const selectDeliverable = curry((state, deliverableName) => {
  * @param {Object} state
  * @param {Array<Object>} projects
  */
-export const setProjects = curry((state, projects) => {
-  assert(Array.isArray(projects), `Invalid array of projects: ${JSON.stringify(projects)}`);
+export const setProjects = curry((state, rawProjects) => {
+  assert(Array.isArray(rawProjects), `Invalid array of projects: ${JSON.stringify(rawProjects)}`);
 
   // TODO: We must use IDS instead of names, as names can change.
   const currentlyRecordingProject = state.recording
@@ -123,7 +123,7 @@ export const setProjects = curry((state, projects) => {
 
   assert(
     !(currentlyRecordingProject
-      && !projects
+      && !rawProjects
         .map(prop('name'))
         .includes(currentlyRecordingProject.name)
     ),
@@ -132,6 +132,7 @@ export const setProjects = curry((state, projects) => {
 
   const { recording, serverURL } = state;
 
+  const projects = rawProjects.map(p => new Project(p));
   return currentlyRecordingProject
     ? new State({
       recording,

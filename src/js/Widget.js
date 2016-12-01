@@ -101,7 +101,7 @@ const isRecording = state => {
 
 const toOption = el => (
   el
-  ? pipe(prop('name'), name => ({ label: name, value: name }))(name)
+  ? pipe(prop('name'), name => ({ label: name, value: name }))(el)
   : null
 );
 
@@ -137,12 +137,12 @@ export default class Widget extends React.Component {
       startStopRecording(new Date(), !isRecording(this.state), this.state)
     );
 
-    const changeProject = name => this.setState(
-      selectProject(state, name)
+    const changeProject = ({ value }) => this.setState(
+      selectProject(state, value)
     );
 
-    const changeDeliverable = name => this.setState(
-      selectDeliverable(state, name)
+    const changeDeliverable = ({ value }) => this.setState(
+      selectDeliverable(state, value)
     );
 
     return (
