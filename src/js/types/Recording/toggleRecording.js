@@ -14,7 +14,7 @@ import {
  * @params {Date} time
  * @params {Boolean} on
  */
-export default curry((model, time, on) => {
+export default curry((time, on, model) => {
   const recordingStarted = isRecording(model);
 
   if ((!on && !recordingStarted) || (on && recordingStarted)) {

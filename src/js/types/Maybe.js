@@ -15,7 +15,7 @@ const types = {
 
 function Maybe(value, type) {
   // Check that a valid type is being used
-  const isJust = type === types.Just;
+  const isJust = value !== null && value !== undefined && type === types.Just;
   this.isJust = isJust;
   this.isNothing = !isJust;
   this.withDefault = defaultVal => (isJust ? value : defaultVal);
@@ -26,6 +26,7 @@ function Maybe(value, type) {
 }
 
 // Static functions
+Maybe.of = v => new Maybe.Success(v); // the function itself will take care of nulls and undefineds
 Maybe.Just = v => new Maybe(v, types.Just);
 Maybe.Nothing = _ => new Maybe(null, types.Nothing);
 

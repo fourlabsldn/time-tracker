@@ -55,11 +55,11 @@ export default class Widget extends React.Component {
   constructor() {
     super();
     this.state = {
-      minimised: false,
-      model: new State({
-        recording: null,
+      model: State.of({
+        minimised: false,
         serverURL: './data.json',
-        availableProjects: null,
+        availableProjects: [],
+        selectedProject: null,
       }),
     };
 
@@ -67,7 +67,7 @@ export default class Widget extends React.Component {
   }
 
   loadProjects() {
-    fetch(this.state.model.serverURL)
+    fetch(State.getServerUrl(this.state.model))
     .then(r => r.json())
     .then(prop('projects'))
     // Set projects is inside a function so that we use this.state.model at the

@@ -14,11 +14,12 @@ export const typeCheck = object({
 const State = immutableConstructor(typeCheck);
 
 export const getMinimised = prop('minimised');
+export const getServerUrl = prop('serverUrl');
 export const getSelectedProject = propOr('selectedProject', null);
 export const getAvailableProjects = model => (
   getSelectedProject(model)
-    ? [getSelectedProject(model), ... model.availableProjects]
-    : model.availableProjects
+    ? [getSelectedProject(model), ... (model.availableProjects || [])]
+    : (model.availableProjects || [])
   );
 
 export const setMinimised = curry((v, model) => pipe(

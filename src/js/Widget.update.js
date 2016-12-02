@@ -1,8 +1,27 @@
 import assert from 'fl-assert';
-import { Project, Recording, TimeInterval, State } from './types';
-import { not, equals, propEq, curry, prop } from 'ramda';
+import { not, equals, propEq, curry, prop, pipe } from 'ramda';
+import {
+  Project,
+  Recording,
+  TimeInterval,
+  Deliverable,
+  State,
+  Maybe,
+} from './types';
+
 
 export const startStopRecording = curry((state, time, shouldStart) => {
+  const proj = Maybe.of(state).map()
+  const deliv = Maybe.map(Project.getSelectedDeliverable, proj);
+  const newRecording = pipe(
+    Maybe.map(Deliverable.getRecording),
+    Maybe.map(Recording.toggleRecording(time, shouldStart))
+  )(deliv);
+
+  Maybe.map2(newRecording, deliv, Deliverable.setRecording)
+CONTINUE FROM HERE
+
+}; {
   const projectChosen = !!state.recording;
   const recordingAlreadyStarted = projectChosen && !!state.recording.startTime;
   const shouldStop = !shouldStart;
@@ -163,3 +182,11 @@ export const setProjects = curry((state, rawProjects) => {
       availableProjects: projects,
     });
 });
+
+export const isRecording = pipe(
+  Maybe.of,
+  Maybe.map(State.getSelectedProject),
+  Maybe.map(Project.getSelectedDeliverable),
+  Maybe.map(Deliverable.isRecording),
+  Maybe.withDefault(false)
+);
