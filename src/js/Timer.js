@@ -8,7 +8,7 @@ const calcInterval = curry((end, start) => moment(end).diff(moment(start)));
 
 /**
  * @method calculateRunningTime
- * @param  {Maybe<Date>} startTime
+ * @param  {Date} startTime
  * @param  {Array<Object>} intervals - Time intervals of type { start: Object, end: Object}
  * @return {Integer}
  */
@@ -29,11 +29,13 @@ function calculateRunningTime(startTime, intervals) {
 const pad2 = num => (`00${num}`).slice(-2);
 
 function millisecondsToTimeString(ms) {
-  const decaseconds = Math.round(ms / 100) % 100;
-  const seconds = Math.round(ms / 1000) % 60;
-  const minutes = Math.round(ms / (1000 * 60)) % 60;
-  const hours = Math.round(ms / (1000 * 60 * 60)) % 24;
-  return `${pad2(minutes)}:${pad2(seconds)}`;
+  const seconds = Math.floor(ms / 1000) % 60;
+  const minutes = Math.floor(ms / (1000 * 60)) % 60;
+  const hours = Math.floor(ms / (1000 * 60 * 60)) % 24;
+
+  return hours > 0
+    ? `${pad2(hours)}:${pad2(minutes)}`
+    : `${pad2(minutes)}:${pad2(seconds)}`;
 }
 
 
@@ -50,6 +52,7 @@ const recordingTime = (startTime, intervals) => {
 export default class Timer extends React.Component {
   render() {
     const { startTime, intervals } = this.props;
+
     if (startTime) {
       setTimeout(_ => this.forceUpdate(), 10);
     }
@@ -66,3 +69,8 @@ export default class Timer extends React.Component {
     );
   }
 }
+
+Timer.propTypes = {
+  startTime: React.PropTypes.Object,
+  intervals: React.PropTypes.Array,
+};
