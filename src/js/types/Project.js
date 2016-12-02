@@ -1,6 +1,6 @@
-import { string, object, array, nullable } from '../type-checkers';
-import Deliverable from '../Deliverable';
-import { immutableConstructor } from '../utils';
+import { string, object, array } from './type-checkers';
+import Deliverable from './Deliverable';
+import { immutableConstructor } from './utils';
 import { prop } from 'ramda';
 
 // ========================================================================

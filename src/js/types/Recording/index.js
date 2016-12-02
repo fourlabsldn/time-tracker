@@ -1,5 +1,4 @@
-import { immutableConstructor } from '../utils';
-import Project from '../Project';
+import { immutableConstructor, checkType } from '../utils';
 import TimeInterval from '../TimeInterval';
 import Immutable from 'seamless-immutable';
 import { nullable, array, date, object } from '../type-checkers';
@@ -14,7 +13,6 @@ import _totalTime from './totalTime';
 // ========================================================================
 
 export const typeCheck = object({
-  project: Project.typeCheck,
   startTime: nullable(date),
   intervals: array(TimeInterval.typeCheck),
 });
@@ -22,25 +20,30 @@ export const typeCheck = object({
 // CONSTRUCTOR
 const Recording = immutableConstructor(typeCheck);
 
-// GETTERS
-export const getProject = propOr('project', null);
-
-// PRIVATE
+// PRIVATE GETTERS
 export const getStartTime = propOr('startTime', null);
 export const getIntervals = propOr('intervals', null);
 
-export const setStartTime = curry((v, model) => Immutable.set(model, 'startTime', v));
-export const setIntervals = curry((v, model) => Immutable.set(model, 'internals', v));
+// PRIVATE SETTERS
+export const setStartTime = curry((v, model) => pipe(
+  Immutable.set(model, 'startTime', v),
+  checkType(typeCheck)
+)());
 
+export const setIntervals = curry((v, model) => pipe(
+  Immutable.set(model, 'internals', v),
+  checkType(typeCheck)
+)());
+
+// ===========================
+// PUBLIC INTERFACE
 // BOOLEAN "gettters"
-export const isRecording = pipe(Recording.getProject, Project.getSelectedDeliverable, v => !!v);
-
+export const isRecording = pipe(getStartTime, v => !!v);
 export const toggleRecording = _toggleRecording;
 export const totalTime = _totalTime;
 
 Object.assign(Recording, {
   typeCheck,
-  getProject,
   getStartTime,
   getIntervals,
   setStartTime,
