@@ -10,4 +10,7 @@ export const typeCheck = object({
 
 const Deliverable = immutableConstructor(typeCheck);
 
+Object.assign(Deliverable, {
+  typeCheck,
+});
 export default Deliverable;

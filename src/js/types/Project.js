@@ -1,7 +1,7 @@
 import { string, object, array, nullable } from './type-checkers';
 import Deliverable from './Deliverable';
 import { immutableConstructor } from './utils';
-import { prop } from 'ramda';
+import { prop, curry } from 'ramda';
 import Immutable from 'seamless-immutable';
 // ========================================================================
 //
@@ -9,7 +9,7 @@ import Immutable from 'seamless-immutable';
 //
 // ========================================================================
 
-const projectTypeCheck = object({
+export const typeCheck = object({
   name: string,
   url: string,
   deliverables: array(Deliverable.typeCheck),
@@ -17,7 +17,7 @@ const projectTypeCheck = object({
 });
 
 // deliverables and selectedDeliverables together form a ziplist.
-const Project = immutableConstructor(projectTypeCheck);
+const Project = immutableConstructor(typeCheck);
 
 // GETTERS
 export const getName = prop('name');
@@ -31,21 +31,25 @@ export const getDeliverables = model => (
 
 export const setSelectedDeliverable = curry((model, newSelected) => {
   const all = getDeliverables(model);
-  const newDeliverables = all.filter(d => Deliverable.getName(d) !== Deliverable.getName(newSelected));
+  const newDeliverables = all.filter(
+    d => Deliverable.getName(d) !== Deliverable.getName(newSelected)
+  );
 
   return Immutable.merge({
     deliverables: newDeliverables,
     selectedDeliverable: newSelected,
-  })
+  });
 });
 
 
 // NO SETTERS
 Object.assign(Project, {
+  typeCheck,
   getName,
   getUrl,
   getDeliverables,
   getSelectedDeliverable,
+  setSelectedDeliverable,
 });
 
 export default Project;
