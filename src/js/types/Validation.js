@@ -48,10 +48,6 @@ function Validation(value, type) {
   this.chain = v => {
     if (!isSuccess) { return this; }
 
-    if (!(v instanceof Validation)) {
-      console.log(v);
-    }
-
     assert(
       v instanceof Validation,
       'Value passed to Validation.chain is not of type Validation'
@@ -76,4 +72,5 @@ Validation.mapFailure = curry((f, v) => v.mapFailure(f));
 Validation.throwFailure = v => v.throwFailure();
 Validation.andThen = curry((f, v) => v.andThen(f));
 Validation.chain = curry((v1, v2) => v1.chain(v2));
+
 export default Validation;

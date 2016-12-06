@@ -37,7 +37,7 @@ const modelType = object({
   minimised: bool,
   serverURL: string,
   unselectedProjects: nullable(array(projectType)),
-  selectedProject: projectType,
+  selectedProject: nullable(projectType),
 });
 
 export default modelType;
