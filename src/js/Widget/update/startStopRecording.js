@@ -1,14 +1,15 @@
 import { pipe, propOr, prop, concat } from 'ramda';
 import {
   selectedDeliverable,
-  allRecordings,
+  allGroups,
   updateAt,
   selectedRecording,
 } from './utils';
 
 export default (model, action) => {
-  const alreadyRecordingSelectedOne = allRecordings(model)
+  const alreadyRecordingSelectedOne = allGroups(model)
     .map(prop('deliverable'))
+    .filter(prop('startTime'))
     .includes(selectedDeliverable(model));
 
   if (!selectedDeliverable(model) || action.shouldStart === alreadyRecordingSelectedOne) {
@@ -18,7 +19,7 @@ export default (model, action) => {
   const recording = selectedRecording(model);
   if (action.shouldStart) {
     // We create the whole TimeInterval because recording may be null.
-    const intervals = propOr([], 'recording');
+    const intervals = propOr([], 'intervals', recording);
     return updateAt(
       ['selectedProject', 'selectedDeliverable', 'recording'],
       { intervals, startTime: new Date() },
@@ -37,9 +38,11 @@ export default (model, action) => {
   )(recording);
 
 
-  return updateAt(
+  const m =  updateAt(
     ['selectedProject', 'selectedDeliverable', 'recording'],
     { intervals, startTime: null },
     model
   );
+  console.log('stopped', m)
+  return m;
 };

@@ -1,22 +1,25 @@
 /* eslint-disable no-nested-ternary */
 import View from './view';
-import { pipe } from 'ramda';
 import { connect } from 'react-redux';
 import {
+  allGroups,
   selectedProject,
-  allDeliverables,
+  selectedDeliverable,
+  selectedRecording,
   allProjects,
-  allRecordings,
 } from './update/utils';
 
 // Hook things up here.
 const mapStateToProps = (model) => { // eslint-disable-line complexity
   return {
-    selectedProject: selectedProject(model),
-    selectedProjectDeliverables: pipe(selectedProject, allDeliverables)(model),
+    allGroups: allGroups(model),
+    selectedGroup: {
+      recording: selectedRecording(model),
+      project: selectedProject(model),
+      deliverable: selectedDeliverable(model),
+    },
     allProjects: allProjects(model),
     isMinimised: model.minimised,
-    allRecordings: allRecordings(model),
   };
 };
 

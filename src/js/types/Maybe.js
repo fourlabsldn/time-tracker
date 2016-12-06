@@ -26,7 +26,7 @@ function Maybe(value, type) {
 }
 
 // Static functions
-Maybe.of = v => new Maybe.Success(v); // the function itself will take care of nulls and undefineds
+Maybe.of = v => Maybe.Just(v); // the function itself will take care of nulls and undefineds
 Maybe.Just = v => new Maybe(v, types.Just);
 Maybe.Nothing = _ => new Maybe(null, types.Nothing);
 

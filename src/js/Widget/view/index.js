@@ -1,8 +1,9 @@
 /* eslint-disable no-nested-ternary */
 import React from 'react';
 import Select from 'react-select';
-import { pipe, prop } from 'ramda';
+import { pipe, prop, pathOr } from 'ramda';
 import Timer from './Timer';
+import { isRecording, selectedRecording, allDeliverables } from '../update/utils';
 
 import {
   startStopRecording,
@@ -19,16 +20,13 @@ const toOption = el => (el
 const Widget = ({ // eslint-disable-line complexity
   store,
   // props
-  selectedProject,
+  selectedGroup,
   allProjects,
-  selectedDeliverable,
-  allDeliverables,
-  recording,
-  isRecording,
   isMinimised,
 }) => {
+  console.log(selectedGroup)
   const timeTrackerClick = _ =>
-    store.dispatch(startStopRecording(new Date(), !isRecording));
+    store.dispatch(startStopRecording(new Date(), !isRecording(selectedGroup.recording)));
   const changeProject = (option) =>
     store.dispatch(selectProject(option ? option.value : null));
   const changeDeliverable = (option) =>
@@ -37,59 +35,53 @@ const Widget = ({ // eslint-disable-line complexity
   return (
     <div className={`TimeTracker ${isMinimised ? 'TimeTracker--minimised' : ''}`}>
       <div
-        className={`TimeTracker-timer ${isRecording ? 'TimeTracker-timer--recording' : ''}`}
+        className={'TimeTracker-timer'}
         onClick={_ => store.dispatch(toggleMinimised(!isMinimised))}
       >
         <Timer
-          startTime={recording ? recording.startTime : null}
-          intervals={recording ? recording.intervals : []}
+          startTime={pathOr(null, ['recording', 'startTime'], selectedGroup.recording)}
+          intervals={pathOr([], ['recording', 'intervals'], selectedGroup.recording)}
         />
       </div>
       <div className="TimeTracker-fields">
         <div className="TimeTracker-projects">
           <Select
             name="form-field-name"
-            value={toOption(selectedProject)}
-            options={allProjects.map(toOption)}
+            value={toOption(selectedGroup.project)}
+            options={allProjects.map(toOption).filter(v => !!v)}
             onChange={changeProject}
-            disabled={isRecording}
+            disabled={isRecording(selectedRecording)}
           />
         </div>
 
         <div className="TimeTracker-deliverables">
           <Select
             name="form-field-name"
-            value={toOption(selectedDeliverable)}
-            options={allDeliverables.map(toOption)}
+            value={toOption(selectedGroup.deliverable)}
+            options={allDeliverables(selectedGroup.project).map(toOption).filter(v => !!v)}
             onChange={changeDeliverable}
-            disabled={isRecording}
+            disabled={isRecording(selectedGroup.recording)}
           />
         </div>
 
         <button
           className="TimeTracker-stop"
           onClick={timeTrackerClick}
-          disabled={!selectedDeliverable}
+          disabled={!selectedGroup.deliverable}
         >
-          {isRecording ? 'Stop' : 'Start'}
+          {isRecording(selectedGroup.recording) ? 'Stop' : 'Start'}
         </button>
       </div>
     </div>
   );
 };
 
-//
-// Widget.propTypes = {
-//   store: React.PropTypes.object,
-//
-//   // props
-//   selectedProject: React.PropTypes.object,
-//   allProjects: React.PropTypes.array.required,
-//   selectedDeliverable: React.PropTypes.object,
-//   allDeliverables: React.PropTypes.array.required,
-//   recording: React.PropTypes.object,
-//   isRecording: React.PropTypes.bool.required,
-//   isMinimised: React.PropTypes.bool.required,
-// };
+
+Widget.propTypes = {
+  store: React.PropTypes.object,
+  selectedGroup: React.PropTypes.object,
+  allProjects: React.PropTypes.array,
+  isMinimised: React.PropTypes.bool,
+};
 
 export default Widget;
