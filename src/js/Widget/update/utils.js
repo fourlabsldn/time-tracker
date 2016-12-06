@@ -1,5 +1,6 @@
 /* eslint-disable new-cap */
-import { pathOr, pipe, curry } from 'ramda';
+import { pathOr, pipe, curry, propOr, concat, map, filter, isNil } from 'ramda';
+import { Maybe } from '../../types';
 import Immutable from 'seamless-immutable';
 
 export const updateAt = curry((keyArray, newVal, obj) => {
@@ -11,44 +12,61 @@ export const updateAt = curry((keyArray, newVal, obj) => {
   return Immutable(obj).merge(deepNewVal, { deep: true });
 });
 
+
+// Model -> Project | null
 export const selectedProject = pathOr(null, ['selectedProject']);
-
+// Model -> [Project]
 export const unselectedProjects = pathOr([], ['unselectedProjects']);
-
+// Model -> Deliverable | null
 export const selectedDeliverable = pathOr(null, ['selectedProject', 'selectedDeliverable']);
-
+// Model -> [Deliverable]
 export const unselectedDeliverables = pathOr([], ['selectedProject', 'unselectedDeliverables']);
-
-export const recordingIntervals = pathOr([], [
-  'selectedProject',
-  'selectedDeliverable',
-  'recording',
-  'intervals',
-]);
-
-export const recordingStartTime = pathOr(null, [
-  'selectedProject',
-  'selectedDeliverable',
-  'recording',
-  'startTime',
-]);
-
-export const recording = pathOr(null, [
+// Model -> Recording | null
+export const selectedRecording = pathOr(null, [
   'selectedProject',
   'selectedDeliverable',
   'recording',
 ]);
+// Model -> Boolean
+export const isRecording = pipe(selectedRecording, propOr(null, 'startTime'), isNil);
 
-export const isRecording = pipe(recordingStartTime, v => !!v);
+// (Project | null) -> Array[Deliverable]
+export const allDeliverables = project => pipe(
+  Maybe.of,
+  Maybe.map(propOr([], 'selectedDeliverable')),
+  Maybe.map(concat(propOr([], 'unselectedDeliverables', project))),
+  Maybe.withDefault([])
+)(project);
 
-export const allDeliverables = model => (
-  selectedDeliverable(model)
-  ? unselectedDeliverables(model).concat(selectedDeliverable(model))
-  : unselectedDeliverables(model)
-);
+// Model -> [Project]
+export const allProjects = model => pipe(
+  unselectedProjects,
+  concat(selectedProject(model) || [])
+)(model);
 
-export const allProjects = model => (
-    selectedProject(model)
-    ? unselectedProjects(model).concat(selectedProject(model))
-    : unselectedProjects(model)
+// Model -> [Recording]
+export const allRecordings = model => {
+  const runningRecording = recording => (
+    recording.startTime
+    ? { recording }
+    : null
   );
+
+  const recordingDeliverable = deliverable => (
+    runningRecording(deliverable)
+    ? Object.assign({}, { deliverable }, runningRecording(deliverable))
+    : null
+  );
+
+  const recordingDeliverables = project => pipe(
+    allDeliverables,
+    recordingDeliverable,
+    filter(isNil),
+    map(v => Object.assign({}, { project }, v))
+  )(project);
+
+  return pipe(
+    allProjects,
+    recordingDeliverables,
+  )(model);
+};
