@@ -1,7 +1,7 @@
 /* eslint-disable new-cap */
 import Validation from './Validation';
 import Maybe from './Maybe';
-import { curry, pipe } from 'ramda';
+import { curry, pipe, isNil } from 'ramda';
 
 export const errMsg = curry((prop, errorMessage) =>
   `Invalid property value for ${prop}. ${errorMessage}`
@@ -108,6 +108,9 @@ const haveSameKeys = (o1, o2) => {
 };
 
 export const object = curry((typeSignature, v) => {
+  if (isNil(v)) {
+    return Validation.Failure(`${v} is not of type object.`);
+  }
   if (!haveSameKeys(typeSignature, v)) {
     return Validation.Failure(
       `Object does not have same keys as its type signature:
