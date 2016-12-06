@@ -8,11 +8,13 @@ import {
   allDeliverables,
   recording,
   isRecording,
+  recordingsInfo,
 } from './update/utils';
 
 // Hook things up here.
 const mapStateToProps = (model) => { // eslint-disable-line complexity
   return {
+    recordingsInfo: recordingsInfo(model),
     selectedProject: selectedProject(model),
     allProjects: allProjects(model),
     selectedDeliverable: selectedDeliverable(model),

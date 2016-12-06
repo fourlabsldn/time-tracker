@@ -12,11 +12,11 @@ import Immutable from 'seamless-immutable';
 export const typeCheck = object({
   name: string,
   url: string,
-  deliverables: array(Deliverable.typeCheck),
+  unselectedDeliverables: array(Deliverable.typeCheck),
   selectedDeliverable: nullable(Deliverable.typeCheck),
 });
 
-// deliverables and selectedDeliverables together form a ziplist.
+// unselectedDeliverables and selectedDeliverables together form a ziplist.
 const Project = immutableConstructor(typeCheck);
 
 // GETTERS
@@ -25,8 +25,8 @@ export const getUrl = prop('url');
 export const getSelectedDeliverable = prop('selectedDeliverable');
 export const getDeliverables = model => (
   getSelectedDeliverable(model)
-    ? [getSelectedDeliverable(model), ... model.deliverables]
-    : model.deliverables
+    ? [getSelectedDeliverable(model), ... model.unselectedDeliverables]
+    : model.unselectedDeliverables
   );
 
 export const setSelectedDeliverable = curry((model, newSelected) => {
@@ -36,7 +36,7 @@ export const setSelectedDeliverable = curry((model, newSelected) => {
   );
 
   return Immutable.merge({
-    deliverables: newDeliverables,
+    unselectedDeliverables: newDeliverables,
     selectedDeliverable: newSelected,
   });
 });

@@ -1,7 +1,7 @@
 /* eslint-disable no-nested-ternary */
 import React from 'react';
 import Select from 'react-select';
-import { pipe, prop } from 'ramda';
+import { pipe, prop, path } from 'ramda';
 import Timer from './Timer';
 
 import {
@@ -19,6 +19,7 @@ const toOption = el => (el
 const Widget = ({ // eslint-disable-line complexity
   store,
   // props
+  recordingsInfo,
   selectedProject,
   allProjects,
   selectedDeliverable,
@@ -34,6 +35,7 @@ const Widget = ({ // eslint-disable-line complexity
   const changeDeliverable = (option) =>
     store.dispatch(selectDeliverable(option ? option.value : null));
 
+  console.log(recordingsInfo);
   return (
     <div className={`TimeTracker ${isMinimised ? 'TimeTracker--minimised' : ''}`}>
       <div
@@ -73,16 +75,21 @@ const Widget = ({ // eslint-disable-line complexity
         >
           {isRecording ? 'Stop' : 'Start'}
         </button>
+
+        <div>
+        {recordingsInfo.map(path(['project', 'name']))}
+        </div>
       </div>
     </div>
   );
 };
 
-//
+
 // Widget.propTypes = {
 //   store: React.PropTypes.object,
 //
 //   // props
+//   recordingsInfo: React.PropTypes.array.required,
 //   selectedProject: React.PropTypes.object,
 //   allProjects: React.PropTypes.array.required,
 //   selectedDeliverable: React.PropTypes.object,
