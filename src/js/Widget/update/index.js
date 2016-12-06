@@ -18,8 +18,15 @@ const actionHandlers = {
 
 export default function update(model, action) {
   const actionName = action.type.replace('WIDGET_', '');
+  const handler = actionHandlers[actionName];
+
+  if (!handler) {
+    console.warn('Invalid action:', actionName);
+    return model;
+  }
+
   return pipe(
-    actionHandlers[actionName],
+    handler,
     modelType,
     Validation.throwFailure,
     Validation.withDefault(null)

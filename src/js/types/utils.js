@@ -1,5 +1,5 @@
 import Immutable from 'seamless-immutable';
-import Validation from '../types';
+import Validation from './Validation';
 import { pipe } from 'ramda';
 
 export const checkType = (typeChecker, customCheck) =>

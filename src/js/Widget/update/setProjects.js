@@ -7,7 +7,7 @@ export default (model, action) => {
 
   const newProjects = action.rawProjects;
   return pipe(
-    updateAt('unselectedProjects', newProjects),
-    updateAt('selectedProject', null),
+    updateAt(['unselectedProjects'], newProjects),
+    updateAt(['selectedProject'], null),
   )(model);
 };

@@ -6,7 +6,7 @@ const {
   object,
   array,
   nullable,
-  boolean,
+  bool,
   date,
 } = typeCheckers;
 
@@ -34,7 +34,7 @@ const projectType = object({
 });
 
 const modelType = object({
-  minimised: boolean,
+  minimised: bool,
   serverURL: string,
   unselectedProjects: nullable(array(projectType)),
   selectedProject: projectType,

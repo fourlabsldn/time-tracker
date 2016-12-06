@@ -4,18 +4,20 @@ import Select from 'react-select';
 import { pipe, prop } from 'ramda';
 import Timer from './Timer';
 
+import {
+  startStopRecording,
+  selectDeliverable,
+  selectProject,
+  toggleMinimised,
+} from '../actions';
+
 const toOption = el => (el
   ? pipe(prop('name'), name => ({ label: name, value: name }))(el)
   : null
 );
 
 const Widget = ({ // eslint-disable-line complexity
-  // actions
-  startStopRecording,
-  selectDeliverable,
-  selectProject,
-  toggleMinimised,
-
+  store,
   // props
   selectedProject,
   allProjects,
@@ -25,15 +27,18 @@ const Widget = ({ // eslint-disable-line complexity
   isRecording,
   isMinimised,
 }) => {
-  const timeTrackerClick = _ => startStopRecording(new Date(), !isRecording);
-  const changeProject = (option) => selectProject(option ? option.value : null);
-  const changeDeliverable = (option) => selectDeliverable(option ? option.value : null);
+  const timeTrackerClick = _ =>
+    store.dispatch(startStopRecording(new Date(), !isRecording));
+  const changeProject = (option) =>
+    store.dispatch(selectProject(option ? option.value : null));
+  const changeDeliverable = (option) =>
+    store.dispatch(selectDeliverable(option ? option.value : null));
 
   return (
     <div className={`TimeTracker ${isMinimised ? 'TimeTracker--minimised' : ''}`}>
       <div
         className={`TimeTracker-timer ${isRecording ? 'TimeTracker-timer--recording' : ''}`}
-        onClick={_ => toggleMinimised(!isMinimised)}
+        onClick={_ => store.dispatch(toggleMinimised(!isMinimised))}
       >
         <Timer
           startTime={recording ? recording.startTime : null}
@@ -73,20 +78,18 @@ const Widget = ({ // eslint-disable-line complexity
   );
 };
 
+// 
+// Widget.propTypes = {
+//   store: React.PropTypes.object,
+//
+//   // props
+//   selectedProject: React.PropTypes.object,
+//   allProjects: React.PropTypes.array.required,
+//   selectedDeliverable: React.PropTypes.object,
+//   allDeliverables: React.PropTypes.array.required,
+//   recording: React.PropTypes.object,
+//   isRecording: React.PropTypes.bool.required,
+//   isMinimised: React.PropTypes.bool.required,
+// };
 
-Widget.propTypes = {
-  startStopRecording: React.PropTypes.func,
-  selectDeliverable: React.PropTypes.func,
-  selectProject: React.PropTypes.func,
-  setProjects: React.PropTypes.func,
-  toggleMinimised: React.PropTypes.func,
-
-  // props
-  selectedProject: React.PropTypes.func,
-  allProjects: React.PropTypes.array.required,
-  selectedDeliverable: React.PropTypes.func,
-  allDeliverables: React.PropTypes.array.required,
-  recording: React.PropTypes.object,
-  isRecording: React.PropTypes.bool.required,
-  isMinimised: React.PropTypes.bool.required,
-};
+export default Widget;

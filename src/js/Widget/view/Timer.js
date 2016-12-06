@@ -71,6 +71,6 @@ export default class Timer extends React.Component {
 }
 
 Timer.propTypes = {
-  startTime: React.PropTypes.Object,
-  intervals: React.PropTypes.Array,
+  startTime: React.PropTypes.object,
+  intervals: React.PropTypes.array,
 };
