@@ -48,6 +48,10 @@ function Validation(value, type) {
   this.chain = v => {
     if (!isSuccess) { return this; }
 
+    if (!(v instanceof Validation)) {
+      console.log(v);
+    }
+
     assert(
       v instanceof Validation,
       'Value passed to Validation.chain is not of type Validation'

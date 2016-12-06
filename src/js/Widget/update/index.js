@@ -2,6 +2,7 @@
 import modelType from '../model';
 import { Validation } from '../../types';
 import { pipe } from 'ramda';
+import Immutable from 'seamless-immutable';
 import startStopRecording from './startStopRecording';
 import selectProject from './selectProject';
 import selectDeliverable from './selectDeliverable';
@@ -27,8 +28,10 @@ export default function update(model, action) {
 
   return pipe(
     handler,
+    v => Immutable.asMutable(v, { deep: true }),
     modelType,
     Validation.throwFailure,
-    Validation.withDefault(null)
+    Validation.withDefault(null),
+    Immutable
   )(model, action);
 }
