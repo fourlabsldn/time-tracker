@@ -2,7 +2,7 @@
 import { pathOr, pipe, curry } from 'ramda';
 import Immutable from 'seamless-immutable';
 
-export const updateAt = curry((keyArray, obj, newVal) => {
+export const updateAt = curry((keyArray, newVal, obj) => {
   const deepNewVal = keyArray.reduceRight(
     (result, key) => ({ [key]: result })
     , newVal

@@ -15,8 +15,8 @@ export default (model, action) => {
     const intervals = recordingIntervals(model);
     return updateAt(
       ['selectedProject', 'selectedDeliverable', 'recording'],
-      model,
-      { intervals, startTime: new Date() }
+      { intervals, startTime: new Date() },
+      model
     );
   }
 
@@ -27,7 +27,7 @@ export default (model, action) => {
   const intervals = recordingIntervals(model).concat([stoppedInterval]);
   return updateAt(
     ['selectedProject', 'selectedDeliverable', 'recording'],
-    model,
-    { intervals, startTime: null }
+    { intervals, startTime: null },
+    model
   );
 };
