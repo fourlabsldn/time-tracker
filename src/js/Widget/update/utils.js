@@ -33,6 +33,12 @@ export const recordingStartTime = pathOr(null, [
   'startTime',
 ]);
 
+export const recording = pathOr(null, [
+  'selectedProject',
+  'selectedDeliverable',
+  'recording',
+]);
+
 export const isRecording = pipe(recordingStartTime, v => !!v);
 
 export const allDeliverables = model => (

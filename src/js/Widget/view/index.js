@@ -18,9 +18,9 @@ const Widget = ({ // eslint-disable-line complexity
 
   // props
   selectedProject,
-  projects,
+  allProjects,
   selectedDeliverable,
-  deliverables,
+  allDeliverables,
   recording,
   isRecording,
   isMinimised,
@@ -45,7 +45,7 @@ const Widget = ({ // eslint-disable-line complexity
           <Select
             name="form-field-name"
             value={toOption(selectedProject)}
-            options={projects.map(toOption)}
+            options={allProjects.map(toOption)}
             onChange={changeProject}
             disabled={isRecording}
           />
@@ -55,7 +55,7 @@ const Widget = ({ // eslint-disable-line complexity
           <Select
             name="form-field-name"
             value={toOption(selectedDeliverable)}
-            options={deliverables.map(toOption)}
+            options={allDeliverables.map(toOption)}
             onChange={changeDeliverable}
             disabled={isRecording}
           />
@@ -83,9 +83,9 @@ Widget.propTypes = {
 
   // props
   selectedProject: React.PropTypes.func,
-  projects: React.PropTypes.array.required,
+  allProjects: React.PropTypes.array.required,
   selectedDeliverable: React.PropTypes.func,
-  deliverables: React.PropTypes.array.required,
+  allDeliverables: React.PropTypes.array.required,
   recording: React.PropTypes.object,
   isRecording: React.PropTypes.bool.required,
   isMinimised: React.PropTypes.bool.required,

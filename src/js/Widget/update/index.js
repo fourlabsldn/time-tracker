@@ -3,9 +3,17 @@ import modelType from '../model';
 import { Validation } from '../../types';
 import { pipe } from 'ramda';
 import startStopRecording from './startStopRecording';
+import selectProject from './selectProject';
+import selectDeliverable from './selectDeliverable';
+import setProjects from './setProjects';
+import toggleMinimised from './toggleMinimised';
 
 const actionHandlers = {
   startStopRecording,
+  selectProject,
+  selectDeliverable,
+  setProjects,
+  toggleMinimised,
 };
 
 export default function update(model, action) {

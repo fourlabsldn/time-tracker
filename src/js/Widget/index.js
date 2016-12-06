@@ -4,36 +4,24 @@ import actions from './actions';
 import View from './view';
 import { connect } from 'react-redux';
 import { pipe } from 'ramda';
+import {
+  selectedProject,
+  selectedDeliverable,
+  allProjects,
+  allDeliverables,
+  recording,
+  isRecording,
+} from './update/utils';
 
 // Hook things up here.
 const mapStateToProps = (model) => { // eslint-disable-line complexity
-  const selectedProject = model.selectedProject ?
-    model.selectedProject :
-    null;
-
-  const selectedDeliverable = !selectedProject ? null :
-    !selectedProject.selectedDeliverable ? null :
-    selectedProject.selectedDeliverable;
-
-  const recording = selectedDeliverable
-    ? selectedDeliverable.recording
-    : null;
-
   return {
-    selectedProject,
-    projects: selectedProject ?
-      (model.projects || [])
-      .concat([selectedProject]) :
-      (model.projects || []),
-
-    selectedDeliverable,
-    deliverables:
-      !selectedProject ? [] :
-      !selectedDeliverable ? (selectedProject.deliverables || [])
-    : (selectedProject.deliverables || [])
-      .concat([selectedDeliverable]),
-    recording,
-    isRecording: recording && recording.startTime,
+    selectedProject: selectedProject(model),
+    allProjects: allProjects(model),
+    selectedDeliverable: selectedDeliverable(model),
+    allDeliverables: allDeliverables(model),
+    recording: recording(model),
+    isRecording: isRecording(model),
     isMinimised: model.minimised,
   };
 };
