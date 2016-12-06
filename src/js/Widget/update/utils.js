@@ -1,6 +1,6 @@
 /* eslint-disable new-cap */
-import { pathOr, pipe, curry, reduce, concat, map } from 'ramda';
-import { Project } from '../../types';
+import { pathOr, pipe, curry, reduce, concat, map, filter, prop } from 'ramda';
+import { Project, Recording } from '../../types';
 import Immutable from 'seamless-immutable';
 
 export const updateAt = curry((keyArray, newVal, obj) => {
@@ -63,6 +63,7 @@ export const recordingsInfo = model => {
   return pipe(
     allProjects,
     map(projectRecordingInfos),
-    reduce(concat, [])
+    reduce(concat, []),
+    filter(pipe(prop('recording'), Recording.isRecording))
   )(model);
 };

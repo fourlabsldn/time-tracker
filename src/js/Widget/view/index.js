@@ -35,7 +35,6 @@ const Widget = ({ // eslint-disable-line complexity
   const changeDeliverable = (option) =>
     store.dispatch(selectDeliverable(option ? option.value : null));
 
-  console.log(recordingsInfo);
   return (
     <div className={`TimeTracker ${isMinimised ? 'TimeTracker--minimised' : ''}`}>
       <div

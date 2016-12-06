@@ -27,5 +27,11 @@ export const getValue = (model) =>
   moment(getEnd(model))
   .diff(moment(getStart(model)));
 
+Object.assign(TimeInterval, {
+  typeCheck,
+  getStart,
+  getEnd,
+  getValue,
+});
 
 export default TimeInterval;
