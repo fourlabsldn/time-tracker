@@ -20,6 +20,6 @@ export const setProjects = (rawProjects) => ({
   rawProjects,
 });
 export const toggleMinimised = (minimise) => ({
-  type: 'WIDGET_setProjects',
+  type: 'WIDGET_toggleMinimised',
   minimise,
 });
