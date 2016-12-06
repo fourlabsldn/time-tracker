@@ -60,10 +60,11 @@ export const recordingsInfo = model => {
     map(d => ({ project, deliverable: d, recording: d.recording }))
   )(project);
 
-  return pipe(
+  const all = pipe(
     allProjects,
     map(projectRecordingInfos),
-    reduce(concat, []),
-    filter(pipe(prop('recording'), Recording.isRecording))
+    reduce(concat, [])
   )(model);
+
+  return all.filter(pipe(prop('recording'), Recording.isRecording));
 };

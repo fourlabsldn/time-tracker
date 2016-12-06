@@ -21,8 +21,8 @@ export const typeCheck = object({
 const Recording = immutableConstructor(typeCheck);
 
 // PRIVATE GETTERS
-export const getStartTime = propOr('startTime', null);
-export const getIntervals = propOr('intervals', null);
+export const getStartTime = propOr(null, 'startTime');
+export const getIntervals = propOr(null, 'intervals');
 
 // PRIVATE SETTERS
 export const setStartTime = curry((v, model) => pipe(
