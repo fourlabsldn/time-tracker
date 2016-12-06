@@ -27,6 +27,7 @@ const Widget = ({ // eslint-disable-line complexity
   isRecording,
   isMinimised,
 }) => {
+  console.log(allProjects)
   const timeTrackerClick = _ =>
     store.dispatch(startStopRecording(new Date(), !isRecording));
   const changeProject = (option) =>
@@ -78,7 +79,7 @@ const Widget = ({ // eslint-disable-line complexity
   );
 };
 
-// 
+//
 // Widget.propTypes = {
 //   store: React.PropTypes.object,
 //

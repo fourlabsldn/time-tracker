@@ -13,7 +13,7 @@ export const updateAt = curry((keyArray, newVal, obj) => {
 
 export const selectedProject = pathOr(null, ['selectedProject']);
 
-export const unselectedProjects = pathOr([], ['selectedProject', 'unselectedProjects']);
+export const unselectedProjects = pathOr([], ['unselectedProjects']);
 
 export const selectedDeliverable = pathOr(null, ['selectedProject', 'selectedDeliverable']);
 
