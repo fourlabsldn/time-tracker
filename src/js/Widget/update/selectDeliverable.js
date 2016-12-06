@@ -2,21 +2,23 @@ import { propEq, not, pipe } from 'ramda';
 import assert from 'fl-assert';
 import {
   selectedProject,
-  isRecording,
   allDeliverables,
   updateAt,
 } from './utils';
 
 export default (model, action) => {
-  if (!selectedProject(model) || isRecording(model)) {
+  if (!selectedProject(model)) {
     return model;
   }
 
-  const newSelectedDeliverable = allDeliverables(model)
-    .find(
-      propEq('name', action.deliverableName)
-    );
-  const newUnselectedDeliverables = allDeliverables(model)
+  const deliverables = pipe(
+    selectedProject,
+    allDeliverables,
+  )(model);
+
+  const newSelectedDeliverable = deliverables.find(propEq('name', action.deliverableName));
+
+  const newUnselectedDeliverables = deliverables
     .filter(pipe(
         propEq('name', action.deliverableName),
         not

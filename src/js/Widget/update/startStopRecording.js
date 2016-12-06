@@ -1,18 +1,24 @@
+import { pipe, propOr, prop, concat } from 'ramda';
 import {
   selectedDeliverable,
-  isRecording,
-  recordingIntervals,
+  allRecordings,
   updateAt,
-  recordingStartTime,
+  selectedRecording,
 } from './utils';
 
 export default (model, action) => {
-  if (!selectedDeliverable(model) || action.shouldStart === isRecording(model)) {
+  const alreadyRecordingSelectedOne = allRecordings(model)
+    .map(prop('deliverable'))
+    .includes(selectedDeliverable(model));
+
+  if (!selectedDeliverable(model) || action.shouldStart === alreadyRecordingSelectedOne) {
     return model;
   }
 
+  const recording = selectedRecording(model);
   if (action.shouldStart) {
-    const intervals = recordingIntervals(model);
+    // We create the whole TimeInterval because recording may be null.
+    const intervals = propOr([], 'recording');
     return updateAt(
       ['selectedProject', 'selectedDeliverable', 'recording'],
       { intervals, startTime: new Date() },
@@ -21,10 +27,16 @@ export default (model, action) => {
   }
 
   const stoppedInterval = {
-    start: recordingStartTime(model),
+    start: recording.startTime,
     end: new Date(),
   };
-  const intervals = recordingIntervals(model).concat([stoppedInterval]);
+
+  const intervals = pipe(
+    propOr([], 'intervals'),
+    concat([stoppedInterval])
+  )(recording);
+
+
   return updateAt(
     ['selectedProject', 'selectedDeliverable', 'recording'],
     { intervals, startTime: null },

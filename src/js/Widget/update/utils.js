@@ -13,6 +13,18 @@ export const updateAt = curry((keyArray, newVal, obj) => {
 });
 
 
+// ============================ Project ===================================
+
+// (Project | null) -> Array[Deliverable]
+export const allDeliverables = project => pipe(
+  Maybe.of,
+  Maybe.map(propOr([], 'selectedDeliverable')),
+  Maybe.map(concat(propOr([], 'unselectedDeliverables', project))),
+  Maybe.withDefault([])
+)(project);
+
+
+// ============================ MODEL ===================================
 // Model -> Project | null
 export const selectedProject = pathOr(null, ['selectedProject']);
 // Model -> [Project]
@@ -29,14 +41,6 @@ export const selectedRecording = pathOr(null, [
 ]);
 // Model -> Boolean
 export const isRecording = pipe(selectedRecording, propOr(null, 'startTime'), isNil);
-
-// (Project | null) -> Array[Deliverable]
-export const allDeliverables = project => pipe(
-  Maybe.of,
-  Maybe.map(propOr([], 'selectedDeliverable')),
-  Maybe.map(concat(propOr([], 'unselectedDeliverables', project))),
-  Maybe.withDefault([])
-)(project);
 
 // Model -> [Project]
 export const allProjects = model => pipe(
