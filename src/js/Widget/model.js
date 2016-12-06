@@ -1,5 +1,6 @@
 import {
   typeCheckers,
+  Project,
 } from '../types';
 const {
   string,
@@ -7,37 +8,13 @@ const {
   array,
   nullable,
   bool,
-  date,
 } = typeCheckers;
-
-export const timeIntervalType = object({
-  start: date,
-  end: date,
-});
-
-const recordingType = object({
-  startTime: nullable(date),
-  intervals: array(timeIntervalType),
-});
-
-const deliverableType = object({
-  name: string,
-  url: string,
-  recording: nullable(recordingType),
-});
-
-const projectType = object({
-  name: string,
-  url: string,
-  unselectedDeliverables: array(deliverableType),
-  selectedDeliverable: nullable(deliverableType),
-});
 
 const modelType = object({
   minimised: bool,
   serverURL: string,
-  unselectedProjects: nullable(array(projectType)),
-  selectedProject: nullable(projectType),
+  unselectedProjects: nullable(array(Project.typeCheck)),
+  selectedProject: nullable(Project.typeCheck),
 });
 
 export default modelType;
