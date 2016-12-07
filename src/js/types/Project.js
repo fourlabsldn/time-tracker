@@ -1,8 +1,10 @@
+/* eslint-disable new-cap */
 import { string, object, array, nullable } from './type-checkers';
 import Deliverable from './Deliverable';
 import { immutableConstructor } from './utils';
-import { propOr, curry } from 'ramda';
+import { propOr, curry, propEq } from 'ramda';
 import Immutable from 'seamless-immutable';
+import assert from 'fl-assert';
 // ========================================================================
 //
 //     ALL GETTERS AND SETTERS (PUBLIC OR NOT) MUST BE IN THIS FILE
@@ -41,6 +43,31 @@ export const setSelectedDeliverable = curry((model, newSelected) => {
   });
 });
 
+export const updateDeliverable = curry((model, newDeliverable) => { // eslint-disable complexity
+  if (!model || !newDeliverable) {
+    return model;
+  }
+
+  const sameName = propEq('name', newDeliverable.name);
+
+  if (sameName(Project.selectedDeliverable(model))) {
+    return Immutable(model).merge({
+      selectedDeliverable: newDeliverable,
+    });
+  } else if (model.unselectedDeliverables.find(sameName)) {
+    const newUnselected = model.unselectedDeliverables.map(
+      d => (sameName(d) ? newDeliverable : d)
+    );
+
+    return Immutable(model).merge({
+      unselectedDeliverables: newUnselected,
+    });
+  }
+
+  assert(false, `No deliverable with name ${newDeliverable.name}`);
+  return model;
+});
+
 
 // NO SETTERS
 Object.assign(Project, {
@@ -50,6 +77,7 @@ Object.assign(Project, {
   getDeliverables,
   getSelectedDeliverable,
   setSelectedDeliverable,
+  updateDeliverable,
 });
 
 export default Project;

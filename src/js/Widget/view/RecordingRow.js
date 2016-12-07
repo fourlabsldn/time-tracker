@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import React from 'react';
-import { Project, Deliverable } from '../../types';
+import { Project, Deliverable, Recording } from '../../types';
 import Timer from './Timer';
 
 const RecordingRow = ({ project, deliverable, recording }) => (
@@ -14,6 +14,13 @@ const RecordingRow = ({ project, deliverable, recording }) => (
         {Project.getName(project)}
       </span>
     </div>
+
+    <button
+      className={
+        `TimeTracker-RecordingRow-start-stop btn fa ${
+          Recording.isRecording(recording) ? 'btn-danger fa-pause' : 'btn-info fa-play'
+        }`}
+    />
 
     <Timer recording={recording} />
   </div>
