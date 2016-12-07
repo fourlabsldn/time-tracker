@@ -75,18 +75,13 @@ const Widget = ({ // eslint-disable-line complexity
           {isRecording ? 'Stop' : 'Start'}
         </button>
 
-        <div>
-        {recordingsInfo.map(path(['project', 'name']))}
-        </div>
+        {recordingsInfo.map((info) =>
+          (<RecordingRow
+            key={info.project.name + info.deliverable.name}
+            {...info}
+          />))
+        }
       </div>
-
-      {recordingsInfo.map((info) =>
-        (<RecordingRow
-          key={info.project.name + info.deliverable.name}
-          {...info}
-        />))
-      }
-
     </div>
   );
 };

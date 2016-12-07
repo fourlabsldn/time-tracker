@@ -1,72 +1,104 @@
 .TimeTracker {
-  display: inline-block;
-  max-width: 200px;
-  max-height: 200px;
-  font-family: $font-family;
-  transform-origin: top right;
-  transition: overflow 0s linear 1s, transform .2s ease-out;
+    display: inline-block;
+    width: 20em;
+    font-family: $font-family;
+    transform-origin: top right;
+    transition: overflow 0s linear 1s, transform 0.2s ease-out;
 
-  &--minimised {
-    transform: scale(.7);
-    overflow: hidden;
-    transition-delay: 0s;
+    &--minimised {
+        transform: scale(.7);
+        overflow: hidden;
+        transition-delay: 0s;
 
-    .TimeTracker-fields {
-      transform: translateY(-100%);
-      opacity: 0;
+        .TimeTracker-fields {
+            transform: translateY(-100%);
+            opacity: 0;
+        }
+
+        .TimeTracker-timer {
+            padding: 0.2em 1em;
+        }
     }
-
-    .TimeTracker-timer {
-      padding: .2em 1em;
-    }
-  }
 }
 
 .TimeTracker-fields {
-  display: flex;
-  flex-flow: column nowrap;
-  justify-content: center;
-  transition: .2s ease-out;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    transition: 0.2s ease-out;
+    box-shadow: 0 0 5px rgba(0, 0, 0, .3);
 }
-
 @keyframes blink {
-  0% { opacity: .5 }
-  50% { opacity: 1 }
-  100% { opacity: .5 }
+    0% {
+        opacity: 0.5;
+    }
+
+    50% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0.5;
+    }
 }
 
 .TimeTracker-timer {
-  position: relative;
-  font-size: 1.5em;
-  text-align: center;
-  padding: 1em 2em;
-  background-color: $c-blue;
-  color: $c-white;
-  transition: .2s ease-out;
-  transform-origin: top left;
-  cursor: pointer;
-  z-index: 1;
-
-  &::before {
-    content: " ";
-    display: inline-block;
-    width: 0.4em;
-    height: .4em;
-    background-color: $c-white;
-    border-radius: 50%;
-    margin-right: .3em;
     position: relative;
-    top: -.054em;
-    background-color: $c-light-blue;
-    transition: .1s ease-out;
-  }
+    font-size: 1.5em;
+    text-align: center;
+    padding: 1em 2em;
+    background-color: $c-blue;
+    color: $c-white;
+    transition: 0.2s ease-out;
+    transform-origin: top left;
+    cursor: pointer;
+    z-index: 1;
+    box-shadow: 0 0 5px rgba(0, 0, 0, .3);
 
-  &--recording::before {
-    background-color: $c-red;
-  }
+    &::before {
+        content: " ";
+        display: inline-block;
+        width: 0.4em;
+        height: 0.4em;
+        background-color: $c-white;
+        border-radius: 50%;
+        margin-right: 0.3em;
+        position: relative;
+        top: -.054em;
+        background-color: $c-light-blue;
+        transition: 0.1s ease-out;
+    }
+
+    &--recording::before {
+        background-color: $c-red;
+    }
 }
 
 .TimeTracker-timer-time {
-  display: inline-block;
-  text-align: left;
+    display: inline-block;
+    text-align: left;
+    margin: auto 0;
+}
+
+.TimeTracker-RecordingRow {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    background-color: white;
+    border: 1px solid #eee;
+    border-top-width: 0;
+    padding: 0.4em 1em;
+
+    .TimeTracker-timer-time {
+        font-size: 1.5em;
+    }
+}
+
+.TimeTracker-RecordingRow-names {
+    display: flex;
+    flex-flow: column nowrap;
+}
+
+.TimeTracker-RecordingRow-projectName {
+    font-weight: bold;
 }
