@@ -14,10 +14,11 @@ function millisecondsToTimeString(ms) {
     : `${pad2(minutes)}:${pad2(seconds)}`;
 }
 
+// We use a class instead of a stateless component because we
+// need the `this` keyword to trigger the force-update
 export default class Timer extends React.Component {
   render() {
     const { recording } = this.props;
-
     if (Recording.isRecording(recording)) {
       setTimeout(_ => this.forceUpdate(), 500);
     }
@@ -29,7 +30,7 @@ export default class Timer extends React.Component {
         className="TimeTracker-timer-time"
         style={{ minWidth: `${timeString.length * 0.6}em` }}
       >
-        {timeString}
+      {timeString}
       </div>
     );
   }

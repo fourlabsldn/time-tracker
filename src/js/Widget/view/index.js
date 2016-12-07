@@ -3,6 +3,7 @@ import React from 'react';
 import Select from 'react-select';
 import { pipe, prop, path } from 'ramda';
 import Timer from './Timer';
+import RecordingRow from './RecordingRow';
 import { Recording } from '../../types';
 
 import {
@@ -78,6 +79,14 @@ const Widget = ({ // eslint-disable-line complexity
         {recordingsInfo.map(path(['project', 'name']))}
         </div>
       </div>
+
+      {recordingsInfo.map((info) =>
+        (<RecordingRow
+          key={info.project.name + info.deliverable.name}
+          {...info}
+        />))
+      }
+
     </div>
   );
 };

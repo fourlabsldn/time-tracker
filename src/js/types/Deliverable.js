@@ -18,9 +18,13 @@ export const typeCheck = object({
 const Deliverable = immutableConstructor(typeCheck);
 
 export const getRecording = propOr(null, 'recording');
+export const getName = propOr(null, 'name');
+export const getUrl = propOr(null, 'url');
 
 Object.assign(Deliverable, {
   typeCheck,
   getRecording,
+  getName,
+  getUrl,
 });
 export default Deliverable;
