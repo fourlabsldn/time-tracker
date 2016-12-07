@@ -1,7 +1,7 @@
 import { string, object, array, nullable } from './type-checkers';
 import Deliverable from './Deliverable';
 import { immutableConstructor } from './utils';
-import { prop, curry } from 'ramda';
+import { propOr, curry } from 'ramda';
 import Immutable from 'seamless-immutable';
 // ========================================================================
 //
@@ -20,13 +20,13 @@ export const typeCheck = object({
 const Project = immutableConstructor(typeCheck);
 
 // GETTERS
-export const getName = prop('name');
-export const getUrl = prop('url');
-export const getSelectedDeliverable = prop('selectedDeliverable');
+export const getName = propOr(null, 'name');
+export const getUrl = propOr(null, 'url');
+export const getSelectedDeliverable = propOr(null, 'selectedDeliverable');
 export const getDeliverables = model => (
   getSelectedDeliverable(model)
-    ? [getSelectedDeliverable(model), ... model.unselectedDeliverables]
-    : model.unselectedDeliverables
+    ? [getSelectedDeliverable(model), ...propOr([], 'unselectedDeliverables', model)]
+    : propOr([], 'unselectedDeliverables', model)
   );
 
 export const setSelectedDeliverable = curry((model, newSelected) => {

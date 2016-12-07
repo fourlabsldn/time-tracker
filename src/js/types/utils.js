@@ -13,8 +13,8 @@ export const checkType = (typeChecker, customCheck) =>
 export function immutableConstructor(typeChecker, customCheck = v => v) {
   return {
     of: pipe(
-      checkType(typeChecker, customCheck),
-      Immutable
+      customCheck,
+      Immutable,
     ),
   };
 }

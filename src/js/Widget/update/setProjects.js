@@ -1,6 +1,5 @@
-import { isRecording, updateAt } from './utils';
+import { updateAt } from './utils';
 import { pipe, map } from 'ramda';
-import assert from 'fl-assert';
 
 const processRawDeliverables = map(
     ({ name, url }) => ({
@@ -20,8 +19,6 @@ const processRawProjects = map(
 );
 
 export default (model, action) => {
-  assert(!isRecording(model), 'Trying to update project array whilst recording');
-
   const newProjects = processRawProjects(action.rawProjects);
   return pipe(
     updateAt(['unselectedProjects'], newProjects),

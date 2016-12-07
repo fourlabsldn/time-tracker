@@ -20,19 +20,6 @@ export const selectedDeliverable = pathOr(null, ['selectedProject', 'selectedDel
 
 export const unselectedDeliverables = pathOr([], ['selectedProject', 'unselectedDeliverables']);
 
-export const recordingIntervals = pathOr([], [
-  'selectedProject',
-  'selectedDeliverable',
-  'recording',
-  'intervals',
-]);
-
-export const recordingStartTime = pathOr(null, [
-  'selectedProject',
-  'selectedDeliverable',
-  'recording',
-  'startTime',
-]);
 
 export const selectedRecording = pathOr(null, [
   'selectedProject',
@@ -40,13 +27,8 @@ export const selectedRecording = pathOr(null, [
   'recording',
 ]);
 
-export const isRecording = pipe(recordingStartTime, v => !!v);
-
-export const allDeliverables = model => (
-  selectedDeliverable(model)
-  ? unselectedDeliverables(model).concat(selectedDeliverable(model))
-  : unselectedDeliverables(model)
-);
+export const allSelectedProjectDeliverables =
+  pipe(selectedProject, Project.getDeliverables);
 
 export const allProjects = model => (
     selectedProject(model)

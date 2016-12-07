@@ -1,18 +1,23 @@
 import {
   selectedDeliverable,
-  isRecording,
-  recordingIntervals,
   updateAt,
-  recordingStartTime,
 } from './utils';
 
+import { Recording, Deliverable, TimeInterval } from '../../types';
+import { pipe } from 'ramda';
+
 export default (model, action) => {
-  if (!selectedDeliverable(model) || action.shouldStart === isRecording(model)) {
+  const recording = pipe(
+    selectedDeliverable,
+    Deliverable.getRecording,
+  )(model);
+
+  if (!selectedDeliverable(model) || action.shouldStart === Recording.isRecording(recording)) {
     return model;
   }
 
+  const intervals = Recording.getIntervals(recording);
   if (action.shouldStart) {
-    const intervals = recordingIntervals(model);
     return updateAt(
       ['selectedProject', 'selectedDeliverable', 'recording'],
       { intervals, startTime: new Date() },
@@ -20,14 +25,19 @@ export default (model, action) => {
     );
   }
 
-  const stoppedInterval = {
-    start: recordingStartTime(model),
+  const stoppedInterval = TimeInterval.of({
+    start: Recording.getStartTime(recording),
     end: new Date(),
-  };
-  const intervals = recordingIntervals(model).concat([stoppedInterval]);
+  });
+
+  const newRecording = Recording.of(Object.assign({}, recording, {
+    startTime: null,
+    intervals: intervals.concat([stoppedInterval]),
+  }));
+
   return updateAt(
     ['selectedProject', 'selectedDeliverable', 'recording'],
-    { intervals, startTime: null },
+    newRecording,
     model
   );
 };

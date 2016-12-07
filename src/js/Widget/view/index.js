@@ -60,8 +60,8 @@ const Widget = ({ // eslint-disable-line complexity
             value={toOption(selectedProject)}
             options={allProjects.map(toOption)}
             onChange={changeProject}
-            disabled={isRecording}
           />
+          <i className="btn btn-danger fa fa-link" />
         </div>
 
         <div className="TimeTracker-deliverables">
@@ -70,8 +70,8 @@ const Widget = ({ // eslint-disable-line complexity
             value={toOption(selectedDeliverable)}
             options={allSelectedProjectDeliverables.map(toOption)}
             onChange={changeDeliverable}
-            disabled={isRecording}
           />
+          <i className="btn btn-danger fa fa-link" />
         </div>
 
         <button
