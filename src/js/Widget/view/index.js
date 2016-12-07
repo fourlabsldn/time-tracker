@@ -1,8 +1,9 @@
-/* eslint-disable no-nested-ternary */
+/* eslint-disable no-nested-ternary, react/prop-types */
 import React from 'react';
 import Select from 'react-select';
 import { pipe, prop, path } from 'ramda';
 import Timer from './Timer';
+import { Recording } from '../../types';
 
 import {
   startStopRecording,
@@ -23,11 +24,12 @@ const Widget = ({ // eslint-disable-line complexity
   selectedProject,
   allProjects,
   selectedDeliverable,
-  allDeliverables,
-  recording,
-  isRecording,
+  allSelectedProjectDeliverables,
+  selectedRecording,
   isMinimised,
 }) => {
+  const isRecording = Recording.isRecording(selectedRecording);
+
   const timeTrackerClick = _ =>
     store.dispatch(startStopRecording(new Date(), !isRecording));
   const changeProject = (option) =>
@@ -41,10 +43,7 @@ const Widget = ({ // eslint-disable-line complexity
         className={`TimeTracker-timer ${isRecording ? 'TimeTracker-timer--recording' : ''}`}
         onClick={_ => store.dispatch(toggleMinimised(!isMinimised))}
       >
-        <Timer
-          startTime={recording ? recording.startTime : null}
-          intervals={recording ? recording.intervals : []}
-        />
+        <Timer recording={selectedRecording} />
       </div>
       <div className="TimeTracker-fields">
         <div className="TimeTracker-projects">
@@ -61,7 +60,7 @@ const Widget = ({ // eslint-disable-line complexity
           <Select
             name="form-field-name"
             value={toOption(selectedDeliverable)}
-            options={allDeliverables.map(toOption)}
+            options={allSelectedProjectDeliverables.map(toOption)}
             onChange={changeDeliverable}
             disabled={isRecording}
           />
@@ -82,20 +81,5 @@ const Widget = ({ // eslint-disable-line complexity
     </div>
   );
 };
-
-
-// Widget.propTypes = {
-//   store: React.PropTypes.object,
-//
-//   // props
-//   recordingsInfo: React.PropTypes.array.required,
-//   selectedProject: React.PropTypes.object,
-//   allProjects: React.PropTypes.array.required,
-//   selectedDeliverable: React.PropTypes.object,
-//   allDeliverables: React.PropTypes.array.required,
-//   recording: React.PropTypes.object,
-//   isRecording: React.PropTypes.bool.required,
-//   isMinimised: React.PropTypes.bool.required,
-// };
 
 export default Widget;

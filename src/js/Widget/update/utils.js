@@ -34,7 +34,7 @@ export const recordingStartTime = pathOr(null, [
   'startTime',
 ]);
 
-export const recording = pathOr(null, [
+export const selectedRecording = pathOr(null, [
   'selectedProject',
   'selectedDeliverable',
   'recording',

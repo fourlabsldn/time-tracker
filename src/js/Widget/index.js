@@ -6,8 +6,7 @@ import {
   selectedDeliverable,
   allProjects,
   allDeliverables,
-  recording,
-  isRecording,
+  selectedRecording,
   recordingsInfo,
 } from './update/utils';
 
@@ -18,9 +17,8 @@ const mapStateToProps = (model) => { // eslint-disable-line complexity
     selectedProject: selectedProject(model),
     allProjects: allProjects(model),
     selectedDeliverable: selectedDeliverable(model),
-    allDeliverables: allDeliverables(model),
-    recording: recording(model),
-    isRecording: isRecording(model),
+    allSelectedProjectDeliverables: allDeliverables(model),
+    selectedRecording: selectedRecording(model),
     isMinimised: model.minimised,
   };
 };
