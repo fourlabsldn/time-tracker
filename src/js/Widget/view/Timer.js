@@ -1,30 +1,6 @@
 import React from 'react';
-import moment from 'moment';
-import { curry, reduce, add, pipe } from 'ramda';
-
-
-// diff in ms
-const calcInterval = curry((end, start) => moment(end).diff(moment(start)));
-
-/**
- * @method calculateRunningTime
- * @param  {Date} startTime
- * @param  {Array<Object>} intervals - Time intervals of type { start: Object, end: Object}
- * @return {Integer}
- */
-function calculateRunningTime(startTime, intervals) {
-  const intervalsSum = reduce(
-    (total, { start, end }) => total + calcInterval(end, start),
-    0,
-    intervals
-  );
-
-  const totalTime = pipe(calcInterval(new Date()), add(intervalsSum));
-
-  return startTime
-    ? totalTime(startTime)
-    : intervalsSum;
-}
+import { pipe } from 'ramda';
+import { Recording } from '../../types';
 
 const pad2 = num => (`00${num}`).slice(-2);
 
@@ -38,26 +14,15 @@ function millisecondsToTimeString(ms) {
     : `${pad2(minutes)}:${pad2(seconds)}`;
 }
 
-
-const recordingTime = (startTime, intervals) => {
-  const runningTime = calculateRunningTime(
-    startTime || 0,
-    intervals || []
-  );
-
-  return millisecondsToTimeString(runningTime);
-};
-
-
 export default class Timer extends React.Component {
   render() {
-    const { startTime, intervals } = this.props;
+    const { recording } = this.props;
 
-    if (startTime) {
-      setTimeout(_ => this.forceUpdate(), 10);
+    if (Recording.isRecording(recording)) {
+      setTimeout(_ => this.forceUpdate(), 500);
     }
 
-    const timeString = recordingTime(startTime, intervals);
+    const timeString = pipe(Recording.totalTime, millisecondsToTimeString)(recording);
 
     return (
       <div
@@ -71,6 +36,5 @@ export default class Timer extends React.Component {
 }
 
 Timer.propTypes = {
-  startTime: React.PropTypes.object,
-  intervals: React.PropTypes.array,
+  recording: React.PropTypes.object,
 };
