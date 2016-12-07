@@ -1,5 +1,4 @@
 import { propEq, not, pipe } from 'ramda';
-import assert from 'fl-assert';
 import {
   selectedProject,
   allSelectedProjectDeliverables,
@@ -14,14 +13,14 @@ export default (model, action) => {
   const newSelectedDeliverable = allSelectedProjectDeliverables(model)
     .find(
       propEq('name', action.deliverableName)
-    );
+    ) || null;
+
   const newUnselectedDeliverables = allSelectedProjectDeliverables(model)
     .filter(pipe(
         propEq('name', action.deliverableName),
         not
     ));
 
-  assert(newSelectedDeliverable, `No deliverables found with name ${action.deliverableName}`);
   return pipe(
     updateAt(['selectedProject', 'selectedDeliverable'], newSelectedDeliverable),
     updateAt(['selectedProject', 'unselectedDeliverables'], newUnselectedDeliverables)
