@@ -107,6 +107,15 @@
     }
 }
 
+.TimeTracker-start-stop {
+    &,
+    &:active:focus,
+    &:focus,
+    &:hover {
+        outline: 0;
+    }
+}
+
 .TimeTracker-RecordingRow {
     display: flex;
     flex-flow: row nowrap;

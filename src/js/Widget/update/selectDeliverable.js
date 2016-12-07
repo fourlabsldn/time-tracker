@@ -1,15 +1,13 @@
-import { Recording } from '../../types';
 import { propEq, not, pipe } from 'ramda';
 import assert from 'fl-assert';
 import {
   selectedProject,
-  selectedRecording,
   allSelectedProjectDeliverables,
   updateAt,
 } from './utils';
 
 export default (model, action) => {
-  if (!selectedProject(model) || Recording.isRecording(selectedRecording(model))) {
+  if (!selectedProject(model)) {
     return model;
   }
 

@@ -75,11 +75,11 @@ const Widget = ({ // eslint-disable-line complexity
         </div>
 
         <button
-          className="TimeTracker-stop"
+          className={`TimeTracker-start-stop btn ${isRecording ? 'btn-danger' : 'btn-default'}`}
           onClick={timeTrackerClick}
           disabled={!selectedDeliverable}
         >
-          {isRecording ? 'Stop' : 'Start'}
+          {isRecording ? 'Pause' : 'Start'}
         </button>
 
         {recordingsInfo
