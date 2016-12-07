@@ -14,22 +14,24 @@ function calculateRunningTime(startTime, intervals) {
     .reduce(add, 0);
 
   const sumSinceStartTime = !startTime
-    ? pipe(TimeInterval.of, TimeInterval.getValue)(new Date(), startTime)
-    : 0;
+    ? 0
+    : pipe(
+        d => ({ start: d, end: new Date() }),
+        TimeInterval.of,
+        TimeInterval.getValue
+      )(startTime);
 
   return intervalsSum + sumSinceStartTime;
 }
 
 /**
  *
- * @param  {Project} model
+ * @param  {Recording} recording
  * @return {Integer} - Time in milliseconds
  */
 export default (model) => {
   const startTime = getStartTime(model);
   const intervals = getIntervals(model);
 
-  return startTime
-    ? calculateRunningTime(startTime, intervals)
-    : startTime;
+  return calculateRunningTime(startTime, intervals);
 };

@@ -22,18 +22,16 @@ const Recording = immutableConstructor(typeCheck);
 
 // PRIVATE GETTERS
 export const getStartTime = propOr(null, 'startTime');
-export const getIntervals = propOr(null, 'intervals');
+export const getIntervals = propOr([], 'intervals');
 
 // PRIVATE SETTERS
-export const setStartTime = curry((v, model) => pipe(
-  Immutable.set(model, 'startTime', v),
-  checkType(typeCheck)
-)());
+export const setStartTime = curry((v, model) =>
+  Immutable.set(model, 'startTime', v)
+);
 
-export const setIntervals = curry((v, model) => pipe(
-  Immutable.set(model, 'internals', v),
-  checkType(typeCheck)
-)());
+export const setIntervals = curry((v, model) =>
+  Immutable.set(model, 'internals', v)
+);
 
 // ===========================
 // PUBLIC INTERFACE

@@ -115,7 +115,8 @@ export const object = curry((typeSignature, v) => {
     return Validation.Failure(
       `Object does not have same keys as its type signature:
       Keys present: ${Object.keys(v)}
-      Keys expected: ${Object.keys(typeSignature)}`
+      Keys expected: ${Object.keys(typeSignature)}
+      ${v}`
     );
   }
 

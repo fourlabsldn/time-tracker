@@ -1,5 +1,5 @@
 /* eslint-disable new-cap */
-import { pathOr, pipe, curry, reduce, concat, map, filter, prop } from 'ramda';
+import { pathOr, pipe, curry, reduce, concat, map, lt, prop } from 'ramda';
 import { Project, Recording } from '../../types';
 import Immutable from 'seamless-immutable';
 
@@ -55,6 +55,12 @@ export const allProjects = model => (
   );
 
 export const recordingsInfo = model => {
+  const nonZeroRecordingTime = pipe(
+    prop('recording'),
+    Recording.totalTime,
+    lt(0), // Int -> Bool. Whether zero is less than the number that will be passed
+  );
+
   const projectRecordingInfos = project => pipe(
     Project.getDeliverables,
     map(d => ({ project, deliverable: d, recording: d.recording }))
@@ -66,5 +72,5 @@ export const recordingsInfo = model => {
     reduce(concat, [])
   )(model);
 
-  return all.filter(pipe(prop('recording'), Recording.isRecording));
+  return all.filter(nonZeroRecordingTime);
 };
