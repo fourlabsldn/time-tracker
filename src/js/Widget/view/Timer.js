@@ -17,11 +17,15 @@ function millisecondsToTimeString(ms) {
 // We use a class instead of a stateless component because we
 // need the `this` keyword to trigger the force-update
 export default class Timer extends React.Component {
+  componentWillUnmount() {
+    clearTimeout(this.timeout);
+  }
+
   render() {
     const { recording } = this.props;
     const isRecording = Recording.isRecording(recording);
     if (isRecording) {
-      setTimeout(_ => this.forceUpdate(), 500);
+      this.timeout = setTimeout(_ => this.forceUpdate(), 500);
     }
 
     const timeString = pipe(Recording.totalTime, millisecondsToTimeString)(recording);

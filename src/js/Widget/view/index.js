@@ -1,10 +1,10 @@
 /* eslint-disable no-nested-ternary, react/prop-types */
 import React from 'react';
 import Select from 'react-select';
-import { pipe, prop, path } from 'ramda';
+import { pipe, prop } from 'ramda';
 import Timer from './Timer';
 import RecordingRow from './RecordingRow';
-import { Recording } from '../../types';
+import { Recording, Project, Deliverable } from '../../types';
 
 import {
   startStopRecording,
@@ -17,6 +17,13 @@ const toOption = el => (el
   ? pipe(prop('name'), name => ({ label: name, value: name }))(el)
   : null
 );
+
+// Object -> String : This creates a string useful in sorting and identifying
+//                    the project deliverable recording
+const stringIdentifier = ({ project, deliverable, recording }) => {
+  return Project.getName(project) +
+    Deliverable.getName(deliverable);
+};
 
 const Widget = ({ // eslint-disable-line complexity
   store,
@@ -75,9 +82,11 @@ const Widget = ({ // eslint-disable-line complexity
           {isRecording ? 'Stop' : 'Start'}
         </button>
 
-        {recordingsInfo.map((info) =>
+        {recordingsInfo
+          .sort((info1, info2) => stringIdentifier(info1) < stringIdentifier(info2))
+          .map((info) =>
           (<RecordingRow
-            key={info.project.name + info.deliverable.name}
+            key={stringIdentifier(info)}
             {...info}
           />))
         }
