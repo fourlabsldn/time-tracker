@@ -19,7 +19,8 @@ function millisecondsToTimeString(ms) {
 export default class Timer extends React.Component {
   render() {
     const { recording } = this.props;
-    if (Recording.isRecording(recording)) {
+    const isRecording = Recording.isRecording(recording);
+    if (isRecording) {
       setTimeout(_ => this.forceUpdate(), 500);
     }
 
@@ -27,8 +28,12 @@ export default class Timer extends React.Component {
 
     return (
       <div
-        className="TimeTracker-timer-time"
-        style={{ minWidth: `${timeString.length * 0.6}em` }}
+        className={
+          `TimeTracker-timer-time ${isRecording
+              ? 'TimeTracker-timer-time--recording'
+              : ''}`
+        }
+        style={{ minWidth: `${timeString.length * 0.6 + 0.5}em` }}
       >
       {timeString}
       </div>

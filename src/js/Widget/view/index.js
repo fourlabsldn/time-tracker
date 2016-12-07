@@ -41,7 +41,7 @@ const Widget = ({ // eslint-disable-line complexity
   return (
     <div className={`TimeTracker ${isMinimised ? 'TimeTracker--minimised' : ''}`}>
       <div
-        className={`TimeTracker-timer ${isRecording ? 'TimeTracker-timer--recording' : ''}`}
+        className={'TimeTracker-timer'}
         onClick={_ => store.dispatch(toggleMinimised(!isMinimised))}
       >
         <Timer recording={selectedRecording} />
