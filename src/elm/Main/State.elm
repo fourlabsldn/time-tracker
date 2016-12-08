@@ -19,7 +19,34 @@ update : Msg Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         SelectDeliverable project maybeDeliverable ->
-            ( model, Cmd.none )
+            if project /= model.selectedProject then
+                ( model, Cmd.none )
+            else
+                let
+                    newSelectedProject =
+                        case maybeDeliverable of
+                            Nothing ->
+                                { project
+                                    | selectedDeliverable = Nothing
+                                    , unselectedDeliverables = allDeliverables project
+                                }
+
+                            Just deliv ->
+                                { project
+                                    | selectedDeliverable = deliv
+                                    , unselectedDeliverables =
+                                        allDeliverables project
+                                            |> List.filter ((/=) deliv)
+                                }
+                in
+                    ( { model
+                        | selectedProject = newSelectedProject
+                        , unselectedProjects =
+                            allProject model
+                                |> List.filter ((/=) newSelectedProject)
+                      }
+                    , Cmd.none
+                    )
 
         SelectProject maybeProject ->
             let
@@ -94,3 +121,13 @@ allProjects model =
 
         Just aProject ->
             aProject :: model.unselectedProjects
+
+
+allDeliverables : Project -> List Deliverable
+allDeliverables project =
+    case project.selectedDeliverable of
+        Nothing ->
+            project.unselectedDeliverables
+
+        Just deliv ->
+            deliv :: project.unselectedDeliverables
