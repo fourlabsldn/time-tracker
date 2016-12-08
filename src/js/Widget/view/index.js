@@ -1,7 +1,7 @@
 /* eslint-disable no-nested-ternary, react/prop-types */
 import React from 'react';
 import Select from 'react-select';
-import { pipe, propOr } from 'ramda';
+import { pipe, propOr, sortBy } from 'ramda';
 import Timer from './Timer';
 import RecordingRow from './RecordingRow';
 import { Recording, Project, Deliverable } from '../../types';
@@ -28,15 +28,16 @@ const stringIdentifier = ({ project, deliverable }) => {
 const Widget = ({ // eslint-disable-line complexity
   store,
   // props
-  recordingsInfo,
   selectedProject,
   allProjects,
-  selectedDeliverable,
-  allSelectedProjectDeliverables,
-  selectedRecording,
+  recordingsInfo,
   isMinimised,
 }) => {
+  const selectedDeliverable = Project.getSelectedDeliverable(selectedProject);
+  const selectedRecording = Deliverable.getRecording(selectedDeliverable);
   const isRecording = Recording.isRecording(selectedRecording);
+  const projectOptions = allProjects.map(toOption);
+  const deliverableOptions = Project.getDeliverables(selectedProject).map(toOption);
 
   const timeTrackerClick = _ =>
     store.dispatch(toggleRecording(selectedProject, selectedDeliverable));
@@ -58,7 +59,7 @@ const Widget = ({ // eslint-disable-line complexity
           <Select
             name="form-field-name"
             value={toOption(selectedProject)}
-            options={allProjects.map(toOption)}
+            options={sortBy('label', projectOptions)}
             onChange={changeProject}
           />
           <i className="btn btn-danger fa fa-link" />
@@ -68,7 +69,7 @@ const Widget = ({ // eslint-disable-line complexity
           <Select
             name="form-field-name"
             value={toOption(selectedDeliverable)}
-            options={allSelectedProjectDeliverables.map(toOption)}
+            options={sortBy('label', deliverableOptions)}
             onChange={changeDeliverable}
           />
           <i className="btn btn-danger fa fa-link" />
