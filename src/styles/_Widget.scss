@@ -97,7 +97,7 @@
         width: 100%;
     }
 
-    i {
+    &-link {
         margin: 0 0 0 0.5em;
         position: relative;
         top: -.1em;
@@ -144,8 +144,16 @@
 .TimeTracker-RecordingRow-names {
     display: flex;
     flex-flow: column nowrap;
+    overflow: hidden;
 }
 
-.TimeTracker-RecordingRow-deliverableName {
+.TimeTracker-RecordingRow-deliverableName,
+.TimeTracker-RecordingRow-projectName {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.TimeTracker-RecordingRow-projectName {
     font-weight: bold;
 }

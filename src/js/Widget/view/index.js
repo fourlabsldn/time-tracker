@@ -64,7 +64,9 @@ const Widget = ({ // eslint-disable-line complexity
           />
           <a
             href={Project.getUrl(selectedProject)}
-            className={`btn btn-${selectedProject ? 'danger' : 'disabled'} fa fa-link`}
+            className={`TimeTracker-projects-link btn btn-${
+              selectedProject ? 'danger' : 'disabled'
+            } fa fa-link`}
           />
         </div>
 
@@ -78,7 +80,9 @@ const Widget = ({ // eslint-disable-line complexity
           <a
             href={Deliverable.getUrl(selectedDeliverable)}
             className="btn btn-danger fa fa-link"
-            className={`btn btn-${selectedDeliverable ? 'danger' : 'disabled'} fa fa-link`}
+            className={`TimeTracker-deliverables-link btn btn-${
+              selectedDeliverable ? 'danger' : 'disabled'
+            } fa fa-link`}
           />
         </div>
 
