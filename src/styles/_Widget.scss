@@ -56,12 +56,6 @@
     z-index: 1;
     box-shadow: 0 0 5px rgba(0, 0, 0, .2);
     user-select: none;
-}
-
-.TimeTracker-timer-time {
-    display: inline-block;
-    text-align: left;
-    margin: auto 0;
 
     &::before {
         content: " ";
@@ -80,6 +74,12 @@
     &--recording::before {
         background-color: $c-red;
     }
+}
+
+.TimeTracker-timer-time {
+    display: inline-block;
+    text-align: left;
+    margin: auto 0;
 }
 
 .TimeTracker-deliverables,

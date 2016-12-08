@@ -32,12 +32,8 @@ export default class Timer extends React.Component {
 
     return (
       <div
-        className={
-          `TimeTracker-timer-time ${isRecording
-              ? 'TimeTracker-timer-time--recording'
-              : ''}`
-        }
-        style={{ minWidth: `${timeString.length * 0.6 + 0.5}em` }}
+        className="TimeTracker-timer-time"
+        style={{ minWidth: `${timeString.length * 0.56}em` }}
       >
       {timeString}
       </div>
