@@ -18,6 +18,13 @@ const toOption = el => (el
   : null
 );
 
+// Option -> [Project] -> Project
+const sameNameAsOptionValue = pipe(
+  propOr(null, 'value'),
+  propEq('name'),
+  find,
+);
+
 // Object -> String : This creates a string useful in sorting and identifying
 //                    the project deliverable recording
 const stringIdentifier = ({ project, deliverable }) => {
@@ -41,13 +48,18 @@ const Widget = ({ // eslint-disable-line complexity
 
   const timeTrackerClick = _ =>
     store.dispatch(toggleRecording(selectedProject, selectedDeliverable));
-  const changeProject = (option) =>
-    store.dispatch(selectProject(option ? option.value : null));
+
+  // { label<String>, value<String>} -> Action
+  const changeProject = (option) => pipe(
+    sameNameAsOptionValue(option),
+    selectProject,
+    action => store.dispatch(action),
+  )(allProjects);
 
   // { label<String>, value<String>} -> Action
   const changeDeliverable = (option) => pipe(
     Project.getDeliverables,
-    find(propEq('name', propOr(null, 'value', option))),
+    sameNameAsOptionValue(option),
     selectDeliverable(selectedProject),
     action => store.dispatch(action),
   )(selectedProject);

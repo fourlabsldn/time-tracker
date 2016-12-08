@@ -13,9 +13,9 @@ export const selectDeliverable = curry((project, deliverable) => ({
   project,
   deliverable,
 }));
-export const selectProject = (projectName) => ({
+export const selectProject = (project) => ({
   type: 'WIDGET_selectProject',
-  projectName,
+  project,
 });
 export const setProjects = (rawProjects) => ({
   type: 'WIDGET_setProjects',

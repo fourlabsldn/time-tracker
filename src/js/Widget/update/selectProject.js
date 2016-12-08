@@ -1,23 +1,20 @@
-import { propEq, not, pipe } from 'ramda';
+import { propEq, propOr, reject, pipe } from 'ramda';
 import {
   allProjects,
   updateAt,
 } from './utils';
 
 export default (model, action) => {
-  const newSelectedProject = allProjects(model)
-    .find(
-      propEq('name', action.projectName)
-    ) || null;
+  const { project = null } = action;
 
-  const newUnselectedProjects = allProjects(model)
-    .filter(pipe(
-        propEq('name', action.projectName),
-        not
-    ));
+  const projectName = propOr(null, 'name', project);
+  const newUnselectedProjects = pipe(
+    allProjects,
+    reject(propEq('name', projectName))
+  )(model);
 
   return pipe(
-    updateAt(['selectedProject'], newSelectedProject),
+    updateAt(['selectedProject'], project),
     updateAt(['unselectedProjects'], newUnselectedProjects)
   )(model);
 };
