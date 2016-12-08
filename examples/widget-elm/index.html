@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Time Tracker widget </title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.5/css/bootstrap.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
+  <style>
+    body {
+      max-width: 800px;
+      margin: auto;
+      background-color: #f7f7f7;
+    }
+  </style>
+
+  <!-- ReactJS dependency -->
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/react/15.4.0/react.js'> </script>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/react/15.4.0/react-dom.js'> </script>
+
+  <!-- App files -->
+  <link rel="stylesheet" href="../../dist/time-tracker.css">
+  <script src="../../dist/time-tracker.js"></script>
+
+</head>
+<body>
+  <nav class="navbar navbar-light" style="background-color: #ececec; margin: .5em 0;">
+      <ul class="nav navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" href="#">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Contacts</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Projects</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Messages</a>
+        </li>
+      </ul>
+  </nav>
+
+  <div class="container">
+    <h1>Time Tracker</h1>
+    <div class="tracker-container" style="float: right"></div>
+    <div id="elm-app" class="tracker-container" style="float: left"></div>
+  </div>
+
+  <script>
+    // require(['time-tracker', timeTracker => {
+      const tracker = timeTracker();
+
+      document.querySelector('.tracker-container').appendChild(tracker);
+    // }])
+  </script>
+
+  <script src="../../dist/elm/Main.js"></script>
+  <script src="../../dist/elm/portal.js"></script>
+</body>
+</html>

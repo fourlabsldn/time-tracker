@@ -30,7 +30,7 @@ organiser.registerAll('./gulp-tasks', {
   'browser-sync': {
     src: '.', // it doesn't matter, it's just so the task object is not ignored.
     reloadOn: ['transpile-react', 'sass'], // reload page when these tasks happen
-    startPath: 'examples/widget/index.html',
+    startPath: 'examples/widget-elm/index.html',
     baseDir: './',
   },
   'sass': {
@@ -46,4 +46,9 @@ organiser.registerAll('./gulp-tasks', {
     moduleName: 'Main',
     ext: 'js',
   },
+  'copy-static': {
+    src: ['src/elm/**/*.js'],
+    dest: 'dist/elm',
+  },
+
 });
