@@ -30,8 +30,8 @@ placeholderProjects =
 main : Program Never Model Msg
 main =
     Html.program
-        { init = init placeholderProjects
+        { init = ( init placeholderProjects, Cmd.none )
         , view = view
         , update = update
-        , subscriptions = Sub.none
+        , subscriptions = \_ -> Sub.none
         }

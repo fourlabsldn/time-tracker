@@ -1,7 +1,7 @@
 module Main.View exposing (view)
 
 import Main.Types exposing (..)
-import Html.Elements exposing (..)
+import Html exposing (..)
 import Html.Attributes exposing (class)
 
 

@@ -1,6 +1,7 @@
-module Main exposing (..)
+module Main.State exposing (init, update)
 
-import Main.State exposing (init, update)
+import Main.Types exposing (..)
+import Time exposing (Time)
 
 
 nowPlaceholder =
@@ -15,38 +16,47 @@ init unselectedProjects =
     }
 
 
-update : Msg Model -> ( Model, Cmd Msg )
+update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         SelectDeliverable project maybeDeliverable ->
-            if project /= model.selectedProject then
-                ( model, Cmd.none )
-            else
-                let
-                    newSelectedProject =
-                        case maybeDeliverable of
-                            Nothing ->
-                                { project
-                                    | selectedDeliverable = Nothing
-                                    , unselectedDeliverables = allDeliverables project
-                                }
+            let
+                isProjectSelected =
+                    case model.selectedProject of
+                        Nothing ->
+                            False
 
-                            Just deliv ->
-                                { project
-                                    | selectedDeliverable = deliv
-                                    , unselectedDeliverables =
-                                        allDeliverables project
-                                            |> List.filter ((/=) deliv)
-                                }
-                in
-                    ( { model
-                        | selectedProject = newSelectedProject
-                        , unselectedProjects =
-                            allProject model
-                                |> List.filter ((/=) newSelectedProject)
-                      }
-                    , Cmd.none
-                    )
+                        Just aProject ->
+                            aProject == project
+            in
+                if not isProjectSelected then
+                    ( model, Cmd.none )
+                else
+                    let
+                        newSelectedProject =
+                            case maybeDeliverable of
+                                Nothing ->
+                                    { project
+                                        | selectedDeliverable = Nothing
+                                        , unselectedDeliverables = allDeliverables project
+                                    }
+
+                                Just deliv ->
+                                    { project
+                                        | selectedDeliverable = Just deliv
+                                        , unselectedDeliverables =
+                                            allDeliverables project
+                                                |> List.filter ((/=) deliv)
+                                    }
+                    in
+                        ( { model
+                            | selectedProject = Just newSelectedProject
+                            , unselectedProjects =
+                                allProjects model
+                                    |> List.filter ((/=) newSelectedProject)
+                          }
+                        , Cmd.none
+                        )
 
         SelectProject maybeProject ->
             let
@@ -71,41 +81,32 @@ update msg model =
 
         ToggleRecording project deliverable ->
             let
-                newSelectedProject =
-                    case selectedProject of
-                        Nothing ->
-                            model.selectedProject
+                newDeliverable =
+                    { deliverable
+                        | recording =
+                            toggleRecording deliverable.recording
+                    }
 
-                        Just proj ->
-                            case proj.selectedDeliverable of
-                                Nothing ->
-                                    model.selectedProject
-
-                                Just deliv ->
-                                    let
-                                        newDeliverable =
-                                            { deliv
-                                                | recording =
-                                                    toggleRecording deliv.recording
-                                            }
-                                    in
-                                        { proj
-                                            | deliverable = newDeliverable
-                                        }
+                newProject =
+                    { project
+                        | selectedDeliverable = Just newDeliverable
+                    }
             in
-                ( model, Cmd.none )
+                ( updateProject model newProject
+                , Cmd.none
+                )
 
 
 toggleRecording : Recording -> Recording
 toggleRecording recording =
     case recording.startTime of
         Nothing ->
-            { recording | startTime = nowPlaceholder }
+            { recording | startTime = Just nowPlaceholder }
 
         Just aStartTime ->
             let
                 newInterval =
-                    TimeInterval recording.startTime nowPlaceholder
+                    TimeInterval aStartTime nowPlaceholder
             in
                 { recording
                     | startTime = Nothing
@@ -131,3 +132,30 @@ allDeliverables project =
 
         Just deliv ->
             deliv :: project.unselectedDeliverables
+
+
+updateProject : Model -> Project -> Model
+updateProject model newProject =
+    let
+        newProjectIsSelected =
+            model.selectedProject
+                |> Maybe.map .name
+                |> Maybe.map ((==) newProject.name)
+                |> Maybe.withDefault False
+    in
+        if newProjectIsSelected then
+            { model
+                | selectedProject = Just newProject
+            }
+        else
+            { model
+                | unselectedProjects =
+                    model.unselectedProjects
+                        |> List.map
+                            (\p ->
+                                if p.name == newProject.name then
+                                    newProject
+                                else
+                                    p
+                            )
+            }

@@ -27,18 +27,18 @@ type alias Deliverable =
 
 type alias Recording =
     { startTime : Maybe Time
-    , intervals : List Interval
+    , intervals : List TimeInterval
     }
 
 
-type alias Interval =
+type alias TimeInterval =
     { start : Time
     , end : Time
     }
 
 
 type Msg
-    = SelectDeliverable Project Maybe Deliverable
-    | SelectProject Maybe Project
+    = SelectDeliverable Project (Maybe Deliverable)
+    | SelectProject (Maybe Project)
     | SetProjects (List Project)
     | ToggleRecording Project Deliverable
