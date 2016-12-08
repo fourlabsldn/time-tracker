@@ -1,9 +1,10 @@
 /* eslint-disable react/prop-types */
 import React from 'react';
 import { Project, Deliverable, Recording } from '../../types';
+import { toggleRecording } from '../actions';
 import Timer from './Timer';
 
-const RecordingRow = ({ project, deliverable, recording }) => (
+const RecordingRow = ({ store, project, deliverable, recording }) => (
   <div className="TimeTracker-RecordingRow">
     <div className="TimeTracker-RecordingRow-names">
       <span className="TimeTracker-RecordingRow-deliverableName">
@@ -20,6 +21,9 @@ const RecordingRow = ({ project, deliverable, recording }) => (
         `TimeTracker-RecordingRow-start-stop btn fa ${
           Recording.isRecording(recording) ? 'btn-danger fa-pause' : 'btn-info fa-play'
         }`}
+      onClick={
+        _ => store.dispatch(toggleRecording(project, deliverable))
+      }
     />
 
     <Timer recording={recording} />

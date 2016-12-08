@@ -87,6 +87,7 @@ const Widget = ({ // eslint-disable-line complexity
           .map((info) =>
           (<RecordingRow
             key={stringIdentifier(info)}
+            store={store}
             {...info}
           />))
         }
