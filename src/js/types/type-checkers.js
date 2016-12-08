@@ -70,7 +70,7 @@ export const date = v => (
 export const nullable = curry((subType, v) => (
    v === null
    ? Validation.Success(v)
-   : Validation.map(_ => Validation.Success(v), subType(v))
+   : subType(v)
 ));
 
 export const maybe = curry((subType, v) => (

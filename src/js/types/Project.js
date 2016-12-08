@@ -50,7 +50,7 @@ export const updateDeliverable = curry((model, newDeliverable) => { // eslint-di
 
   const sameName = propEq('name', newDeliverable.name);
 
-  if (sameName(Project.selectedDeliverable(model))) {
+  if (sameName(Project.getSelectedDeliverable(model))) {
     return Immutable(model).merge({
       selectedDeliverable: newDeliverable,
     });

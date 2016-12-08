@@ -1,10 +1,11 @@
-import { immutableConstructor, checkType } from '../utils';
+/* eslint-disable new-cap */
+import { immutableConstructor } from '../utils';
 import TimeInterval from '../TimeInterval';
-import Immutable from 'seamless-immutable';
 import { nullable, array, date, object } from '../type-checkers';
-import { propOr, pipe, curry } from 'ramda';
+import { isNil, propOr, pipe, curry } from 'ramda';
 import _toggleRecording from './toggleRecording';
 import _totalTime from './totalTime';
+import Immutable from 'seamless-immutable';
 
 // ========================================================================
 //
@@ -25,13 +26,17 @@ export const getStartTime = propOr(null, 'startTime');
 export const getIntervals = propOr([], 'intervals');
 
 // PRIVATE SETTERS
-export const setStartTime = curry((v, model) =>
-  Immutable.set(model, 'startTime', v)
-);
+export const setStartTime = curry((v, model) => (
+  isNil(model)
+    ? model
+    : Immutable(model).set('startTime', v)
+));
 
-export const setIntervals = curry((v, model) =>
-  Immutable.set(model, 'internals', v)
-);
+export const setIntervals = curry((v, model) => (
+  isNil(model)
+    ? model
+    : Immutable(model).set('internals', v)
+));
 
 // ===========================
 // PUBLIC INTERFACE

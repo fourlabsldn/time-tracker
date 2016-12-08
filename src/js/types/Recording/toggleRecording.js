@@ -16,7 +16,7 @@ import {
  */
 export default curry((model) => {
   if (!isRecording(model)) {
-    return setStartTime(model, new Date());
+    return setStartTime(new Date(), model);
   }
 
   const newInterval = TimeInterval.of(getStartTime(model), new Date());
