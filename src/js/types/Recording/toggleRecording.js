@@ -14,21 +14,15 @@ import {
  * @params {Date} time
  * @params {Boolean} on
  */
-export default curry((model, time, on) => {
-  const recordingStarted = isRecording(model);
-
-  if ((!on && !recordingStarted) || (on && recordingStarted)) {
-    return model;
+export default curry((model) => {
+  if (!isRecording(model)) {
+    return setStartTime(model, new Date());
   }
 
-  if (on) {
-    return setStartTime(model, time);
-  }
-
-  const newInterval = TimeInterval.of(getStartTime(model), time);
+  const newInterval = TimeInterval.of(getStartTime(model), new Date());
 
   return pipe(
-    setStartTime(time),
+    setStartTime(null),
     setIntervals([newInterval, ...getIntervals(model)])
   )(model);
 });
