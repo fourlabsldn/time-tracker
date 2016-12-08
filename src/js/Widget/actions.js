@@ -1,16 +1,18 @@
 //
 //    ACTION CREATORS
 //
+import { curry } from 'ramda';
 
-export const toggleRecording = (project, deliverable) => ({
+export const toggleRecording = curry((project, deliverable) => ({
   type: 'WIDGET_toggleRecording',
   project,
   deliverable,
-});
-export const selectDeliverable = (deliverableName) => ({
+}));
+export const selectDeliverable = curry((project, deliverable) => ({
   type: 'WIDGET_selectDeliverable',
-  deliverableName,
-});
+  project,
+  deliverable,
+}));
 export const selectProject = (projectName) => ({
   type: 'WIDGET_selectProject',
   projectName,

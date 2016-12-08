@@ -1,7 +1,7 @@
 /* eslint-disable no-nested-ternary, react/prop-types */
 import React from 'react';
 import Select from 'react-select';
-import { pipe, propOr, sortBy } from 'ramda';
+import { pipe, propOr, sortBy, propEq, find } from 'ramda';
 import Timer from './Timer';
 import RecordingRow from './RecordingRow';
 import { Recording, Project, Deliverable } from '../../types';
@@ -43,8 +43,14 @@ const Widget = ({ // eslint-disable-line complexity
     store.dispatch(toggleRecording(selectedProject, selectedDeliverable));
   const changeProject = (option) =>
     store.dispatch(selectProject(option ? option.value : null));
-  const changeDeliverable = (option) =>
-    store.dispatch(selectDeliverable(option ? option.value : null));
+
+  // { label<String>, value<String>} -> Action
+  const changeDeliverable = (option) => pipe(
+    Project.getDeliverables,
+    find(propEq('name', propOr(null, 'value', option))),
+    selectDeliverable(selectedProject),
+    action => store.dispatch(action),
+  )(selectedProject);
 
   return (
     <div className={`TimeTracker ${isMinimised ? 'TimeTracker--minimised' : ''}`}>

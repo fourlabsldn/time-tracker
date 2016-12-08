@@ -39,7 +39,7 @@ export const setSelectedDeliverable = curry((model, newSelected) => {
 
   return Immutable.merge({
     unselectedDeliverables: newDeliverables,
-    selectedDeliverable: newSelected,
+    selectedDeliverable: newSelected || null,
   });
 });
 
