@@ -14,25 +14,12 @@ export const updateAt = curry((keyArray, newVal, obj) => {
 
 export const selectedProject = pathOr(null, ['selectedProject']);
 
-export const unselectedProjects = pathOr([], ['unselectedProjects']);
-
-export const selectedDeliverable = pathOr(null, ['selectedProject', 'selectedDeliverable']);
-
-export const unselectedDeliverables = pathOr([], ['selectedProject', 'unselectedDeliverables']);
-
-
-export const selectedRecording = pathOr(null, [
-  'selectedProject',
-  'selectedDeliverable',
-  'recording',
-]);
-
-export const allSelectedProjectDeliverables =
-  pipe(selectedProject, Project.getDeliverables);
+// Model -> [Project]
+const unselectedProjects = propOr([], 'unselectedProjects');
 
 export const allProjects = model => (
     selectedProject(model)
-    ? unselectedProjects(model).concat(selectedProject(model))
+    ? unselectedProjects().concat(selectedProject(model))
     : unselectedProjects(model)
   );
 
@@ -98,17 +85,3 @@ export const updateProject = curry((project, model, newProject) => {
 
   return model;
 });
-//
-//
-// export const updateRecording = curry((deliverable, project, model, newRecording) => {
-//   const proj = allProjects(model)
-//     .find(propEq('name', Project.getName(project)));
-//   const deliv = Project.getDeliverables(proj)
-//     .find(propEq('name', Deliverable.getName(deliverable)));
-//
-//   return pipe(
-//     Deliverable.setRecording(deliv),
-//     Project.updateDeliverable(proj),
-//     updateProject(project, model)
-//   )(newRecording);
-// });
