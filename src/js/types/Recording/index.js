@@ -19,7 +19,13 @@ export const typeCheck = object({
 });
 
 // CONSTRUCTOR
-const Recording = immutableConstructor(typeCheck);
+const Recording = immutableConstructor(
+  typeCheck,
+  r => ({
+    startTime: r && r.startTime ? r.startTime : null,
+    intervals: r && r.intervals ? r.intervals : [],
+  })
+);
 
 // PRIVATE GETTERS
 export const getStartTime = propOr(null, 'startTime');
@@ -35,7 +41,7 @@ export const setStartTime = curry((v, model) => (
 export const setIntervals = curry((v, model) => (
   isNil(model)
     ? model
-    : Immutable(model).set('internals', v)
+    : Immutable(model).set('intervals', v)
 ));
 
 // ===========================

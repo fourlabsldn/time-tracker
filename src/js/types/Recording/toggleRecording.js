@@ -19,7 +19,10 @@ export default curry((model) => {
     return setStartTime(new Date(), model);
   }
 
-  const newInterval = TimeInterval.of(getStartTime(model), new Date());
+  const newInterval = TimeInterval.of({
+    start: getStartTime(model),
+    end: new Date(),
+  });
 
   return pipe(
     setStartTime(null),

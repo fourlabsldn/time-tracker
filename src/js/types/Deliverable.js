@@ -19,7 +19,12 @@ export const typeCheck = object({
 
 const Deliverable = immutableConstructor(typeCheck);
 
-export const getRecording = propOr(null, 'recording');
+export const getRecording = deliverable => (
+  deliverable
+    ? deliverable.recording || Recording.of({})
+    : null
+);
+
 export const getName = propOr(null, 'name');
 export const getUrl = propOr(null, 'url');
 

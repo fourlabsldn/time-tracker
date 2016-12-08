@@ -3,14 +3,14 @@ import modelType from '../model';
 import { Validation } from '../../types';
 import { pipe } from 'ramda';
 import Immutable from 'seamless-immutable';
-import startStopRecording from './startStopRecording';
+import toggleRecording from './toggleRecording';
 import selectProject from './selectProject';
 import selectDeliverable from './selectDeliverable';
 import setProjects from './setProjects';
 import toggleMinimised from './toggleMinimised';
 
 const actionHandlers = {
-  startStopRecording,
+  toggleRecording,
   selectProject,
   selectDeliverable,
   setProjects,

@@ -38,7 +38,7 @@ export const allProjects = model => (
 
 export const recordingsInfo = model => {
   const nonZeroRecordingTime = pipe(
-    prop('recording'),
+    propOr(null, 'recording'),
     Recording.totalTime,
     lt(0), // Int -> Bool. Whether zero is less than the number that will be passed
   );
@@ -82,8 +82,8 @@ export const updateProject = curry((project, model, newProject) => {
   if (updatingSelectedProject) {
     return updateAt(
       ['selectedProject'],
-      model,
-      newProject
+      newProject,
+      model
     );
   } else if (updatingUnselectedProject) {
     const newUnselectedProjects = unselectedProjects(model)
@@ -91,8 +91,8 @@ export const updateProject = curry((project, model, newProject) => {
 
     return updateAt(
       ['unselectedProjects'],
-      model,
-      newUnselectedProjects
+      newUnselectedProjects,
+      model
     );
   }
 

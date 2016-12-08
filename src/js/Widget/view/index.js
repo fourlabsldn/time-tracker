@@ -1,26 +1,26 @@
 /* eslint-disable no-nested-ternary, react/prop-types */
 import React from 'react';
 import Select from 'react-select';
-import { pipe, prop } from 'ramda';
+import { pipe, propOr } from 'ramda';
 import Timer from './Timer';
 import RecordingRow from './RecordingRow';
 import { Recording, Project, Deliverable } from '../../types';
 
 import {
-  startStopRecording,
+  toggleRecording,
   selectDeliverable,
   selectProject,
   toggleMinimised,
 } from '../actions';
 
 const toOption = el => (el
-  ? pipe(prop('name'), name => ({ label: name, value: name }))(el)
+  ? pipe(propOr(null, 'name'), name => ({ label: name, value: name }))(el)
   : null
 );
 
 // Object -> String : This creates a string useful in sorting and identifying
 //                    the project deliverable recording
-const stringIdentifier = ({ project, deliverable, recording }) => {
+const stringIdentifier = ({ project, deliverable }) => {
   return Project.getName(project) +
     Deliverable.getName(deliverable);
 };
@@ -39,7 +39,7 @@ const Widget = ({ // eslint-disable-line complexity
   const isRecording = Recording.isRecording(selectedRecording);
 
   const timeTrackerClick = _ =>
-    store.dispatch(startStopRecording(new Date(), !isRecording));
+    store.dispatch(toggleRecording(selectedProject, selectedDeliverable));
   const changeProject = (option) =>
     store.dispatch(selectProject(option ? option.value : null));
   const changeDeliverable = (option) =>

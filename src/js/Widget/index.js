@@ -15,8 +15,8 @@ const mapStateToProps = (model) => { // eslint-disable-line complexity
   return {
     recordingsInfo: recordingsInfo(model),
     selectedProject: selectedProject(model),
-    allProjects: allProjects(model),
     selectedDeliverable: selectedDeliverable(model),
+    allProjects: allProjects(model),
     allSelectedProjectDeliverables: allSelectedProjectDeliverables(model),
     selectedRecording: selectedRecording(model),
     isMinimised: model.minimised,

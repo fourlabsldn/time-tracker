@@ -2,10 +2,10 @@
 //    ACTION CREATORS
 //
 
-export const startStopRecording = (time, shouldStart) => ({
-  type: 'WIDGET_startStopRecording',
-  time,
-  shouldStart,
+export const toggleRecording = (project, deliverable) => ({
+  type: 'WIDGET_toggleRecording',
+  project,
+  deliverable,
 });
 export const selectDeliverable = (deliverableName) => ({
   type: 'WIDGET_selectDeliverable',
