@@ -51,14 +51,14 @@ export const array = curry((subType, v) => {
     return Validation.Failure(`${v} is not an array`);
   }
 
-  const subtypesValidaton = v
+  const subTypesValidation = v
     .map(subType)
     .reduce(Validation.chain, Validation.Success(v));
 
-  if (Validation.isSuccess(subtypesValidaton)) {
+  if (Validation.isSuccess(subTypesValidation)) {
     return Validation.Success(v);
   }
-  return Validation.mapFailure(errMsg('array'));
+  return Validation.mapFailure(errMsg('array'), subTypesValidation);
 });
 
 export const date = v => (
