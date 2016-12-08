@@ -39,4 +39,11 @@ organiser.registerAll('./gulp-tasks', {
     dest,
     rename: 'time-tracker.css',
   },
+  'build-elm': {
+    watch: 'src/elm/**/*',
+    src: 'src/elm/Main.elm',
+    dest: 'dist/elm',
+    moduleName: 'Main',
+    ext: 'js',
+  },
 });
