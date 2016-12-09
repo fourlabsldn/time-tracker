@@ -10245,7 +10245,20 @@ var _fourlabsldn$time_tracker$Main_State$update = F2(
 		}
 	});
 
-var _fourlabsldn$time_tracker$Main_View$toTwoDigits = function (_p0) {
+var _fourlabsldn$time_tracker$Main_View$isRecording = function (recording) {
+	return A2(
+		_elm_lang$core$Maybe$withDefault,
+		false,
+		A2(
+			_elm_lang$core$Maybe$map,
+			function (_p0) {
+				return true;
+			},
+			function (_) {
+				return _.startTime;
+			}(recording)));
+};
+var _fourlabsldn$time_tracker$Main_View$toTwoDigits = function (_p1) {
 	return A2(
 		_elm_lang$core$String$right,
 		2,
@@ -10255,7 +10268,7 @@ var _fourlabsldn$time_tracker$Main_View$toTwoDigits = function (_p0) {
 					return A2(_elm_lang$core$Basics_ops['++'], x, y);
 				}),
 			'00',
-			_elm_lang$core$Basics$toString(_p0)));
+			_elm_lang$core$Basics$toString(_p1)));
 };
 var _fourlabsldn$time_tracker$Main_View$prettyTime = function (time) {
 	return A2(
@@ -10273,11 +10286,11 @@ var _fourlabsldn$time_tracker$Main_View$prettyTime = function (time) {
 var _fourlabsldn$time_tracker$Main_View$totalDuration = F2(
 	function (clock, recording) {
 		var runningTime = function () {
-			var _p1 = recording.startTime;
-			if (_p1.ctor === 'Nothing') {
+			var _p2 = recording.startTime;
+			if (_p2.ctor === 'Nothing') {
 				return 0;
 			} else {
-				return clock - _p1._0;
+				return clock - _p2._0;
 			}
 		}();
 		var intervalsDuration = A3(
@@ -10295,35 +10308,146 @@ var _fourlabsldn$time_tracker$Main_View$totalDuration = F2(
 				recording.intervals));
 		return intervalsDuration + runningTime;
 	});
+var _fourlabsldn$time_tracker$Main_View$timeTracker = F2(
+	function (clock, recording) {
+		return A2(
+			_elm_lang$html$Html$div,
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$class('TimeTracker-timer-time'),
+				_1: {ctor: '[]'}
+			},
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html$text(
+					_fourlabsldn$time_tracker$Main_View$prettyTime(
+						A2(_fourlabsldn$time_tracker$Main_View$totalDuration, clock, recording))),
+				_1: {ctor: '[]'}
+			});
+	});
+var _fourlabsldn$time_tracker$Main_View$recordingInfoView = F2(
+	function (clock, info) {
+		return A2(
+			_elm_lang$html$Html$div,
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$class('TimeTracker-RecordingRow'),
+				_1: {ctor: '[]'}
+			},
+			{
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$div,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$class('TimeTracker-RecordingRow-names'),
+						_1: {ctor: '[]'}
+					},
+					{
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$span,
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html_Attributes$class('TimeTracker-RecordingRow-deliverableName'),
+								_1: {ctor: '[]'}
+							},
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html$text(info.deliverable.name),
+								_1: {ctor: '[]'}
+							}),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$span,
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html_Attributes$class('TimeTracker-RecordingRow-projectName'),
+									_1: {ctor: '[]'}
+								},
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html$text(info.project.name),
+									_1: {ctor: '[]'}
+								}),
+							_1: {ctor: '[]'}
+						}
+					}),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$button,
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$class(
+								_fourlabsldn$time_tracker$Main_View$isRecording(info.recording) ? 'TimeTracker-RecordingRow-start-stop btn fa btn-danger fa-pause' : 'TimeTracker-RecordingRow-start-stop btn fa btn-info fa-play'),
+							_1: {ctor: '[]'}
+						},
+						{ctor: '[]'}),
+					_1: {
+						ctor: '::',
+						_0: A2(_fourlabsldn$time_tracker$Main_View$timeTracker, clock, info.recording),
+						_1: {ctor: '[]'}
+					}
+				}
+			});
+	});
 var _fourlabsldn$time_tracker$Main_View$onChange = function (tagger) {
 	var decoder = A2(_elm_lang$core$Json_Decode$map, tagger, _elm_lang$html$Html_Events$targetValue);
 	return A2(_elm_lang$html$Html_Events$on, 'change', decoder);
 };
+var _fourlabsldn$time_tracker$Main_View$RecordingInfo = F3(
+	function (a, b, c) {
+		return {project: a, deliverable: b, recording: c};
+	});
+var _fourlabsldn$time_tracker$Main_View$projectRecordingInfos = function (project) {
+	return A2(
+		_elm_lang$core$List$map,
+		function (d) {
+			return A3(_fourlabsldn$time_tracker$Main_View$RecordingInfo, project, d, d.recording);
+		},
+		_fourlabsldn$time_tracker$Main_Utils$allDeliverables(project));
+};
+var _fourlabsldn$time_tracker$Main_View$allRecordingInfos = function (model) {
+	return _elm_lang$core$List$concat(
+		A2(
+			_elm_lang$core$List$map,
+			_fourlabsldn$time_tracker$Main_View$projectRecordingInfos,
+			_fourlabsldn$time_tracker$Main_Utils$allProjects(model)));
+};
+var _fourlabsldn$time_tracker$Main_View$allStartedTimers = function (model) {
+	return A2(
+		_elm_lang$core$List$filter,
+		function (info) {
+			return A2(
+				F2(
+					function (x, y) {
+						return _elm_lang$core$Native_Utils.cmp(x, y) < 0;
+					}),
+				0,
+				A2(_fourlabsldn$time_tracker$Main_View$totalDuration, model.clock, info.recording));
+		},
+		_fourlabsldn$time_tracker$Main_View$allRecordingInfos(model));
+};
 var _fourlabsldn$time_tracker$Main_View$view = function (model) {
-	var isRecording = A2(
+	var isRecordingOn = A2(
 		_elm_lang$core$Maybe$withDefault,
 		false,
 		A2(
 			_elm_lang$core$Maybe$map,
-			function (_p2) {
-				return true;
-			},
+			_fourlabsldn$time_tracker$Main_View$isRecording,
 			A2(
-				_elm_lang$core$Maybe$andThen,
+				_elm_lang$core$Maybe$map,
 				function (_) {
-					return _.startTime;
+					return _.recording;
 				},
 				A2(
-					_elm_lang$core$Maybe$map,
+					_elm_lang$core$Maybe$andThen,
 					function (_) {
-						return _.recording;
+						return _.selectedDeliverable;
 					},
-					A2(
-						_elm_lang$core$Maybe$andThen,
-						function (_) {
-							return _.selectedDeliverable;
-						},
-						model.selectedProject)))));
+					model.selectedProject))));
 	var startClickEnabled = A2(
 		_elm_lang$core$Maybe$withDefault,
 		false,
@@ -10439,7 +10563,7 @@ var _fourlabsldn$time_tracker$Main_View$view = function (model) {
 				{
 					ctor: '::',
 					_0: _elm_lang$html$Html_Attributes$class(
-						isRecording ? 'TimeTracker-timer TimeTracker-timer--recording' : 'TimeTracker-timer'),
+						isRecordingOn ? 'TimeTracker-timer TimeTracker-timer--recording' : 'TimeTracker-timer'),
 					_1: {
 						ctor: '::',
 						_0: _elm_lang$html$Html_Events$onClick(_fourlabsldn$time_tracker$Main_Types$ToggleMinimise),
@@ -10658,7 +10782,7 @@ var _fourlabsldn$time_tracker$Main_View$view = function (model) {
 									{
 										ctor: '::',
 										_0: _elm_lang$html$Html_Attributes$class(
-											isRecording ? 'TimeTracker-start-stop btn btn-danger' : 'TimeTracker-start-stop btn btn-default'),
+											isRecordingOn ? 'TimeTracker-start-stop btn btn-danger' : 'TimeTracker-start-stop btn btn-default'),
 										_1: {
 											ctor: '::',
 											_0: _elm_lang$html$Html_Events$onClick(onStartClick),
@@ -10672,10 +10796,20 @@ var _fourlabsldn$time_tracker$Main_View$view = function (model) {
 									{
 										ctor: '::',
 										_0: _elm_lang$html$Html$text(
-											isRecording ? 'Pause' : 'Start'),
+											isRecordingOn ? 'Pause' : 'Start'),
 										_1: {ctor: '[]'}
 									}),
-								_1: {ctor: '[]'}
+								_1: {
+									ctor: '::',
+									_0: A2(
+										_elm_lang$html$Html$div,
+										{ctor: '[]'},
+										A2(
+											_elm_lang$core$List$map,
+											_fourlabsldn$time_tracker$Main_View$recordingInfoView(model.clock),
+											_fourlabsldn$time_tracker$Main_View$allStartedTimers(model))),
+									_1: {ctor: '[]'}
+								}
 							}
 						}
 					}),

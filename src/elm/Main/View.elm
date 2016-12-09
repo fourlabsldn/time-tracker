@@ -10,6 +10,13 @@ import Json.Decode as Json
 import Time exposing (Time)
 
 
+type alias RecordingInfo =
+    { project : Project
+    , deliverable : Deliverable
+    , recording : Recording
+    }
+
+
 view : Model -> Html Msg
 view model =
     let
@@ -72,18 +79,17 @@ view model =
                 |> Maybe.map (\_ -> True)
                 |> Maybe.withDefault False
 
-        isRecording =
+        isRecordingOn =
             model.selectedProject
                 |> Maybe.andThen .selectedDeliverable
                 |> Maybe.map .recording
-                |> Maybe.andThen .startTime
-                |> Maybe.map (\_ -> True)
+                |> Maybe.map isRecording
                 |> Maybe.withDefault False
     in
         div [ class topClass ]
             [ div
                 [ class <|
-                    if isRecording then
+                    if isRecordingOn then
                         "TimeTracker-timer TimeTracker-timer--recording"
                     else
                         "TimeTracker-timer"
@@ -153,7 +159,7 @@ view model =
                     ]
                 , button
                     [ class <|
-                        if isRecording then
+                        if isRecordingOn then
                             "TimeTracker-start-stop btn btn-danger"
                         else
                             "TimeTracker-start-stop btn btn-default"
@@ -161,11 +167,12 @@ view model =
                     , disabled <| not startClickEnabled
                     ]
                     [ text <|
-                        if isRecording then
+                        if isRecordingOn then
                             "Pause"
                         else
                             "Start"
                     ]
+                , div [] <| (allStartedTimers model |> List.map (recordingInfoView model.clock))
                 ]
             ]
 
@@ -209,3 +216,65 @@ prettyTime time =
 toTwoDigits : Int -> String
 toTwoDigits =
     toString >> (++) "00" >> String.right 2
+
+
+allStartedTimers : Model -> List RecordingInfo
+allStartedTimers model =
+    model
+        |> allRecordingInfos
+        |> List.filter (\info -> (<) 0 <| totalDuration model.clock info.recording)
+
+
+allRecordingInfos : Model -> List RecordingInfo
+allRecordingInfos model =
+    model
+        |> allProjects
+        |> List.map projectRecordingInfos
+        |> List.concat
+
+
+projectRecordingInfos : Project -> List RecordingInfo
+projectRecordingInfos project =
+    allDeliverables project
+        |> List.map (\d -> RecordingInfo project d d.recording)
+
+
+recordingInfoView : Time -> RecordingInfo -> Html Msg
+recordingInfoView clock info =
+    div
+        [ class "TimeTracker-RecordingRow" ]
+        [ div
+            [ class "TimeTracker-RecordingRow-names" ]
+            [ span
+                [ class "TimeTracker-RecordingRow-deliverableName" ]
+                [ text info.deliverable.name ]
+            , span
+                [ class "TimeTracker-RecordingRow-projectName" ]
+                [ text info.project.name ]
+            ]
+        , button
+            [ class <|
+                if isRecording info.recording then
+                    "TimeTracker-RecordingRow-start-stop btn fa btn-danger fa-pause"
+                else
+                    "TimeTracker-RecordingRow-start-stop btn fa btn-info fa-play"
+            ]
+            []
+        , timeTracker clock info.recording
+        ]
+
+
+isRecording : Recording -> Bool
+isRecording recording =
+    recording
+        |> .startTime
+        |> Maybe.map (\_ -> True)
+        |> Maybe.withDefault False
+
+
+timeTracker : Time -> Recording -> Html Msg
+timeTracker clock recording =
+    div
+        [ class "TimeTracker-timer-time"
+        ]
+        [ text <| prettyTime <| totalDuration clock recording ]
