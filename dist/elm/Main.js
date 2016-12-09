@@ -10382,7 +10382,12 @@ var _fourlabsldn$time_tracker$Main_View$recordingInfoView = F2(
 							ctor: '::',
 							_0: _elm_lang$html$Html_Attributes$class(
 								_fourlabsldn$time_tracker$Main_View$isRecording(info.recording) ? 'TimeTracker-RecordingRow-start-stop btn fa btn-danger fa-pause' : 'TimeTracker-RecordingRow-start-stop btn fa btn-info fa-play'),
-							_1: {ctor: '[]'}
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$html$Html_Events$onClick(
+									A2(_fourlabsldn$time_tracker$Main_Types$ToggleRecording, info.project, info.deliverable)),
+								_1: {ctor: '[]'}
+							}
 						},
 						{ctor: '[]'}),
 					_1: {

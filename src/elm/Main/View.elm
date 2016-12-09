@@ -258,6 +258,7 @@ recordingInfoView clock info =
                     "TimeTracker-RecordingRow-start-stop btn fa btn-danger fa-pause"
                 else
                     "TimeTracker-RecordingRow-start-stop btn fa btn-info fa-play"
+            , onClick (ToggleRecording info.project info.deliverable)
             ]
             []
         , timeTracker clock info.recording
