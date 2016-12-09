@@ -10033,6 +10033,7 @@ var _fourlabsldn$time_tracker$Main_Types$SelectDeliverable = F2(
 	function (a, b) {
 		return {ctor: 'SelectDeliverable', _0: a, _1: b};
 	});
+var _fourlabsldn$time_tracker$Main_Types$DoNothing = {ctor: 'DoNothing'};
 
 var _fourlabsldn$time_tracker$Main_Utils$allDeliverables = function (project) {
 	var _p0 = project.selectedDeliverable;
@@ -10109,6 +10110,8 @@ var _fourlabsldn$time_tracker$Main_State$update = F2(
 	function (msg, model) {
 		var _p1 = msg;
 		switch (_p1.ctor) {
+			case 'DoNothing':
+				return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
 			case 'SelectDeliverable':
 				var _p5 = _p1._0;
 				var isProjectSelected = function () {
@@ -10307,18 +10310,39 @@ var _fourlabsldn$time_tracker$Main_View$view = function (model) {
 										}
 									},
 									A2(
-										_elm_lang$core$List$map,
-										function (p) {
-											return A2(
-												_elm_lang$html$Html$option,
-												{ctor: '[]'},
-												{
+										F2(
+											function (x, y) {
+												return {ctor: '::', _0: x, _1: y};
+											}),
+										A2(
+											_elm_lang$html$Html$option,
+											{
+												ctor: '::',
+												_0: _elm_lang$html$Html_Attributes$disabled(true),
+												_1: {
 													ctor: '::',
-													_0: _elm_lang$html$Html$text(p.name),
+													_0: _elm_lang$html$Html_Attributes$selected(true),
 													_1: {ctor: '[]'}
-												});
-										},
-										availableProjects)),
+												}
+											},
+											{
+												ctor: '::',
+												_0: _elm_lang$html$Html$text('Select...'),
+												_1: {ctor: '[]'}
+											}),
+										A2(
+											_elm_lang$core$List$map,
+											function (p) {
+												return A2(
+													_elm_lang$html$Html$option,
+													{ctor: '[]'},
+													{
+														ctor: '::',
+														_0: _elm_lang$html$Html$text(p.name),
+														_1: {ctor: '[]'}
+													});
+											},
+											availableProjects))),
 								_1: {
 									ctor: '::',
 									_0: A2(
@@ -10339,7 +10363,28 @@ var _fourlabsldn$time_tracker$Main_View$view = function (model) {
 								{
 									ctor: '::',
 									_0: _elm_lang$html$Html_Attributes$class('TimeTracker-deliverables'),
-									_1: {ctor: '[]'}
+									_1: {
+										ctor: '::',
+										_0: _fourlabsldn$time_tracker$Main_View$onChange(
+											function (n) {
+												var deliverable = A2(
+													_elm_lang$core$Maybe$map,
+													_elm_community$list_extra$List_Extra$find(
+														function (d) {
+															return _elm_lang$core$Native_Utils.eq(d.name, n);
+														}),
+													A2(_elm_lang$core$Maybe$map, _fourlabsldn$time_tracker$Main_Utils$allDeliverables, model.selectedProject));
+												var project = model.selectedProject;
+												var cmd = A3(_elm_lang$core$Maybe$map2, _fourlabsldn$time_tracker$Main_Types$SelectDeliverable, project, deliverable);
+												var _p1 = cmd;
+												if (_p1.ctor === 'Nothing') {
+													return _fourlabsldn$time_tracker$Main_Types$DoNothing;
+												} else {
+													return _p1._0;
+												}
+											}),
+										_1: {ctor: '[]'}
+									}
 								},
 								{
 									ctor: '::',
@@ -10351,18 +10396,39 @@ var _fourlabsldn$time_tracker$Main_View$view = function (model) {
 											_1: {ctor: '[]'}
 										},
 										A2(
-											_elm_lang$core$List$map,
-											function (d) {
-												return A2(
-													_elm_lang$html$Html$option,
-													{ctor: '[]'},
-													{
+											F2(
+												function (x, y) {
+													return {ctor: '::', _0: x, _1: y};
+												}),
+											A2(
+												_elm_lang$html$Html$option,
+												{
+													ctor: '::',
+													_0: _elm_lang$html$Html_Attributes$disabled(true),
+													_1: {
 														ctor: '::',
-														_0: _elm_lang$html$Html$text(d.name),
+														_0: _elm_lang$html$Html_Attributes$selected(true),
 														_1: {ctor: '[]'}
-													});
-											},
-											availableDeliverables)),
+													}
+												},
+												{
+													ctor: '::',
+													_0: _elm_lang$html$Html$text('Select...'),
+													_1: {ctor: '[]'}
+												}),
+											A2(
+												_elm_lang$core$List$map,
+												function (d) {
+													return A2(
+														_elm_lang$html$Html$option,
+														{ctor: '[]'},
+														{
+															ctor: '::',
+															_0: _elm_lang$html$Html$text(d.name),
+															_1: {ctor: '[]'}
+														});
+												},
+												availableDeliverables))),
 									_1: {
 										ctor: '::',
 										_0: A2(

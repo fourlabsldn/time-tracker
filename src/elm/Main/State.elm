@@ -20,6 +20,9 @@ init unselectedProjects =
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
+        DoNothing ->
+            ( model, Cmd.none )
+
         SelectDeliverable project maybeDeliverable ->
             let
                 isProjectSelected =

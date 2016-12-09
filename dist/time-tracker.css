@@ -508,6 +508,14 @@
   .TimeTracker-deliverables:first-child,
   .TimeTracker-projects:first-child {
     padding-top: 1em; }
+  #elm-app .TimeTracker-deliverables .Select, #elm-app
+  .TimeTracker-projects .Select {
+    background-color: white;
+    border-color: #ddd;
+    /* color: #bbb; */
+    padding: .5em;
+    -webkit-border-radius: 4px;
+            border-radius: 4px; }
   .TimeTracker-deliverables .Select,
   .TimeTracker-projects .Select {
     width: 100%; }

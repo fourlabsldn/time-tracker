@@ -93,6 +93,14 @@
         padding-top: 1em;
     }
 
+    #elm-app & .Select {
+        background-color: white;
+        border-color: #ddd;
+        /* color: #bbb; */
+        padding: 0.5em;
+        border-radius: 4px;
+    }
+
     .Select {
         width: 100%;
     }

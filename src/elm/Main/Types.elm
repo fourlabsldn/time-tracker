@@ -38,7 +38,8 @@ type alias TimeInterval =
 
 
 type Msg
-    = SelectDeliverable Project (Maybe Deliverable)
+    = DoNothing
+    | SelectDeliverable Project (Maybe Deliverable)
     | SelectProject (Maybe Project)
     | SetProjects (List Project)
     | ToggleRecording Project Deliverable
