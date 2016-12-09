@@ -48,7 +48,11 @@ export const updateDeliverable = curry((model, newDeliverable) => { // eslint-di
     return model;
   }
 
-  const sameName = propEq('name', newDeliverable.name);
+  const sameName = deliv => (
+      deliv
+      ? propEq('name', newDeliverable.name, deliv)
+      : false
+    );
 
   if (sameName(Project.getSelectedDeliverable(model))) {
     return Immutable(model).merge({
@@ -63,8 +67,6 @@ export const updateDeliverable = curry((model, newDeliverable) => { // eslint-di
       unselectedDeliverables: newUnselected,
     });
   }
-
-  assert(false, `No deliverable with name ${newDeliverable.name}`);
   return model;
 });
 
