@@ -15,7 +15,7 @@ export const updateAt = curry((keyArray, newVal, obj) => {
 export const selectedProject = pathOr(null, ['selectedProject']);
 
 // Model -> [Project]
-const unselectedProjects = propOr([], 'unselectedProjects');
+const unselectedProjects = pipe(propOr(null, 'unselectedProjects'), v => v || []);
 
 export const allProjects = model => (
     selectedProject(model)
