@@ -100,6 +100,9 @@ update msg model =
                 , Cmd.none
                 )
 
+        ToggleMinimise ->
+            ( { model | isMinimised = not model.isMinimised }, Cmd.none )
+
 
 toggleRecording : Recording -> Recording
 toggleRecording recording =

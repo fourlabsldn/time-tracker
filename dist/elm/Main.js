@@ -10019,6 +10019,7 @@ var _fourlabsldn$time_tracker$Main_Types$TimeInterval = F2(
 	function (a, b) {
 		return {start: a, end: b};
 	});
+var _fourlabsldn$time_tracker$Main_Types$ToggleMinimise = {ctor: 'ToggleMinimise'};
 var _fourlabsldn$time_tracker$Main_Types$ToggleRecording = F2(
 	function (a, b) {
 		return {ctor: 'ToggleRecording', _0: a, _1: b};
@@ -10202,7 +10203,7 @@ var _fourlabsldn$time_tracker$Main_State$update = F2(
 					_0: _fourlabsldn$time_tracker$Main_State$init(_p1._0),
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
-			default:
+			case 'ToggleRecording':
 				var _p9 = _p1._1;
 				var newDeliverable = _elm_lang$core$Native_Utils.update(
 					_p9,
@@ -10219,6 +10220,14 @@ var _fourlabsldn$time_tracker$Main_State$update = F2(
 					_0: A2(_fourlabsldn$time_tracker$Main_State$updateProject, model, newProject),
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
+			default:
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{isMinimised: !model.isMinimised}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
 		}
 	});
 
@@ -10227,6 +10236,7 @@ var _fourlabsldn$time_tracker$Main_View$onChange = function (tagger) {
 	return A2(_elm_lang$html$Html_Events$on, 'change', decoder);
 };
 var _fourlabsldn$time_tracker$Main_View$view = function (model) {
+	var topClass = model.isMinimised ? 'TimeTracker TimeTracker--minimised' : 'TimeTracker';
 	var deliverableLinkClass = A2(
 		_elm_lang$core$Maybe$withDefault,
 		'disabled',
@@ -10286,7 +10296,7 @@ var _fourlabsldn$time_tracker$Main_View$view = function (model) {
 		_elm_lang$html$Html$div,
 		{
 			ctor: '::',
-			_0: _elm_lang$html$Html_Attributes$class('TimeTracker'),
+			_0: _elm_lang$html$Html_Attributes$class(topClass),
 			_1: {ctor: '[]'}
 		},
 		{
@@ -10296,7 +10306,11 @@ var _fourlabsldn$time_tracker$Main_View$view = function (model) {
 				{
 					ctor: '::',
 					_0: _elm_lang$html$Html_Attributes$class('TimeTracker-timer'),
-					_1: {ctor: '[]'}
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$html$Html_Events$onClick(_fourlabsldn$time_tracker$Main_Types$ToggleMinimise),
+						_1: {ctor: '[]'}
+					}
 				},
 				{
 					ctor: '::',

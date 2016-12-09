@@ -43,3 +43,4 @@ type Msg
     | SelectProject (Maybe Project)
     | SetProjects (List Project)
     | ToggleRecording Project Deliverable
+    | ToggleMinimise

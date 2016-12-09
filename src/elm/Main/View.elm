@@ -4,7 +4,7 @@ import Main.Utils exposing (allProjects, allDeliverables)
 import Main.Types exposing (..)
 import Html exposing (..)
 import Html.Attributes exposing (class, disabled, selected, href)
-import Html.Events exposing (on, targetValue)
+import Html.Events exposing (on, targetValue, onClick)
 import List.Extra
 import Json.Decode as Json
 
@@ -44,12 +44,21 @@ view model =
                 |> Maybe.andThen .selectedDeliverable
                 |> Maybe.map (\_ -> "danger")
                 |> Maybe.withDefault "disabled"
+
+        topClass =
+            if model.isMinimised then
+                "TimeTracker TimeTracker--minimised"
+            else
+                "TimeTracker"
     in
-        div [ class "TimeTracker" ]
+        div [ class topClass ]
             [ div
-                [ class "TimeTracker-timer" ]
+                [ class "TimeTracker-timer"
+                , onClick ToggleMinimise
+                ]
                 [ div
-                    [ class "TimeTracker-timer-time" ]
+                    [ class "TimeTracker-timer-time"
+                    ]
                     [ text "00:00" ]
                 ]
             , div

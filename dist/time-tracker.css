@@ -513,7 +513,8 @@
     background-color: white;
     border-color: #ddd;
     /* color: #bbb; */
-    padding: .5em;
+    padding: 0.5em;
+    outline-color: transparent;
     -webkit-border-radius: 4px;
             border-radius: 4px; }
   .TimeTracker-deliverables .Select,
