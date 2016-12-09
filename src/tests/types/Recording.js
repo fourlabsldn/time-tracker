@@ -62,6 +62,7 @@ describe('Recording type', () => {
     expect(intervalIsArray({ intervals })).toEqual(true);
     expect(intervalIsArray({ intervals: null })).toEqual(true);
     expect(intervalIsArray({})).toEqual(true);
+    expect(intervalIsArray(null)).toEqual(true);
     expect(_ => Recording.getIntervals(null)).not.toThrow();
   });
 
@@ -110,5 +111,13 @@ describe('Recording type', () => {
     expect(Recording.totalTime(sec0)).toEqual(0);
     expect(Recording.totalTime(sec15Running)).toBeGreaterThan(100 * 15);
     expect(Recording.totalTime(sec0Running)).toBeGreaterThan(0);
+  });
+
+  it('does not break when totalTime receives null and always returns a number', () => {
+    expect(_ => Recording.totalTime(null)).not.toThrow();
+    expect(Recording.totalTime(null)).toEqual(0);
+    expect(Recording.totalTime()).toEqual(0);
+    expect(Recording.totalTime({})).toEqual(0);
+    expect(Recording.totalTime([])).toEqual(0);
   });
 });

@@ -30,7 +30,7 @@ const Recording = immutableConstructor(
 // PRIVATE GETTERS
 export const getStartTime = propOr(null, 'startTime');
 export const getIntervals = model => (
-  isNil(model) ? null
+  isNil(model) ? []
   : isNil(model.intervals) ? []
   : model.intervals
 );
