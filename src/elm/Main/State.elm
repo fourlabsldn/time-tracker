@@ -16,7 +16,7 @@ init unselectedProjects =
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
-    Time.every Time.second UpdateClock
+    Time.every (100 * Time.millisecond) UpdateClock
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )

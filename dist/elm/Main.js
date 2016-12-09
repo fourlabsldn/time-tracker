@@ -10108,7 +10108,7 @@ var _fourlabsldn$time_tracker$Main_State$toggleRecording = F2(
 		}
 	});
 var _fourlabsldn$time_tracker$Main_State$subscriptions = function (model) {
-	return A2(_elm_lang$core$Time$every, _elm_lang$core$Time$second, _fourlabsldn$time_tracker$Main_Types$UpdateClock);
+	return A2(_elm_lang$core$Time$every, 100 * _elm_lang$core$Time$millisecond, _fourlabsldn$time_tracker$Main_Types$UpdateClock);
 };
 var _fourlabsldn$time_tracker$Main_State$init = function (unselectedProjects) {
 	return {isMinimised: false, clock: 0, selectedProject: _elm_lang$core$Maybe$Nothing, unselectedProjects: unselectedProjects};
