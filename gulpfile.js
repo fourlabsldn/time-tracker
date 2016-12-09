@@ -42,4 +42,9 @@ organiser.registerAll('./gulp-tasks', {
     dest,
     rename: 'time-tracker.css',
   },
+  'copy-static': {
+    src: 'node_modules/jasmine-core/**/*',
+    dest: 'examples/widget/jasmine-core',
+    map: {},
+  },
 });
