@@ -7,6 +7,7 @@ import Html.Attributes exposing (class, disabled, selected, href)
 import Html.Events exposing (on, targetValue, onClick)
 import List.Extra
 import Json.Decode as Json
+import Time exposing (Time)
 
 
 view : Model -> Html Msg
@@ -50,16 +51,48 @@ view model =
                 "TimeTracker TimeTracker--minimised"
             else
                 "TimeTracker"
+
+        runningTime =
+            model.selectedProject
+                |> Maybe.andThen .selectedDeliverable
+                |> Maybe.map .recording
+                |> Maybe.map (totalDuration model.clock)
+                |> Maybe.withDefault 0
+                |> prettyTime
+
+        onStartClick =
+            model.selectedProject
+                |> Maybe.andThen .selectedDeliverable
+                |> Maybe.map2 ToggleRecording model.selectedProject
+                |> Maybe.withDefault DoNothing
+
+        startClickEnabled =
+            model.selectedProject
+                |> Maybe.andThen .selectedDeliverable
+                |> Maybe.map (\_ -> True)
+                |> Maybe.withDefault False
+
+        isRecording =
+            model.selectedProject
+                |> Maybe.andThen .selectedDeliverable
+                |> Maybe.map .recording
+                |> Maybe.andThen .startTime
+                |> Maybe.map (\_ -> True)
+                |> Maybe.withDefault False
     in
         div [ class topClass ]
             [ div
-                [ class "TimeTracker-timer"
+                [ class <|
+                    if isRecording then
+                        "TimeTracker-timer TimeTracker-timer--recording"
+                    else
+                        "TimeTracker-timer"
                 , onClick ToggleMinimise
                 ]
                 [ div
                     [ class "TimeTracker-timer-time"
                     ]
-                    [ text "00:00" ]
+                    [ text runningTime ]
                 ]
             , div
                 [ class "TimeTracker-fields" ]
@@ -119,8 +152,20 @@ view model =
                         []
                     ]
                 , button
-                    [ class "TimeTracker-start-stop btn btn-default" ]
-                    [ text "Start" ]
+                    [ class <|
+                        if isRecording then
+                            "TimeTracker-start-stop btn btn-danger"
+                        else
+                            "TimeTracker-start-stop btn btn-default"
+                    , onClick onStartClick
+                    , disabled <| not startClickEnabled
+                    ]
+                    [ text <|
+                        if isRecording then
+                            "Pause"
+                        else
+                            "Start"
+                    ]
                 ]
             ]
 
@@ -133,3 +178,29 @@ onChange tagger =
                 |> Json.map tagger
     in
         on "change" decoder
+
+
+totalDuration : Time -> Recording -> Float
+totalDuration clock recording =
+    let
+        intervalsDuration =
+            recording.intervals
+                |> List.map (\i -> i.end - i.start)
+                |> List.foldl (+) 0
+
+        runningTime =
+            case recording.startTime of
+                Nothing ->
+                    0
+
+                Just aTime ->
+                    clock - aTime
+    in
+        intervalsDuration + runningTime
+
+
+prettyTime : Time -> String
+prettyTime time =
+    toString (Time.inMinutes time)
+        ++ ":"
+        ++ toString (Time.inSeconds time)
