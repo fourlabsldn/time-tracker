@@ -10,7 +10,10 @@ const relativePath = (...args) => path.join(__dirname, ...args);
 const organiser = require('gulp-organiser');
 organiser.registerAll('./gulp-tasks', {
   'transpile-react': {
-    watch: relativePath(src, '/js/**/*.js'),
+    watch: [
+      relativePath(src, '/js/**/*.js'),
+      relativePath(src, '/tests/**/*.js'),
+    ],
     src: relativePath(src, '/js/main.js'),
     dest,
     rename: 'time-tracker.js',
