@@ -1,4 +1,4 @@
-module Main.State exposing (init, update)
+module Main.State exposing (init, update, subscriptions)
 
 import Main.Types exposing (..)
 import Main.Utils exposing (..)
@@ -12,9 +12,15 @@ nowPlaceholder =
 init : List Project -> Model
 init unselectedProjects =
     { isMinimised = False
+    , clock = 0
     , selectedProject = Nothing
     , unselectedProjects = unselectedProjects
     }
+
+
+subscriptions : Model -> Sub Msg
+subscriptions model =
+    Time.every Time.second UpdateClock
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -22,6 +28,9 @@ update msg model =
     case msg of
         DoNothing ->
             ( model, Cmd.none )
+
+        UpdateClock time ->
+            ( { model | clock = time }, Cmd.none )
 
         SelectDeliverable project maybeDeliverable ->
             let

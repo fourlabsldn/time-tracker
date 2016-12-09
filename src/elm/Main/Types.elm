@@ -5,6 +5,7 @@ import Time exposing (Time)
 
 type alias Model =
     { isMinimised : Bool
+    , clock : Time
     , selectedProject : Maybe Project
     , unselectedProjects : List Project
     }
@@ -44,3 +45,4 @@ type Msg
     | SetProjects (List Project)
     | ToggleRecording Project Deliverable
     | ToggleMinimise
+    | UpdateClock Time

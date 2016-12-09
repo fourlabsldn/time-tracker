@@ -9999,9 +9999,9 @@ var _elm_lang$html$Html_Events$Options = F2(
 		return {stopPropagation: a, preventDefault: b};
 	});
 
-var _fourlabsldn$time_tracker$Main_Types$Model = F3(
-	function (a, b, c) {
-		return {isMinimised: a, selectedProject: b, unselectedProjects: c};
+var _fourlabsldn$time_tracker$Main_Types$Model = F4(
+	function (a, b, c, d) {
+		return {isMinimised: a, clock: b, selectedProject: c, unselectedProjects: d};
 	});
 var _fourlabsldn$time_tracker$Main_Types$Project = F4(
 	function (a, b, c, d) {
@@ -10019,6 +10019,9 @@ var _fourlabsldn$time_tracker$Main_Types$TimeInterval = F2(
 	function (a, b) {
 		return {start: a, end: b};
 	});
+var _fourlabsldn$time_tracker$Main_Types$UpdateClock = function (a) {
+	return {ctor: 'UpdateClock', _0: a};
+};
 var _fourlabsldn$time_tracker$Main_Types$ToggleMinimise = {ctor: 'ToggleMinimise'};
 var _fourlabsldn$time_tracker$Main_Types$ToggleRecording = F2(
 	function (a, b) {
@@ -10085,8 +10088,11 @@ var _fourlabsldn$time_tracker$Main_State$updateProject = F2(
 					model.unselectedProjects)
 			});
 	});
+var _fourlabsldn$time_tracker$Main_State$subscriptions = function (model) {
+	return A2(_elm_lang$core$Time$every, _elm_lang$core$Time$second, _fourlabsldn$time_tracker$Main_Types$UpdateClock);
+};
 var _fourlabsldn$time_tracker$Main_State$init = function (unselectedProjects) {
-	return {isMinimised: false, selectedProject: _elm_lang$core$Maybe$Nothing, unselectedProjects: unselectedProjects};
+	return {isMinimised: false, clock: 0, selectedProject: _elm_lang$core$Maybe$Nothing, unselectedProjects: unselectedProjects};
 };
 var _fourlabsldn$time_tracker$Main_State$nowPlaceholder = 32412341234;
 var _fourlabsldn$time_tracker$Main_State$toggleRecording = function (recording) {
@@ -10113,6 +10119,14 @@ var _fourlabsldn$time_tracker$Main_State$update = F2(
 		switch (_p1.ctor) {
 			case 'DoNothing':
 				return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
+			case 'UpdateClock':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{clock: _p1._0}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
 			case 'SelectDeliverable':
 				var _p5 = _p1._0;
 				var isProjectSelected = function () {
@@ -10676,9 +10690,7 @@ var _fourlabsldn$time_tracker$Main$main = _elm_lang$html$Html$program(
 		},
 		view: _fourlabsldn$time_tracker$Main_View$view,
 		update: _fourlabsldn$time_tracker$Main_State$update,
-		subscriptions: function (_p0) {
-			return _elm_lang$core$Platform_Sub$none;
-		}
+		subscriptions: _fourlabsldn$time_tracker$Main_State$subscriptions
 	})();
 
 var Elm = {};

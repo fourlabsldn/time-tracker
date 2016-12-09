@@ -1,7 +1,7 @@
 module Main exposing (..)
 
 import Main.Types exposing (Model, Msg)
-import Main.State exposing (init, update)
+import Main.State exposing (init, update, subscriptions)
 import Main.View exposing (view)
 import Html
 
@@ -101,5 +101,5 @@ main =
         { init = ( init placeholderProjects, Cmd.none )
         , view = view
         , update = update
-        , subscriptions = \_ -> Sub.none
+        , subscriptions = subscriptions
         }
