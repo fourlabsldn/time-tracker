@@ -1,6 +1,7 @@
 module Main.State exposing (init, update)
 
 import Main.Types exposing (..)
+import Main.Utils exposing (..)
 import Time exposing (Time)
 
 
@@ -112,26 +113,6 @@ toggleRecording recording =
                     | startTime = Nothing
                     , intervals = newInterval :: recording.intervals
                 }
-
-
-allProjects : Model -> List Project
-allProjects model =
-    case model.selectedProject of
-        Nothing ->
-            model.unselectedProjects
-
-        Just aProject ->
-            aProject :: model.unselectedProjects
-
-
-allDeliverables : Project -> List Deliverable
-allDeliverables project =
-    case project.selectedDeliverable of
-        Nothing ->
-            project.unselectedDeliverables
-
-        Just deliv ->
-            deliv :: project.unselectedDeliverables
 
 
 updateProject : Model -> Project -> Model
