@@ -34,5 +34,13 @@ Maybe.isJust = v => v.isJust;
 Maybe.isNothing = v => v.isNothing;
 Maybe.withDefault = curry((defaultVal, v) => v.withDefault(defaultVal));
 Maybe.map = curry((f, v) => v.map(f));
+Maybe.map2 = curry((f, v1, v2) => (
+  Maybe.isJust(v1) && Maybe.isJust(v2)
+  ? Maybe.of(f(
+      Maybe.withDefault(null, v1),
+      Maybe.withDefault(null, v2)
+    ))
+  : Maybe.Nothing()
+));
 
 export default Maybe;

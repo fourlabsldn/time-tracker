@@ -50,10 +50,20 @@ describe('Maybe type', () => {
 
   it('maps Just only values', () => {
     const mappedVal = 'mapped';
-    const mapAndGetDefault = pipe(Maybe.map, Maybe.withDefault(defaultVal));
     const func = _ => mappedVal;
-    expect(mapAndGetDefault(func, Maybe.Just(justVal))).toEqual(mappedVal);
-    expect(mapAndGetDefault(func, Maybe.Nothing(justVal))).toEqual(defaultVal);
+    const mapAndGetDefault = pipe(Maybe.map(func), Maybe.withDefault(defaultVal));
+    expect(mapAndGetDefault(Maybe.Just(justVal))).toEqual(mappedVal);
+    expect(mapAndGetDefault(Maybe.Nothing(justVal))).toEqual(defaultVal);
+  });
+
+  it('maps only two Justs in map2', () => {
+    const mappedVal = 'mapped';
+    const func = _ => mappedVal;
+    const map2AndGetDefault = pipe(Maybe.map2(func), Maybe.withDefault(defaultVal));
+    expect(map2AndGetDefault(Maybe.Just(justVal), Maybe.Just(justVal))).toEqual(mappedVal);
+    expect(map2AndGetDefault(Maybe.Just(justVal), Maybe.Nothing(justVal))).toEqual(defaultVal);
+    expect(map2AndGetDefault(Maybe.Nothing(justVal), Maybe.Just(justVal))).toEqual(defaultVal);
+    expect(map2AndGetDefault(Maybe.Nothing(justVal), Maybe.Nothing(justVal))).toEqual(defaultVal);
   });
 
   it('has curried maps', () => {
