@@ -1,4 +1,4 @@
-/* eslint-disable new-cap */
+/* eslint-disable new-cap, no-nested-ternary */
 import { immutableConstructor } from '../utils';
 import TimeInterval from '../TimeInterval';
 import { nullable, array, date, object } from '../type-checkers';
@@ -29,21 +29,26 @@ const Recording = immutableConstructor(
 
 // PRIVATE GETTERS
 export const getStartTime = propOr(null, 'startTime');
-export const getIntervals = propOr([], 'intervals');
+export const getIntervals = model => (
+  isNil(model) ? null
+  : isNil(model.intervals) ? []
+  : model.intervals
+);
 
 // PRIVATE SETTERS
-export const setStartTime = curry((v, model) => (
-  isNil(model)
-    ? model
-    : Immutable(model).set('startTime', v)
-));
+export const setStartTime = curry((model, v) => {
+  const imutableModel = Immutable(model);
+  return !!imutableModel && !!imutableModel.merge
+    ? imutableModel.merge({ startTime: v }, { deep: true })
+    : null;
+});
 
-export const setIntervals = curry((v, model) => (
-  isNil(model)
-    ? model
-    : Immutable(model).set('intervals', v)
-));
-
+export const setIntervals = curry((model, v) => {
+  const imutableModel = Immutable(model);
+  return !!imutableModel && !!imutableModel.merge
+    ? imutableModel.merge({ intervals: v }, { deep: true })
+    : null;
+});
 // ===========================
 // PUBLIC INTERFACE
 // BOOLEAN "gettters"

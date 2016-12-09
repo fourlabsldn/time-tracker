@@ -1,4 +1,4 @@
-import { curry, pipe } from 'ramda';
+import { curry } from 'ramda';
 import TimeInterval from '../TimeInterval';
 import {
   isRecording,
@@ -16,7 +16,7 @@ import {
  */
 export default curry((model) => {
   if (!isRecording(model)) {
-    return setStartTime(new Date(), model);
+    return setStartTime(model, new Date());
   }
 
   const newInterval = TimeInterval.of({
@@ -24,8 +24,6 @@ export default curry((model) => {
     end: new Date(),
   });
 
-  return pipe(
-    setStartTime(null),
-    setIntervals([newInterval, ...getIntervals(model)])
-  )(model);
+  const withStartTime = setStartTime(model, null);
+  return setIntervals(withStartTime, [newInterval, ...getIntervals(model)]);
 });
