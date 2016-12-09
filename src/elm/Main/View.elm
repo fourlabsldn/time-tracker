@@ -201,6 +201,11 @@ totalDuration clock recording =
 
 prettyTime : Time -> String
 prettyTime time =
-    toString (floor <| Time.inMinutes time)
+    toTwoDigits (floor <| Time.inMinutes time)
         ++ ":"
-        ++ toString (floor <| Time.inSeconds time)
+        ++ toTwoDigits (floor <| Time.inSeconds time)
+
+
+toTwoDigits : Int -> String
+toTwoDigits =
+    toString >> (++) "00" >> String.right 2

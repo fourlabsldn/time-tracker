@@ -10245,27 +10245,39 @@ var _fourlabsldn$time_tracker$Main_State$update = F2(
 		}
 	});
 
+var _fourlabsldn$time_tracker$Main_View$toTwoDigits = function (_p0) {
+	return A2(
+		_elm_lang$core$String$right,
+		2,
+		A2(
+			F2(
+				function (x, y) {
+					return A2(_elm_lang$core$Basics_ops['++'], x, y);
+				}),
+			'00',
+			_elm_lang$core$Basics$toString(_p0)));
+};
 var _fourlabsldn$time_tracker$Main_View$prettyTime = function (time) {
 	return A2(
 		_elm_lang$core$Basics_ops['++'],
-		_elm_lang$core$Basics$toString(
+		_fourlabsldn$time_tracker$Main_View$toTwoDigits(
 			_elm_lang$core$Basics$floor(
 				_elm_lang$core$Time$inMinutes(time))),
 		A2(
 			_elm_lang$core$Basics_ops['++'],
 			':',
-			_elm_lang$core$Basics$toString(
+			_fourlabsldn$time_tracker$Main_View$toTwoDigits(
 				_elm_lang$core$Basics$floor(
 					_elm_lang$core$Time$inSeconds(time)))));
 };
 var _fourlabsldn$time_tracker$Main_View$totalDuration = F2(
 	function (clock, recording) {
 		var runningTime = function () {
-			var _p0 = recording.startTime;
-			if (_p0.ctor === 'Nothing') {
+			var _p1 = recording.startTime;
+			if (_p1.ctor === 'Nothing') {
 				return 0;
 			} else {
-				return clock - _p0._0;
+				return clock - _p1._0;
 			}
 		}();
 		var intervalsDuration = A3(
@@ -10293,7 +10305,7 @@ var _fourlabsldn$time_tracker$Main_View$view = function (model) {
 		false,
 		A2(
 			_elm_lang$core$Maybe$map,
-			function (_p1) {
+			function (_p2) {
 				return true;
 			},
 			A2(
@@ -10317,7 +10329,7 @@ var _fourlabsldn$time_tracker$Main_View$view = function (model) {
 		false,
 		A2(
 			_elm_lang$core$Maybe$map,
-			function (_p2) {
+			function (_p3) {
 				return true;
 			},
 			A2(
@@ -10363,7 +10375,7 @@ var _fourlabsldn$time_tracker$Main_View$view = function (model) {
 		'disabled',
 		A2(
 			_elm_lang$core$Maybe$map,
-			function (_p3) {
+			function (_p4) {
 				return 'danger';
 			},
 			A2(
@@ -10391,7 +10403,7 @@ var _fourlabsldn$time_tracker$Main_View$view = function (model) {
 		'disabled',
 		A2(
 			_elm_lang$core$Maybe$map,
-			function (_p4) {
+			function (_p5) {
 				return 'danger';
 			},
 			model.selectedProject));
@@ -10405,11 +10417,11 @@ var _fourlabsldn$time_tracker$Main_View$view = function (model) {
 			},
 			model.selectedProject));
 	var availableDeliverables = function () {
-		var _p5 = model.selectedProject;
-		if (_p5.ctor === 'Nothing') {
+		var _p6 = model.selectedProject;
+		if (_p6.ctor === 'Nothing') {
 			return {ctor: '[]'};
 		} else {
-			return _fourlabsldn$time_tracker$Main_Utils$allDeliverables(_p5._0);
+			return _fourlabsldn$time_tracker$Main_Utils$allDeliverables(_p6._0);
 		}
 	}();
 	var availableProjects = _fourlabsldn$time_tracker$Main_Utils$allProjects(model);
@@ -10565,11 +10577,11 @@ var _fourlabsldn$time_tracker$Main_View$view = function (model) {
 													A2(_elm_lang$core$Maybe$map, _fourlabsldn$time_tracker$Main_Utils$allDeliverables, model.selectedProject));
 												var project = model.selectedProject;
 												var cmd = A3(_elm_lang$core$Maybe$map2, _fourlabsldn$time_tracker$Main_Types$SelectDeliverable, project, deliverable);
-												var _p6 = cmd;
-												if (_p6.ctor === 'Nothing') {
+												var _p7 = cmd;
+												if (_p7.ctor === 'Nothing') {
 													return _fourlabsldn$time_tracker$Main_Types$DoNothing;
 												} else {
-													return _p6._0;
+													return _p7._0;
 												}
 											}),
 										_1: {ctor: '[]'}
