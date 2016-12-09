@@ -5,10 +5,6 @@ import Main.Utils exposing (..)
 import Time exposing (Time)
 
 
-nowPlaceholder =
-    32412341234
-
-
 init : List Project -> Model
 init unselectedProjects =
     { isMinimised = False
@@ -97,7 +93,7 @@ update msg model =
                 newDeliverable =
                     { deliverable
                         | recording =
-                            toggleRecording deliverable.recording
+                            toggleRecording model.clock deliverable.recording
                     }
 
                 newProject =
@@ -113,16 +109,16 @@ update msg model =
             ( { model | isMinimised = not model.isMinimised }, Cmd.none )
 
 
-toggleRecording : Recording -> Recording
-toggleRecording recording =
+toggleRecording : Time -> Recording -> Recording
+toggleRecording clock recording =
     case recording.startTime of
         Nothing ->
-            { recording | startTime = Just nowPlaceholder }
+            { recording | startTime = Just clock }
 
         Just aStartTime ->
             let
                 newInterval =
-                    TimeInterval aStartTime nowPlaceholder
+                    TimeInterval aStartTime clock
             in
                 { recording
                     | startTime = Nothing

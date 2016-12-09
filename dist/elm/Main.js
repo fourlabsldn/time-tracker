@@ -10088,30 +10088,30 @@ var _fourlabsldn$time_tracker$Main_State$updateProject = F2(
 					model.unselectedProjects)
 			});
 	});
+var _fourlabsldn$time_tracker$Main_State$toggleRecording = F2(
+	function (clock, recording) {
+		var _p0 = recording.startTime;
+		if (_p0.ctor === 'Nothing') {
+			return _elm_lang$core$Native_Utils.update(
+				recording,
+				{
+					startTime: _elm_lang$core$Maybe$Just(clock)
+				});
+		} else {
+			var newInterval = A2(_fourlabsldn$time_tracker$Main_Types$TimeInterval, _p0._0, clock);
+			return _elm_lang$core$Native_Utils.update(
+				recording,
+				{
+					startTime: _elm_lang$core$Maybe$Nothing,
+					intervals: {ctor: '::', _0: newInterval, _1: recording.intervals}
+				});
+		}
+	});
 var _fourlabsldn$time_tracker$Main_State$subscriptions = function (model) {
 	return A2(_elm_lang$core$Time$every, _elm_lang$core$Time$second, _fourlabsldn$time_tracker$Main_Types$UpdateClock);
 };
 var _fourlabsldn$time_tracker$Main_State$init = function (unselectedProjects) {
 	return {isMinimised: false, clock: 0, selectedProject: _elm_lang$core$Maybe$Nothing, unselectedProjects: unselectedProjects};
-};
-var _fourlabsldn$time_tracker$Main_State$nowPlaceholder = 32412341234;
-var _fourlabsldn$time_tracker$Main_State$toggleRecording = function (recording) {
-	var _p0 = recording.startTime;
-	if (_p0.ctor === 'Nothing') {
-		return _elm_lang$core$Native_Utils.update(
-			recording,
-			{
-				startTime: _elm_lang$core$Maybe$Just(_fourlabsldn$time_tracker$Main_State$nowPlaceholder)
-			});
-	} else {
-		var newInterval = A2(_fourlabsldn$time_tracker$Main_Types$TimeInterval, _p0._0, _fourlabsldn$time_tracker$Main_State$nowPlaceholder);
-		return _elm_lang$core$Native_Utils.update(
-			recording,
-			{
-				startTime: _elm_lang$core$Maybe$Nothing,
-				intervals: {ctor: '::', _0: newInterval, _1: recording.intervals}
-			});
-	}
 };
 var _fourlabsldn$time_tracker$Main_State$update = F2(
 	function (msg, model) {
@@ -10222,7 +10222,7 @@ var _fourlabsldn$time_tracker$Main_State$update = F2(
 				var newDeliverable = _elm_lang$core$Native_Utils.update(
 					_p9,
 					{
-						recording: _fourlabsldn$time_tracker$Main_State$toggleRecording(_p9.recording)
+						recording: A2(_fourlabsldn$time_tracker$Main_State$toggleRecording, model.clock, _p9.recording)
 					});
 				var newProject = _elm_lang$core$Native_Utils.update(
 					_p1._0,
@@ -10249,12 +10249,14 @@ var _fourlabsldn$time_tracker$Main_View$prettyTime = function (time) {
 	return A2(
 		_elm_lang$core$Basics_ops['++'],
 		_elm_lang$core$Basics$toString(
-			_elm_lang$core$Time$inMinutes(time)),
+			_elm_lang$core$Basics$floor(
+				_elm_lang$core$Time$inMinutes(time))),
 		A2(
 			_elm_lang$core$Basics_ops['++'],
 			':',
 			_elm_lang$core$Basics$toString(
-				_elm_lang$core$Time$inSeconds(time))));
+				_elm_lang$core$Basics$floor(
+					_elm_lang$core$Time$inSeconds(time)))));
 };
 var _fourlabsldn$time_tracker$Main_View$totalDuration = F2(
 	function (clock, recording) {
