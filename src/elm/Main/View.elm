@@ -3,7 +3,7 @@ module Main.View exposing (view)
 import Main.Utils exposing (allProjects, allDeliverables)
 import Main.Types exposing (..)
 import Html exposing (..)
-import Html.Attributes exposing (class, disabled, selected)
+import Html.Attributes exposing (class, disabled, selected, href)
 import Html.Events exposing (on, targetValue)
 import List.Extra
 import Json.Decode as Json
@@ -22,6 +22,28 @@ view model =
 
                 Just aProject ->
                     allDeliverables aProject
+
+        projectLink =
+            model.selectedProject
+                |> Maybe.map .url
+                |> Maybe.withDefault ""
+
+        projectLinkClass =
+            model.selectedProject
+                |> Maybe.map (\_ -> "danger")
+                |> Maybe.withDefault "disabled"
+
+        deliverableLink =
+            model.selectedProject
+                |> Maybe.andThen .selectedDeliverable
+                |> Maybe.map .url
+                |> Maybe.withDefault ""
+
+        deliverableLinkClass =
+            model.selectedProject
+                |> Maybe.andThen .selectedDeliverable
+                |> Maybe.map (\_ -> "danger")
+                |> Maybe.withDefault "disabled"
     in
         div [ class "TimeTracker" ]
             [ div
@@ -47,7 +69,11 @@ view model =
                         (::)
                             (option [ disabled True, selected True ] [ text "Select..." ])
                             (availableProjects |> List.map (\p -> option [] [ text p.name ]))
-                    , a [ class "TimeTracker-projects-link btn btn-disabled fa fa-link" ] []
+                    , a
+                        [ class <| "TimeTracker-projects-link btn btn-" ++ projectLinkClass ++ " fa fa-link"
+                        , href projectLink
+                        ]
+                        []
                     ]
                 , div
                     [ class "TimeTracker-deliverables"
@@ -77,7 +103,11 @@ view model =
                         (::)
                             (option [ disabled True, selected True ] [ text "Select..." ])
                             (availableDeliverables |> List.map (\d -> option [] [ text d.name ]))
-                    , a [ class "TimeTracker-deliverables-link btn btn-disabled fa fa-link" ] []
+                    , a
+                        [ class <| "TimeTracker-deliverables-link btn btn-" ++ deliverableLinkClass ++ "  fa fa-link"
+                        , href deliverableLink
+                        ]
+                        []
                     ]
                 , button
                     [ class "TimeTracker-start-stop btn btn-default" ]

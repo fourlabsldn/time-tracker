@@ -10158,10 +10158,9 @@ var _fourlabsldn$time_tracker$Main_State$update = F2(
 								selectedProject: _elm_lang$core$Maybe$Just(newSelectedProject),
 								unselectedProjects: A2(
 									_elm_lang$core$List$filter,
-									F2(
-										function (x, y) {
-											return !_elm_lang$core$Native_Utils.eq(x, y);
-										})(newSelectedProject),
+									function (p) {
+										return !_elm_lang$core$Native_Utils.eq(p.name, newSelectedProject.name);
+									},
 									_fourlabsldn$time_tracker$Main_Utils$allProjects(model))
 							}),
 						_1: _elm_lang$core$Platform_Cmd$none
@@ -10228,12 +10227,58 @@ var _fourlabsldn$time_tracker$Main_View$onChange = function (tagger) {
 	return A2(_elm_lang$html$Html_Events$on, 'change', decoder);
 };
 var _fourlabsldn$time_tracker$Main_View$view = function (model) {
+	var deliverableLinkClass = A2(
+		_elm_lang$core$Maybe$withDefault,
+		'disabled',
+		A2(
+			_elm_lang$core$Maybe$map,
+			function (_p0) {
+				return 'danger';
+			},
+			A2(
+				_elm_lang$core$Maybe$andThen,
+				function (_) {
+					return _.selectedDeliverable;
+				},
+				model.selectedProject)));
+	var deliverableLink = A2(
+		_elm_lang$core$Maybe$withDefault,
+		'',
+		A2(
+			_elm_lang$core$Maybe$map,
+			function (_) {
+				return _.url;
+			},
+			A2(
+				_elm_lang$core$Maybe$andThen,
+				function (_) {
+					return _.selectedDeliverable;
+				},
+				model.selectedProject)));
+	var projectLinkClass = A2(
+		_elm_lang$core$Maybe$withDefault,
+		'disabled',
+		A2(
+			_elm_lang$core$Maybe$map,
+			function (_p1) {
+				return 'danger';
+			},
+			model.selectedProject));
+	var projectLink = A2(
+		_elm_lang$core$Maybe$withDefault,
+		'',
+		A2(
+			_elm_lang$core$Maybe$map,
+			function (_) {
+				return _.url;
+			},
+			model.selectedProject));
 	var availableDeliverables = function () {
-		var _p0 = model.selectedProject;
-		if (_p0.ctor === 'Nothing') {
+		var _p2 = model.selectedProject;
+		if (_p2.ctor === 'Nothing') {
 			return {ctor: '[]'};
 		} else {
-			return _fourlabsldn$time_tracker$Main_Utils$allDeliverables(_p0._0);
+			return _fourlabsldn$time_tracker$Main_Utils$allDeliverables(_p2._0);
 		}
 	}();
 	var availableProjects = _fourlabsldn$time_tracker$Main_Utils$allProjects(model);
@@ -10349,8 +10394,16 @@ var _fourlabsldn$time_tracker$Main_View$view = function (model) {
 										_elm_lang$html$Html$a,
 										{
 											ctor: '::',
-											_0: _elm_lang$html$Html_Attributes$class('TimeTracker-projects-link btn btn-disabled fa fa-link'),
-											_1: {ctor: '[]'}
+											_0: _elm_lang$html$Html_Attributes$class(
+												A2(
+													_elm_lang$core$Basics_ops['++'],
+													'TimeTracker-projects-link btn btn-',
+													A2(_elm_lang$core$Basics_ops['++'], projectLinkClass, ' fa fa-link'))),
+											_1: {
+												ctor: '::',
+												_0: _elm_lang$html$Html_Attributes$href(projectLink),
+												_1: {ctor: '[]'}
+											}
 										},
 										{ctor: '[]'}),
 									_1: {ctor: '[]'}
@@ -10376,11 +10429,11 @@ var _fourlabsldn$time_tracker$Main_View$view = function (model) {
 													A2(_elm_lang$core$Maybe$map, _fourlabsldn$time_tracker$Main_Utils$allDeliverables, model.selectedProject));
 												var project = model.selectedProject;
 												var cmd = A3(_elm_lang$core$Maybe$map2, _fourlabsldn$time_tracker$Main_Types$SelectDeliverable, project, deliverable);
-												var _p1 = cmd;
-												if (_p1.ctor === 'Nothing') {
+												var _p3 = cmd;
+												if (_p3.ctor === 'Nothing') {
 													return _fourlabsldn$time_tracker$Main_Types$DoNothing;
 												} else {
-													return _p1._0;
+													return _p3._0;
 												}
 											}),
 										_1: {ctor: '[]'}
@@ -10435,8 +10488,16 @@ var _fourlabsldn$time_tracker$Main_View$view = function (model) {
 											_elm_lang$html$Html$a,
 											{
 												ctor: '::',
-												_0: _elm_lang$html$Html_Attributes$class('TimeTracker-deliverables-link btn btn-disabled fa fa-link'),
-												_1: {ctor: '[]'}
+												_0: _elm_lang$html$Html_Attributes$class(
+													A2(
+														_elm_lang$core$Basics_ops['++'],
+														'TimeTracker-deliverables-link btn btn-',
+														A2(_elm_lang$core$Basics_ops['++'], deliverableLinkClass, '  fa fa-link'))),
+												_1: {
+													ctor: '::',
+													_0: _elm_lang$html$Html_Attributes$href(deliverableLink),
+													_1: {ctor: '[]'}
+												}
 											},
 											{ctor: '[]'}),
 										_1: {ctor: '[]'}

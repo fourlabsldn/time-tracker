@@ -57,7 +57,7 @@ update msg model =
                             | selectedProject = Just newSelectedProject
                             , unselectedProjects =
                                 allProjects model
-                                    |> List.filter ((/=) newSelectedProject)
+                                    |> List.filter (\p -> p.name /= newSelectedProject.name)
                           }
                         , Cmd.none
                         )
