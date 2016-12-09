@@ -19,7 +19,7 @@ const unselectedProjects = pipe(propOr(null, 'unselectedProjects'), v => v || []
 
 export const allProjects = model => (
     selectedProject(model)
-    ? unselectedProjects().concat(selectedProject(model))
+    ? unselectedProjects(model).concat(selectedProject(model))
     : unselectedProjects(model)
   );
 
