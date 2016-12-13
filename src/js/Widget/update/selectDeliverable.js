@@ -1,14 +1,12 @@
-import { Project } from '../../types';
-import { pipe } from 'ramda';
+import { Project, Maybe } from '../../types';
 import { updateProject } from './utils';
 
-export default (model, action) => {
-  const { project, deliverable = null } = action;
-
-  return !project
-    ? model
-    : pipe(
-      Project.setSelectedDeliverable(project),
-      updateProject(project, model)
-    )(deliverable);
-};
+export default (model, { project, deliverable }) =>
+  Maybe.map2(
+    Project.setSelectedDeliverable,
+    Maybe.of(project),
+    Maybe.of(deliverable)
+  )
+  .map(v => console.log(v) || v)
+  .map(updateProject(project, model))
+  .withDefault(model);
