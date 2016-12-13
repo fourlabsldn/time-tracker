@@ -511,14 +511,23 @@
   .TimeTracker-deliverables .Select,
   .TimeTracker-projects .Select {
     width: 100%; }
-  .TimeTracker-deliverables-link,
-  .TimeTracker-projects-link {
-    margin: 0 0 0 0.5em;
-    position: relative;
-    top: -.1em; }
-    .TimeTracker-deliverables-link:before,
-    .TimeTracker-projects-link:before {
-      margin: auto; }
+
+.TimeTracker-sideButtons {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-flow: row nowrap;
+      -ms-flex-flow: row nowrap;
+          flex-flow: row nowrap;
+  font-size: 0.6em;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center; }
+  .TimeTracker-sideButtons * {
+    padding: 0.5rem;
+    margin: 0 0 0 0.5em; }
 
 .TimeTracker-start-stop, .TimeTracker-start-stop:active:focus, .TimeTracker-start-stop:focus, .TimeTracker-start-stop:hover {
   outline: 0; }

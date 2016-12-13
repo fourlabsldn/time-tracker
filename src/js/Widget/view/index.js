@@ -84,12 +84,13 @@ const Widget = ({ // eslint-disable-line complexity
             options={sortBy(propOr('', 'label'), projectOptions)}
             onChange={changeProject}
           />
-          <a
-            href={Project.getUrl(selectedProject)}
-            className={`TimeTracker-projects-link btn btn-${
-              selectedProject ? 'danger' : 'disabled'
-            } fa fa-link`}
-          />
+          <div className="TimeTracker-sideButtons">
+            <a
+              href={Project.getUrl(selectedProject)}
+              className={`btn btn-${selectedProject ? 'danger' : 'disabled'} fa fa-link`}
+            />
+            <a className="btn btn-secondary fa fa-plus" />
+          </div>
         </div>
 
         <div className="TimeTracker-deliverables">
@@ -99,13 +100,16 @@ const Widget = ({ // eslint-disable-line complexity
             options={sortBy(propOr('', 'label'), deliverableOptions)}
             onChange={changeDeliverable}
           />
-          <a
-            href={Deliverable.getUrl(selectedDeliverable)}
-            className="btn btn-danger fa fa-link"
-            className={`TimeTracker-deliverables-link btn btn-${
-              selectedDeliverable ? 'danger' : 'disabled'
-            } fa fa-link`}
-          />
+          <div className="TimeTracker-sideButtons">
+            <a
+              href={Deliverable.getUrl(selectedDeliverable)}
+              className="btn btn-danger fa fa-link"
+              className={`btn btn-${selectedDeliverable ? 'danger' : 'disabled'} fa fa-link`}
+            />
+            <a
+              className="btn btn-secondary fa fa-plus"
+            />
+          </div>
         </div>
 
         <button

@@ -96,15 +96,17 @@
     .Select {
         width: 100%;
     }
+}
 
-    &-link {
+.TimeTracker-sideButtons {
+    display: flex;
+    flex-flow: row nowrap;
+    font-size: 0.6em;
+    align-items: center;
+
+    * {
+        padding: 0.5rem;
         margin: 0 0 0 0.5em;
-        position: relative;
-        top: -.1em;
-
-        &:before {
-            margin: auto;
-        }
     }
 }
 
