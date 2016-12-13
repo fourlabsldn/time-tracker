@@ -1,19 +1,27 @@
+$delay: 0.25s;
+$duration: 0.3s;
+$anim-func: cubic-bezier(.1,.73,.18,.98);
+
 .TimeTracker {
     display: inline-block;
     width: 20em;
     font-family: $font-family;
     transform-origin: top right;
-    transition: all 0.2s ease-out;
     box-shadow: 0 0 90px rgba(0,0,0,.08) inset;
+    transition: all $duration $anim-func 0s, box-shadow $duration ($delay + .2s);
 
     &--minimised {
         overflow: hidden;
         transform: scale(.7);
         box-shadow: none;
+        width: 10em;
+        padding: 0.5em 0.2em;
+        transition: all 0.2s $anim-func $delay, box-shadow 0.01s step-end 0s;
 
         .TimeTracker-fields {
             transform: translateY(-100%);
             opacity: 0;
+            transition: transform $duration $anim-func 0s, opacity ($duration / 2) $anim-func ($duration / 4);
         }
 
         .TimeTracker-timer {
@@ -26,7 +34,7 @@
     display: flex;
     flex-flow: column nowrap;
     justify-content: center;
-    transition: transform 0.2s ease-out, opacity 0.1s ease-out 0.1s;
+    transition: transform $duration $anim-func $delay, opacity ($duration / 2) $anim-func ($delay + .1s);
     box-shadow: 0 0 5px rgba(0, 0, 0, .2);
 }
 @keyframes blink {

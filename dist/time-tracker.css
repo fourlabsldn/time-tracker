@@ -395,22 +395,34 @@
   -webkit-transform-origin: top right;
       -ms-transform-origin: top right;
           transform-origin: top right;
-  -webkit-transition: all 0.2s ease-out;
-  transition: all 0.2s ease-out;
   -webkit-box-shadow: 0 0 90px rgba(0, 0, 0, 0.08) inset;
-          box-shadow: 0 0 90px rgba(0, 0, 0, 0.08) inset; }
+          box-shadow: 0 0 90px rgba(0, 0, 0, 0.08) inset;
+  -webkit-transition: all 0.3s cubic-bezier(0.1, 0.73, 0.18, 0.98) 0s, -webkit-box-shadow 0.3s 0.45s;
+  transition: all 0.3s cubic-bezier(0.1, 0.73, 0.18, 0.98) 0s, -webkit-box-shadow 0.3s 0.45s;
+  transition: all 0.3s cubic-bezier(0.1, 0.73, 0.18, 0.98) 0s, box-shadow 0.3s 0.45s;
+  transition: all 0.3s cubic-bezier(0.1, 0.73, 0.18, 0.98) 0s, box-shadow 0.3s 0.45s, -webkit-box-shadow 0.3s 0.45s; }
   .TimeTracker--minimised {
     overflow: hidden;
     -webkit-transform: scale(0.7);
         -ms-transform: scale(0.7);
             transform: scale(0.7);
     -webkit-box-shadow: none;
-            box-shadow: none; }
+            box-shadow: none;
+    width: 10em;
+    padding: 0.5em 0.2em;
+    -webkit-transition: all 0.2s cubic-bezier(0.1, 0.73, 0.18, 0.98) 0.25s, -webkit-box-shadow 0.01s step-end 0s;
+    transition: all 0.2s cubic-bezier(0.1, 0.73, 0.18, 0.98) 0.25s, -webkit-box-shadow 0.01s step-end 0s;
+    transition: all 0.2s cubic-bezier(0.1, 0.73, 0.18, 0.98) 0.25s, box-shadow 0.01s step-end 0s;
+    transition: all 0.2s cubic-bezier(0.1, 0.73, 0.18, 0.98) 0.25s, box-shadow 0.01s step-end 0s, -webkit-box-shadow 0.01s step-end 0s; }
     .TimeTracker--minimised .TimeTracker-fields {
       -webkit-transform: translateY(-100%);
           -ms-transform: translateY(-100%);
               transform: translateY(-100%);
-      opacity: 0; }
+      opacity: 0;
+      -webkit-transition: opacity 0.15s cubic-bezier(0.1, 0.73, 0.18, 0.98) 0.075s, -webkit-transform 0.3s cubic-bezier(0.1, 0.73, 0.18, 0.98) 0s;
+      transition: opacity 0.15s cubic-bezier(0.1, 0.73, 0.18, 0.98) 0.075s, -webkit-transform 0.3s cubic-bezier(0.1, 0.73, 0.18, 0.98) 0s;
+      transition: transform 0.3s cubic-bezier(0.1, 0.73, 0.18, 0.98) 0s, opacity 0.15s cubic-bezier(0.1, 0.73, 0.18, 0.98) 0.075s;
+      transition: transform 0.3s cubic-bezier(0.1, 0.73, 0.18, 0.98) 0s, opacity 0.15s cubic-bezier(0.1, 0.73, 0.18, 0.98) 0.075s, -webkit-transform 0.3s cubic-bezier(0.1, 0.73, 0.18, 0.98) 0s; }
     .TimeTracker--minimised .TimeTracker-timer {
       padding: 0.2em 1em; }
 
@@ -426,10 +438,10 @@
   -webkit-justify-content: center;
       -ms-flex-pack: center;
           justify-content: center;
-  -webkit-transition: opacity 0.1s ease-out 0.1s, -webkit-transform 0.2s ease-out;
-  transition: opacity 0.1s ease-out 0.1s, -webkit-transform 0.2s ease-out;
-  transition: transform 0.2s ease-out, opacity 0.1s ease-out 0.1s;
-  transition: transform 0.2s ease-out, opacity 0.1s ease-out 0.1s, -webkit-transform 0.2s ease-out;
+  -webkit-transition: opacity 0.15s cubic-bezier(0.1, 0.73, 0.18, 0.98) 0.35s, -webkit-transform 0.3s cubic-bezier(0.1, 0.73, 0.18, 0.98) 0.25s;
+  transition: opacity 0.15s cubic-bezier(0.1, 0.73, 0.18, 0.98) 0.35s, -webkit-transform 0.3s cubic-bezier(0.1, 0.73, 0.18, 0.98) 0.25s;
+  transition: transform 0.3s cubic-bezier(0.1, 0.73, 0.18, 0.98) 0.25s, opacity 0.15s cubic-bezier(0.1, 0.73, 0.18, 0.98) 0.35s;
+  transition: transform 0.3s cubic-bezier(0.1, 0.73, 0.18, 0.98) 0.25s, opacity 0.15s cubic-bezier(0.1, 0.73, 0.18, 0.98) 0.35s, -webkit-transform 0.3s cubic-bezier(0.1, 0.73, 0.18, 0.98) 0.25s;
   -webkit-box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
           box-shadow: 0 0 5px rgba(0, 0, 0, 0.2); }
 
