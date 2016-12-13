@@ -1,10 +1,10 @@
 /* eslint-disable no-nested-ternary, react/prop-types */
 import React from 'react';
 import Select from 'react-select';
-import { pipe, propOr, sortBy, propEq, find } from 'ramda';
+import { pipe, map, propOr, sortBy, propEq, find, prop, filter } from 'ramda';
 import Timer from './Timer';
 import RecordingRow from './RecordingRow';
-import { Recording, Project, Deliverable } from '../../types';
+import { Recording, Project, Deliverable, Maybe } from '../../types';
 
 import {
   toggleRecording,
@@ -32,6 +32,13 @@ const stringIdentifier = ({ project, deliverable }) => {
     Deliverable.getName(deliverable);
 };
 
+const runningTimer = recordingsInfo =>
+  Maybe.of(recordingsInfo)
+    .map(map(prop('recording')))
+    .map(filter(Recording.isRecording))
+    .map(prop(0))
+    .withDefault(undefined);
+
 const Widget = ({ // eslint-disable-line complexity
   store,
   // props
@@ -41,8 +48,10 @@ const Widget = ({ // eslint-disable-line complexity
   isMinimised,
 }) => {
   const selectedDeliverable = Project.getSelectedDeliverable(selectedProject);
-  const selectedRecording = Deliverable.getRecording(selectedDeliverable);
-  const isRecording = Recording.isRecording(selectedRecording);
+  const activeRecording = isMinimised
+    ? runningTimer(recordingsInfo)
+    : Deliverable.getRecording(selectedDeliverable);
+  const isRecording = Recording.isRecording(activeRecording);
   const projectOptions = allProjects.map(toOption);
   const deliverableOptions = Project.getDeliverables(selectedProject).map(toOption);
 
@@ -74,7 +83,7 @@ const Widget = ({ // eslint-disable-line complexity
           }
         onClick={_ => store.dispatch(toggleMinimised(!isMinimised))}
       >
-        <Timer recording={selectedRecording} />
+        <Timer recording={activeRecording} />
       </div>
       <div className="TimeTracker-fields">
         <div className="TimeTracker-projects">
