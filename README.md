@@ -1,4 +1,6 @@
 # Time tracker
+[![Build Status](https://travis-ci.org/fourlabsldn/time-tracker.svg?branch=master)](https://travis-ci.org/fourlabsldn/time-tracker)
+
 [Demo](https://fourlabsldn.github.io/time-tracker/examples/widget/index.html)
 
 ## Time intervals
