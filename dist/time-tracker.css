@@ -571,7 +571,8 @@
 .TimeTracker-RecordingRow-projectName {
   text-overflow: ellipsis;
   overflow: hidden;
-  white-space: nowrap; }
+  white-space: nowrap;
+  cursor: pointer; }
 
 .TimeTracker-RecordingRow-deliverableName {
   font-weight: bold; }

@@ -1,10 +1,10 @@
 /* eslint-disable new-cap */
 import { string, object, array, nullable } from './type-checkers';
 import Deliverable from './Deliverable';
+import Maybe from './Maybe';
 import { immutableConstructor } from './utils';
-import { propOr, curry, propEq } from 'ramda';
+import { pipe, propOr, curry, propEq, filter, not } from 'ramda';
 import Immutable from 'seamless-immutable';
-import assert from 'fl-assert';
 // ========================================================================
 //
 //     ALL GETTERS AND SETTERS (PUBLIC OR NOT) MUST BE IN THIS FILE
@@ -31,17 +31,18 @@ export const getDeliverables = model => (
     : propOr([], 'unselectedDeliverables', model)
   );
 
-export const setSelectedDeliverable = curry((model, newSelected) => {
-  const all = getDeliverables(model);
-  const newDeliverables = all.filter(
-    d => Deliverable.getName(d) !== Deliverable.getName(newSelected)
-  );
-
-  return Immutable.merge({
-    unselectedDeliverables: newDeliverables,
-    selectedDeliverable: newSelected || null,
-  });
-});
+export const setSelectedDeliverable = curry((model, newSelected) =>
+  Maybe.of(model)
+    .map(getDeliverables)
+    .map(filter(pipe(Deliverable.isSame(newSelected), not)))
+    .map(newDeliverables =>
+      Immutable(model).merge({
+        unselectedDeliverables: newDeliverables,
+        selectedDeliverable: newSelected || null,
+      })
+    )
+    .withDefault(model)
+);
 
 export const updateDeliverable = curry((model, newDeliverable) => { // eslint-disable complexity
   if (!model || !newDeliverable) {

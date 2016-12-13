@@ -6,6 +6,7 @@ import {
   Recording,
   Validation,
 } from '../../js/types';
+import Immutable from 'seamless-immutable';
 
 describe('Project type', () => {
   const delivRec = Recording.of({ startTime: null, intervals: [] });
@@ -19,6 +20,12 @@ describe('Project type', () => {
     unselectedDeliverables,
     selectedDeliverable: mockDeliverable,
   };
+  const isValid = pipe(
+    v => Immutable(v).asMutable({ deep: true }),
+    Project.typeCheck,
+    Validation.isSuccess
+  );
+
 
   it('typeChecks ok', () => {
     const invalid1 = {
@@ -35,7 +42,6 @@ describe('Project type', () => {
     };
     const invalid3 = {};
 
-    const isValid = pipe(Project.typeCheck, Validation.isSuccess);
     expect(isValid(invalid1)).toEqual(false);
     expect(isValid(invalid2)).toEqual(false);
     expect(isValid(invalid3)).toEqual(false);
@@ -96,6 +102,12 @@ describe('Project type', () => {
       updateAndGetDeliverables(mockProject, mockDeliverableChanged)
         .find(m => m.url === mockDeliverable.url)
     ).toBeFalsy();
+
+    expect(pipe(
+        Project.updateDeliverable,
+        isValid
+      )(mockProject, mockDeliverableChanged)
+    ).toEqual(true);
   });
 
   it('updates a deliverable that is not selected', () => {
@@ -120,6 +132,12 @@ describe('Project type', () => {
       updateAndGetDeliverables(mockProject, mockDeliverableChanged)
         .find(m => m.url === mockDeliverable.url)
     ).toBeFalsy();
+
+    expect(pipe(
+        Project.updateDeliverable,
+        isValid
+      )(mockProject, mockDeliverableChanged)
+    ).toEqual(true);
   });
 
   it('handles nulls when updating deliverables', () => {
