@@ -1,5 +1,5 @@
 /* eslint-disable new-cap */
-import { curry } from 'ramda';
+import { curry, pipe } from 'ramda';
 
 /**
   type Validation
@@ -20,9 +20,10 @@ function Maybe(value, type) {
   this.isNothing = !isJust;
   this.withDefault = defaultVal => (isJust ? value : defaultVal);
   this.map = f => (isJust
-    ? Maybe.Just(f(value))
+    ? Maybe.of(f(value))
     : Maybe.Nothing()
   );
+  this.chain = f => this.map(f).withDefault(Maybe.Nothing());
 }
 
 // Static functions
@@ -42,5 +43,6 @@ Maybe.map2 = curry((f, v1, v2) => (
     ))
   : Maybe.Nothing()
 ));
+Maybe.chain = curry((v, f) => v.chain(f));
 
 export default Maybe;

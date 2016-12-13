@@ -56,6 +56,15 @@ describe('Maybe type', () => {
     expect(mapAndGetDefault(Maybe.Nothing(justVal))).toEqual(defaultVal);
   });
 
+  it('doesn\' does not continue mapping when a null value appears', () => {
+    expect(
+      Maybe.of(justVal)
+      .map(_ => null)
+      .map(_ => justVal)
+      .withDefault(defaultVal)
+    ).toEqual(defaultVal);
+  });
+
   it('maps only two Justs in map2', () => {
     const mappedVal = 'mapped';
     const func = _ => mappedVal;

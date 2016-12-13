@@ -35,11 +35,14 @@ export const setRecording = curry((model, newRecording) => (
     : Immutable(model).merge({ recording: newRecording }, { deep: true })
 ));
 
+export const isSame = curry((d1, d2) => getName(d1) === getName(d2));
+
 Object.assign(Deliverable, {
   typeCheck,
   getRecording,
   getName,
   getUrl,
   setRecording,
+  isSame,
 });
 export default Deliverable;

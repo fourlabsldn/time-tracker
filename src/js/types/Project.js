@@ -70,6 +70,8 @@ export const updateDeliverable = curry((model, newDeliverable) => { // eslint-di
   return model;
 });
 
+export const isSame = curry((p1, p2) => getName(p1) === getName(p2));
+
 
 // NO SETTERS
 Object.assign(Project, {
@@ -80,6 +82,7 @@ Object.assign(Project, {
   getSelectedDeliverable,
   setSelectedDeliverable,
   updateDeliverable,
+  isSame,
 });
 
 export default Project;
