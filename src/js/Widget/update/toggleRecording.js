@@ -23,7 +23,6 @@ const findRecordingDeliverable = model =>
 // Model -> Model
 const stopAllRecordings = model =>
   Maybe.of(model)
-    .map(m => console.log('stopping all recordings for', model) || m)
     .chain(findRecordingDeliverable)
     .map(toggleDeliverableRecording(model))
     .map(stopAllRecordings)
